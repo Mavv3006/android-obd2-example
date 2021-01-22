@@ -125,11 +125,7 @@ public class DeviceControlActivity extends Activity {
                     if (mDataField.length() > 500)
                         mDataField.setText("");
                     mDataField.append(data);
-                    svResult.post(new Runnable() {
-                        public void run() {
-                            svResult.fullScroll(ScrollView.FOCUS_DOWN);
-                        }
-                    });
+                    svResult.post(() -> svResult.fullScroll(ScrollView.FOCUS_DOWN));
                 }
             }
         }

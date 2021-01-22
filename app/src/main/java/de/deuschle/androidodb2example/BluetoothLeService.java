@@ -82,7 +82,7 @@ public class BluetoothLeService extends Service {
                         Log.i(TAG, gattCharacteristic.getUuid().toString());
                         Log.i(TAG, UUID_UCSI_NOTIFY_TX.toString());
                         mNotifyCharacteristic = gattCharacteristic;
-                        //setCharacteristicNotification(gattCharacteristic, true);
+                        setCharacteristicNotification(gattCharacteristic, true);
                         broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                         //return;
                     }
@@ -286,7 +286,7 @@ public class BluetoothLeService extends Service {
             mBluetoothGatt.close();
             mBluetoothGatt = null;
         }
-        mBluetoothGatt = device.connectGatt(this, false, mGattCallback, BluetoothDevice.TRANSPORT_LE);
+        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         //mBluetoothGatt.connect();
 
         Log.d(TAG, "Trying to create a new connection.");
