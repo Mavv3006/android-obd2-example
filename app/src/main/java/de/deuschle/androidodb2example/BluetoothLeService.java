@@ -32,7 +32,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,15 +73,6 @@ public class BluetoothLeService extends Service {
     public void findService(List<BluetoothGattService> gattServices) {
         Log.i(TAG, "Count is:" + gattServices.size());
         for (BluetoothGattService gattService : gattServices) {
-            Log.i(TAG, "Service UUID: " + gattService.getUuid().toString());
-            for (BluetoothGattCharacteristic bluetoothGattCharacteristic : gattService.getCharacteristics()) {
-                Log.i(TAG, "Characteristic UUID: " + bluetoothGattCharacteristic.getUuid().toString());
-                Log.i(TAG, "Characteristic Value: " + Arrays.toString(bluetoothGattCharacteristic.getValue()));
-                for (BluetoothGattDescriptor bluetoothGattDescriptor : bluetoothGattCharacteristic.getDescriptors()) {
-                    Log.i(TAG, "Descriptor UUID: " + bluetoothGattDescriptor.getUuid().toString());
-                    Log.i(TAG, "Descriptor Value: " + Arrays.toString(bluetoothGattDescriptor.getValue()));
-                }
-            }
             if (gattService.getUuid().toString().equalsIgnoreCase(UUID_UCSI_SERVICE.toString())) {
                 Log.i(TAG, UUID_UCSI_SERVICE.toString());
                 List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
