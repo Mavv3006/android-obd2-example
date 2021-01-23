@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.deuschle.androidodb2example.LogTags.LogTags;
+
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -122,6 +124,7 @@ public class DeviceControlActivity extends Activity {
                 Log.e(TAG, "RECV DATA");
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                 if (data != null) {
+                    Log.i(LogTags.OBD2, "Data: " + data);
                     if (mDataField.length() > 500)
                         mDataField.setText("");
                     mDataField.append(data);

@@ -32,8 +32,11 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import de.deuschle.androidodb2example.LogTags.LogTags;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -142,18 +145,21 @@ public class BluetoothLeService extends Service {
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.i(LogTags.OBD2, Arrays.toString(characteristic.getValue()));
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            Log.i(LogTags.OBD2, "Changed: " + Arrays.toString(characteristic.getValue()));
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             Log.e(TAG, "OnCharacteristicWrite");
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            Log.i(LogTags.OBD2, "Write: " + Arrays.toString(characteristic.getValue()));
             Log.e(TAG, "OnCharacteristicWrite");
         }
 
