@@ -43,12 +43,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.deuschle.androidodb2example.LogTags.LogTags;
+import de.deuschle.androidodb2example.Streams.BleOutputStream;
 
 
 /**
@@ -65,6 +67,7 @@ public class DeviceControlActivity extends Activity {
     private static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 12345678;
 
     private TextView mDataField;
+    private BleOutputStream bleOutputStream = new BleOutputStream();
     private String mDeviceName;
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
@@ -88,6 +91,7 @@ public class DeviceControlActivity extends Activity {
             Log.e(TAG, "mBluetoothLeService is okay");
             // Automatically connects to the device upon successful start-up initialization.
             //mBluetoothLeService.connect(mDeviceAddress);
+            bleOutputStream.setBleService(mBluetoothLeService);
         }
 
         @Override
@@ -244,7 +248,14 @@ public class DeviceControlActivity extends Activity {
                     Toast.makeText(DeviceControlActivity.this, "Please enter the text", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mBluetoothLeService.writeValue(edtSend.getText().toString() + "\r");
+                String valueToWrite = edtSend.getText().toString() + "\r";
+                Log.d(TAG, "Value to write: " + valueToWrite);
+                try {
+                    // mBluetoothLeService.writeValue(valueToWrite);
+                    bleOutputStream.write(valueToWrite.getBytes());
+                } catch (IOException e) {
+                    Log.e(TAG, "Writing value to BLE failed: " + e.getMessage());
+                }
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm.isActive())
