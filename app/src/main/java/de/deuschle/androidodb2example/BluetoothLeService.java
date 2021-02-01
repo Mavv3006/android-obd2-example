@@ -68,8 +68,13 @@ public class BluetoothLeService extends Service {
     public BluetoothGattCharacteristic mNotifyCharacteristic;
     public BluetoothGattCharacteristic mRxCharacteristic;
 
-    public void WriteValue(String strValue) {
-        mNotifyCharacteristic.setValue(strValue.getBytes());
+    public void writeValue(byte[] strValue) {
+        mNotifyCharacteristic.setValue(strValue);
+        mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
+    }
+
+    public void writeValue(String strValue) {
+        mNotifyCharacteristic.setValue(strValue);
         mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
     }
 

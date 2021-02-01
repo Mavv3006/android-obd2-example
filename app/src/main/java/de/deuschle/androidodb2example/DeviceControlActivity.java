@@ -244,7 +244,7 @@ public class DeviceControlActivity extends Activity {
                     Toast.makeText(DeviceControlActivity.this, "Please enter the text", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mBluetoothLeService.WriteValue(edtSend.getText().toString() + "\r");
+                mBluetoothLeService.writeValue(edtSend.getText().toString() + "\r");
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm.isActive())
