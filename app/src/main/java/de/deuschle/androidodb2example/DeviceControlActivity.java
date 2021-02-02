@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.deuschle.androidodb2example.LogTags.LogTags;
+import de.deuschle.androidodb2example.Streams.BleInputStream;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
 
 
@@ -68,6 +69,7 @@ public class DeviceControlActivity extends Activity {
 
     private TextView mDataField;
     private BleOutputStream bleOutputStream = new BleOutputStream();
+    private BleInputStream bleInputStream = new BleInputStream();
     private String mDeviceName;
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
@@ -133,6 +135,15 @@ public class DeviceControlActivity extends Activity {
                         mDataField.setText("");
                     mDataField.append(data);
                     svResult.post(() -> svResult.fullScroll(ScrollView.FOCUS_DOWN));
+
+                    bleInputStream.setData(data);
+                    // Only for testing
+//                    byte b;
+//                    Log.d(LogTags.INPUT_STREAM_DATA, "new Data arrived");
+//                    do {
+//                        b = (byte) bleInputStream.read();
+//                        Log.d(LogTags.INPUT_STREAM_DATA, "Byte: " + b);
+//                    } while (b > -1);
                 }
             }
         }
