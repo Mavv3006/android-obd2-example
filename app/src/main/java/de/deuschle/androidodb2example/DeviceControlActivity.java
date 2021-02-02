@@ -253,6 +253,7 @@ public class DeviceControlActivity extends Activity {
                 try {
                     // mBluetoothLeService.writeValue(valueToWrite);
                     bleOutputStream.write(valueToWrite.getBytes());
+                    bleOutputStream.flush();
                 } catch (IOException e) {
                     Log.e(TAG, "Writing value to BLE failed: " + e.getMessage());
                 }
