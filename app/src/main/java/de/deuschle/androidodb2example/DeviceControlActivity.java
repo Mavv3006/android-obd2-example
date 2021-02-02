@@ -131,15 +131,16 @@ public class DeviceControlActivity extends Activity {
                         mDataField.setText("");
                     mDataField.append(data);
                     svResult.post(() -> svResult.fullScroll(ScrollView.FOCUS_DOWN));
+
+                    bleInputStream.setData(data);
+                    // Only for testing
+//                    byte b;
+//                    Log.d(LogTags.INPUT_STREAM_DATA, "new Data arrived");
+//                    do {
+//                        b = (byte) bleInputStream.read();
+//                        Log.d(LogTags.INPUT_STREAM_DATA, "Byte: " + b);
+//                    } while (b > -1);
                 }
-                bleInputStream.setData(data);
-                // Only for testing
-                byte b;
-                Log.d(LogTags.INPUT_STREAM_DATA, "new Data arrived");
-                do {
-                    b = (byte) bleInputStream.read();
-                    Log.d(LogTags.INPUT_STREAM_DATA, "Byte: " + b);
-                } while (b > -1);
             }
         }
     };
