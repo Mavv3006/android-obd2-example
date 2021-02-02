@@ -33,11 +33,13 @@ public class BleInputStream extends InputStream {
 
         Log.d(LogTags.INPUT_STREAM_DATA, "Splitted Data: " + Arrays.toString(dataArray));
 
-        for (String stringData : dataArray) {
-            try {
-                integerList.add(Integer.parseInt(stringData, 16));
-            } catch (NumberFormatException e) {
-                Log.e(LogTags.INPUT_STREAM_DATA, "Error: " + e.getMessage());
+        for (String s : dataArray) {
+            if (s.equals(">")) {
+                integerList.add(62);
+                break;
+            }
+            if (!s.equals("")) {
+                integerList.add(Integer.parseInt(s,16));
             }
         }
 
