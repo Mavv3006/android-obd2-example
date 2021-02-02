@@ -1,9 +1,6 @@
 package de.deuschle.androidodb2example.Streams;
 
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -21,13 +18,11 @@ public class BleInputStream extends InputStream {
         return integerList.remove();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setData(String data) {
         this.inputData = data;
         processData();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void processData() {
         String[] dataArray = inputData.split(" |\n|\r");
 
@@ -39,7 +34,7 @@ public class BleInputStream extends InputStream {
                 break;
             }
             if (!s.equals("")) {
-                integerList.add(Integer.parseInt(s,16));
+                integerList.add(Integer.parseInt(s, 16));
             }
         }
 
