@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidODB2Example</string>
+    <string name="app_name">Android ODB2 Example</string>
     <string name="main_text">Ich bin eine App</string>
     <string name="ble_not_supported">BLE not supported</string>
     <string name="label_data">Data:</string>
@@ -22,4 +22,6 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
+    <string name="get_engine_rpm">Get Engine RPM</string>
+    <string name="current_engine_rpm">Current engine RPM:</string>
 </resources>

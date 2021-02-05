@@ -68,8 +68,8 @@ public class DeviceControlActivity extends Activity {
     private static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 12345678;
 
     private TextView mDataField;
-    private BleOutputStream bleOutputStream = new BleOutputStream();
-    private BleInputStream bleInputStream = new BleInputStream();
+    private final BleOutputStream bleOutputStream = new BleOutputStream();
+    private final BleInputStream bleInputStream = new BleInputStream();
     private String mDeviceName;
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
@@ -137,13 +137,6 @@ public class DeviceControlActivity extends Activity {
                     svResult.post(() -> svResult.fullScroll(ScrollView.FOCUS_DOWN));
 
                     bleInputStream.setData(data);
-                    // Only for testing
-//                    byte b;
-//                    Log.d(LogTags.INPUT_STREAM_DATA, "new Data arrived");
-//                    do {
-//                        b = (byte) bleInputStream.read();
-//                        Log.d(LogTags.INPUT_STREAM_DATA, "Byte: " + b);
-//                    } while (b > -1);
                 }
             }
         }
@@ -165,7 +158,7 @@ public class DeviceControlActivity extends Activity {
         // Sets up UI references.
         mDataField = findViewById(R.id.data_value);
         edtSend = this.findViewById(R.id.edtSend);
-        edtSend.setText("ATI");
+        edtSend.setText("");
         svResult = this.findViewById(R.id.svResult);
 
         btnSend = this.findViewById(R.id.btnSend);
@@ -270,9 +263,8 @@ public class DeviceControlActivity extends Activity {
                 }
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm.isActive())
+                if (imm != null && imm.isActive())
                     imm.hideSoftInputFromWindow(edtSend.getWindowToken(), 0);
-                //todo Send data
             }
         }
 
@@ -292,7 +284,7 @@ public class DeviceControlActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS) {
-            Map<String, Integer> perms = new HashMap<String, Integer>();
+            Map<String, Integer> perms = new HashMap<>();
             // Initial
             perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
 
@@ -339,14 +331,8 @@ public class DeviceControlActivity extends Activity {
                     message.append(", ").append(permissionsNeeded.get(i));
 
                 showMessageOKCancel(message.toString(),
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-                                        REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
-                            }
-                        });
+                        (dialog, which) -> requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                                REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS));
                 return;
             }
             requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),

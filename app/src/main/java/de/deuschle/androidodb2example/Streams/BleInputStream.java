@@ -2,14 +2,15 @@ package de.deuschle.androidodb2example.Streams;
 
 import android.util.Log;
 
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import de.deuschle.androidodb2example.LogTags.LogTags;
 
-public class BleInputStream extends InputStream {
+public class BleInputStream extends MyInputStream {
     private String inputData;
     private final Queue<Integer> integerList = new LinkedList<>();
 
@@ -18,23 +19,50 @@ public class BleInputStream extends InputStream {
         return integerList.remove();
     }
 
+    @Override
     public void setData(String data) {
         this.inputData = data;
         processData();
     }
 
     private void processData() {
-        String[] dataArray = inputData.split(" |\n|\r");
+        String[] dataArray = inputData.split("[ \n\r]");
 
         Log.d(LogTags.INPUT_STREAM_DATA, "Splitted Data: " + Arrays.toString(dataArray));
 
-        for (String s : dataArray) {
+        List<String> clearedData = new ArrayList<>();
+
+        for (int i = 0; i < dataArray.length; i++) {
+            if (i >= 2) {
+                clearedData.add(dataArray[i]);
+            }
+        }
+
+        Log.d(LogTags.INPUT_STREAM_DATA, "Cleared Splitted Data: " + clearedData);
+
+        List<String> hexArray = new ArrayList<>();
+        for (String data : clearedData) {
+            if (!data.equals("")) {
+                for (int i = 0; i < data.length(); i++) {
+                    String substring = data.substring(i, i + 1);
+                    hexArray.add(substring);
+                }
+            }
+        }
+
+        Log.d(LogTags.INPUT_STREAM_DATA, "Hex Array: " + hexArray);
+
+        for (String s : hexArray) {
             if (s.equals(">")) {
                 integerList.add(62);
                 break;
             }
-            if (!s.equals("")) {
-                integerList.add(Integer.parseInt(s, 16));
+
+            int parsedInteger = Integer.parseInt(s, 16);
+            if (parsedInteger >= 0 && parsedInteger <= 9) {
+                integerList.add(parsedInteger + 48);
+            } else if (parsedInteger >= 10 && parsedInteger <= 15) {
+                integerList.add(parsedInteger + 55);
             }
         }
 

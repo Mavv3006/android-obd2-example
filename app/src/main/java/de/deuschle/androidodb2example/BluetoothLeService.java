@@ -73,11 +73,6 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
     }
 
-    public void writeValue(String strValue) {
-        mNotifyCharacteristic.setValue(strValue);
-        mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
-    }
-
     public void findService(List<BluetoothGattService> gattServices) {
         Log.i(TAG, "Count is:" + gattServices.size());
         for (BluetoothGattService gattService : gattServices) {
@@ -215,7 +210,7 @@ public class BluetoothLeService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        BluetoothLeService getService() {
+        public BluetoothLeService getService() {
             return BluetoothLeService.this;
         }
     }
