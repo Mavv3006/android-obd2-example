@@ -24,4 +24,16 @@
     <string name="menu_stop">Stop</string>
     <string name="get_engine_rpm">Get Engine RPM</string>
     <string name="current_engine_rpm">Current engine RPM:</string>
+
+    <!-- Main Activity -->
+    <string name="main_toolbar_title">Hauptmenü</string>
+    <string name="main_toolbar_subtitle">Dies ist ein Untertitel</string>
+
+    <string name="bluetooth_connection_status">Status:</string>
+    <string name="bluetooth_connection_connected">Verbunden</string>
+    <string name="bluetooth_connection_disconnected">Getrennt</string>
+    <string name="bluetooth_connect">Verbinden</string>
+    <string name="bluetooth_disconnect">Trennen</string>
+
+
 </resources>
