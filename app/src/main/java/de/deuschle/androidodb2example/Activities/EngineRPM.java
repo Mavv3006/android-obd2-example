@@ -1,6 +1,12 @@
 package de.deuschle.androidodb2example.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,6 +21,7 @@ import br.ufrn.imd.obd.commands.ObdCommand;
 import br.ufrn.imd.obd.commands.engine.ThrottlePositionCommand;
 import br.ufrn.imd.obd.exceptions.NonNumericResponseException;
 import de.deuschle.androidodb2example.BluetoothLeService;
+import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Streams.BleInputStream;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
@@ -30,45 +37,45 @@ public class EngineRPM extends AppCompatActivity {
     private TextView resultTextView;
     private ObdCommand command;
 
-//    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-//
-//        @Override
-//        public void onServiceConnected(ComponentName componentName, IBinder service) {
-//            bluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-//            if (!bluetoothLeService.initialize()) {
-//                Log.e(TAG, "Unable to initialize Bluetooth");
-//                finish();
-//            }
-//
-//            Log.e(TAG, "mBluetoothLeService is okay");
-//            bleOutputStream.setBleService(bluetoothLeService);
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName componentName) {
-//            bluetoothLeService = null;
-//        }
-//    };
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            bluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!bluetoothLeService.initialize()) {
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+
+            Log.e(TAG, "mBluetoothLeService is okay");
+            bleOutputStream.setBleService(bluetoothLeService);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            bluetoothLeService = null;
+        }
+    };
 
 
     // Handles various events fired by the Service.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
     //                        or notification operations.
-//    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            final String action = intent.getAction();
-//
-//            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-//                Log.e(TAG, "RECV DATA");
-//                String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
-//                if (data != null) {
-//                    Log.i(LogTags.OBD2, "Data: " + data);
-//                    bleInputStream.setData(data);
-//                }
-//            }
-//        }
-//    };
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                Log.e(TAG, "RECV DATA");
+                String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
+                if (data != null) {
+                    Log.i(LogTags.OBD2, "Data: " + data);
+                    bleInputStream.setData(data);
+                }
+            }
+        }
+    };
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -109,14 +116,14 @@ public class EngineRPM extends AppCompatActivity {
             }
         });
 
-//        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-//        Log.d(TAG, "Try to bindService=" + bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE));
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        Log.d(TAG, "Try to bindService=" + bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE));
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        unregisterReceiver(mGattUpdateReceiver);
-//        unbindService(mServiceConnection);
-//    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mGattUpdateReceiver);
+        unbindService(mServiceConnection);
+    }
 }
