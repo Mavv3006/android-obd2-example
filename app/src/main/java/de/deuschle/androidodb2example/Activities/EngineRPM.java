@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -70,14 +71,25 @@ public class EngineRPM extends AppCompatActivity {
 //    };
 
     @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engine_r_p_m);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.engine_rpm_toolbar);
-        String subtitle = "Dies ist ein Test";
-        toolbar.setTitle(subtitle);
+        String title = "Dies ist ein Test";
+        toolbar.setTitle(title);
         setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         this.resultTextView = findViewById(R.id.result);
         Button getDataButton = findViewById(R.id.button);

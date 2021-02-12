@@ -34,6 +34,7 @@
     <string name="bluetooth_connection_disconnected">Getrennt</string>
     <string name="bluetooth_connect">Verbinden</string>
     <string name="bluetooth_disconnect">Trennen</string>
+    <string name="main_rpm_anzeigen">RPM anzeigen</string>
 
 
 </resources>

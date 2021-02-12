@@ -67,6 +67,7 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.MyTheme.BottomSheetDialog</item>
         <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+        <item name="materialButtonStyle">@style/Widget.MyApp.Button</item>
     </style>
 
     <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -79,5 +80,13 @@
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">
             ?attr/colorControlHighlight
         </item>
+    </style>
+
+    <style name="ThemeOverlay.MyApp.Button.SecondaryColor" parent="">
+        <item name="colorPrimary">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Widget.MyApp.Button" parent="@style/Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.Button.SecondaryColor</item>
     </style>
 </resources>

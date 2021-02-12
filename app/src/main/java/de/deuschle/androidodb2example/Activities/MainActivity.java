@@ -1,6 +1,8 @@
 package de.deuschle.androidodb2example.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,5 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private void toggleButtons() {
         disconnectButton.setEnabled(!disconnectButton.isEnabled());
         connectButton.setEnabled(!connectButton.isEnabled());
+    }
+
+    public void goToEngineRPM(View view) {
+        Intent intent = new Intent(this, EngineRPM.class);
+        startActivity(intent);
     }
 }

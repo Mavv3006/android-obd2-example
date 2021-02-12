@@ -37,4 +37,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/main_toolbar_title" />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:onClick="goToEngineRPM"
+        android:text="@string/main_rpm_anzeigen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_button_connect" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
