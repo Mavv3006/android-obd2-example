@@ -115,6 +115,10 @@ public class OdometerActivity extends AppCompatActivity {
     }
 
     public void readData(View view) {
+        if (bluetoothLeService.getSupportedGattServices() == null) {
+            Log.e(TAG, "Bluetooth device not connected");
+            return;
+        }
         try {
             Log.d(TAG, "Trying to run command: [" + this.command.getCommandPID() + "]");
             this.command.run(bleInputStream, bleOutputStream);

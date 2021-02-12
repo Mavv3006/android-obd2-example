@@ -30,6 +30,7 @@ import java.util.Map;
 
 import de.deuschle.androidodb2example.BluetoothLeService;
 import de.deuschle.androidodb2example.DeviceControlActivity;
+import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Streams.BleInputStream;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
@@ -39,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private final BleOutputStream bleOutputStream = new BleOutputStream();
     private final BleInputStream bleInputStream = new BleInputStream();
     private BluetoothLeService bluetoothLeService;
-    private boolean mConnected = false;
+    private boolean isConnected = false;
     Button disconnectButton;
     Button connectButton;
+    Button odometerButton;
     Toolbar toolbar;
     String deviceName;
     String deviceAddress;
@@ -79,24 +81,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            Log.d(TAG, "Bluetooth Callback called");
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 Log.e(TAG, "Only gatt, just wait");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
+                isConnected = false;
                 toolbar.setSubtitle(getString(R.string.bluetooth_connection_status) + " " + getString(R.string.bluetooth_connection_disconnected));
                 toggleButtons();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                mConnected = true;
+                isConnected = true;
                 toolbar.setSubtitle(getString(R.string.bluetooth_connection_status) + " " + getString(R.string.bluetooth_connection_connected));
                 ShowDialog();
                 toggleButtons();
                 Log.e(TAG, "In what we need");
-                invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.e(TAG, "RECV DATA");
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
-                Log.d(TAG, "Data: " + data);
+                Log.d(LogTags.OBD2, "Data: " + data);
             }
         }
     };
@@ -110,19 +110,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.main_toolbar);
-        toolbar.setSubtitle(getString(R.string.bluetooth_connection_status) + " " + getString(R.string.bluetooth_connection_disconnected));
-        setSupportActionBar(toolbar);
-
-        connectButton = findViewById(R.id.main_button_connect);
-        disconnectButton = findViewById(R.id.main_button_disconnect);
-
         final Intent intent = getIntent();
         deviceAddress = intent.getStringExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS);
         deviceName = intent.getStringExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME);
 
-        Log.i(TAG, "deviceAddress: " + deviceAddress);
-        Log.i(TAG, "deviceName: " + deviceName);
+        // Sets up UI references
+        connectButton = findViewById(R.id.main_button_connect);
+        disconnectButton = findViewById(R.id.main_button_disconnect);
+        odometerButton = findViewById(R.id.odometer_button);
+
+        toolbar = findViewById(R.id.main_toolbar);
+        toolbar.setSubtitle(getString(R.string.bluetooth_connection_status) + " " + getString(R.string.bluetooth_connection_disconnected));
+        setSupportActionBar(toolbar);
 
         fuckMarshMallow();
 
@@ -153,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
     private void toggleButtons() {
         disconnectButton.setEnabled(!disconnectButton.isEnabled());
         connectButton.setEnabled(!connectButton.isEnabled());
+        odometerButton.setEnabled(isConnected);
     }
 
     public void goToEngineRPM(View view) {
