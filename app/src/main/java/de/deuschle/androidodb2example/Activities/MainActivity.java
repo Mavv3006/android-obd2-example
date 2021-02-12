@@ -3,11 +3,13 @@ package de.deuschle.androidodb2example.Activities;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
+            Log.d(TAG, "Bluetooth Callback called");
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 Log.e(TAG, "Only gatt, just wait");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
@@ -118,7 +121,15 @@ public class MainActivity extends AppCompatActivity {
         deviceAddress = intent.getStringExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS);
         deviceName = intent.getStringExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME);
 
+        Log.i(TAG, "deviceAddress: " + deviceAddress);
+        Log.i(TAG, "deviceName: " + deviceName);
+
         fuckMarshMallow();
+
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        Log.d(TAG, "Try to bindService = " + bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE));
+
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
         connectButton.setOnClickListener(view -> {
             bluetoothLeService.connect(deviceAddress);
@@ -127,6 +138,16 @@ public class MainActivity extends AppCompatActivity {
         disconnectButton.setOnClickListener(view -> {
             bluetoothLeService.disconnect();
         });
+    }
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothDevice.ACTION_UUID);
+        return intentFilter;
     }
 
     private void toggleButtons() {

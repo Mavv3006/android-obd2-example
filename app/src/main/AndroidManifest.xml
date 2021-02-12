@@ -7,11 +7,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApp">
-        <activity android:name=".Activities.OdometerActivity" />
+        android:theme="@android:style/Theme.Material.Light.DarkActionBar">
+        <activity
+            android:name=".Activities.OdometerActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Activities.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Activities.EngineRPM"
             android:screenOrientation="portrait" />
