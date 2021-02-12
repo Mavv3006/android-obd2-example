@@ -65,7 +65,7 @@ public class DeviceControlActivity extends Activity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    private static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 12345678;
+    public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 12345678;
 
     private TextView mDataField;
     private final BleOutputStream bleOutputStream = new BleOutputStream();

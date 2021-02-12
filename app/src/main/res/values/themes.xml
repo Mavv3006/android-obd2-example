@@ -89,4 +89,13 @@
     <style name="Widget.MyApp.Button" parent="@style/Widget.MaterialComponents.Button">
         <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.Button.SecondaryColor</item>
     </style>
+
+    <style name="Theme.MyApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.MyApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.MyApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
