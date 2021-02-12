@@ -1,6 +1,5 @@
 package de.deuschle.androidodb2example.Activities;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,6 +10,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.io.IOException;
 
@@ -25,7 +28,7 @@ import de.deuschle.androidodb2example.Streams.BleOutputStream;
 import de.deuschle.androidodb2example.Streams.MyInputStream;
 import de.deuschle.androidodb2example.Streams.MyOutputStream;
 
-public class EngineRPM extends Activity {
+public class EngineRPM extends AppCompatActivity {
     private static final String TAG = EngineRPM.class.getSimpleName();
     private final MyInputStream bleInputStream = new BleInputStream();
     private final MyOutputStream bleOutputStream = new BleOutputStream();
@@ -75,9 +78,25 @@ public class EngineRPM extends Activity {
     };
 
     @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engine_r_p_m);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.engine_rpm_toolbar);
+        String title = "Dies ist ein Test";
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         this.resultTextView = findViewById(R.id.result);
         Button getDataButton = findViewById(R.id.button);
