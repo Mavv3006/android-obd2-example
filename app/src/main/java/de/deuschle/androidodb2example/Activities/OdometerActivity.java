@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class OdometerActivity extends AppCompatActivity {
     private BluetoothLeService bluetoothLeService;
     private TextView valueTextView;
     private ObdCommand command;
+    private SharedPreferences sharedPreferences;
 
     // Handles various events fired by the Service.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
@@ -67,8 +69,17 @@ public class OdometerActivity extends AppCompatActivity {
                 finish();
             }
 
-            Log.e(TAG, "mBluetoothLeService is okay");
+            Log.i(TAG, "mBluetoothLeService is okay");
             bleOutputStream.setBleService(bluetoothLeService);
+
+            String deviceAddress = sharedPreferences.getString(getString(R.string.shared_preferences_device_address), null);
+            Log.d(LogTags.SHARED_PREFERENCES, "Device Address read: " + deviceAddress);
+            if (deviceAddress != null) {
+                // Automatically connects to the device upon successful start-up initialization.
+                bluetoothLeService.connect(deviceAddress);
+            } else {
+                Log.e(LogTags.SHARED_PREFERENCES, "unable to connect to device, device address not saved");
+            }
         }
 
         @Override
@@ -102,6 +113,8 @@ public class OdometerActivity extends AppCompatActivity {
         Log.d(TAG, "Try to bindService = " + bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE));
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {

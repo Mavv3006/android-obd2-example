@@ -30,6 +30,7 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.deuschle.androidodb2example.Activities.MainActivity;
+import de.deuschle.androidodb2example.LogTags.LogTags;
 
 
 /**
@@ -63,6 +65,7 @@ public class DeviceScanActivity extends ListActivity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
     private boolean mScanning;
+    SharedPreferences sharedPreferences;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
@@ -102,6 +105,8 @@ public class DeviceScanActivity extends ListActivity {
         }
 
         bluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+
+        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
 
         //Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter();
@@ -179,11 +184,22 @@ public class DeviceScanActivity extends ListActivity {
         final Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+
+        writeToSharedPreferences(getString(R.string.shared_preferences_device_address), device.getAddress());
+        writeToSharedPreferences(getString(R.string.shared_preferences_device_name), device.getName());
+
         if (mScanning) {
             bluetoothLeScanner.stopScan(scanCallback);
             mScanning = false;
         }
         startActivity(intent);
+    }
+
+    private void writeToSharedPreferences(String key, String value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        Log.d(LogTags.SHARED_PREFERENCES, String.format("Written: %s-%s", key, value));
+        editor.apply();
     }
 
     private void scanLeDevice(final boolean enable) {

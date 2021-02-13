@@ -216,6 +216,16 @@ public class BluetoothLeService extends Service {
     }
 
     @Override
+    public void onDestroy() {
+        Log.i(TAG, "the service is about to be destoryed");
+    }
+
+    @Override
+    public void onCreate() {
+        Log.i(TAG, "the service is about to be created");
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }

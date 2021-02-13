@@ -49,5 +49,9 @@
     <string name="odometer_text_view_description">Aktueller Kilometerstand:</string>
     <string name="odometer">Odometer</string>
 
+    <string name="shared_preferences_file_key">de.deuschle.android_obd2.shared_preferences_file_key</string>
+    <string name="shared_preferences_device_address">shared_preferences_device_address</string>
+    <string name="shared_preferences_device_name">shared_preferences_device_name</string>
+
 
 </resources>
