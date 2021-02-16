@@ -32,18 +32,15 @@ import de.deuschle.androidodb2example.BluetoothLeService;
 import de.deuschle.androidodb2example.DeviceControlActivity;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
-import de.deuschle.androidodb2example.Streams.BleInputStream;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
     private final BleOutputStream bleOutputStream = new BleOutputStream();
-    private final BleInputStream bleInputStream = new BleInputStream();
     private BluetoothLeService bluetoothLeService;
     private boolean isConnected = false;
     Button disconnectButton;
     Button connectButton;
-    Button odometerButton;
     Toolbar toolbar;
     String deviceName;
     String deviceAddress;
@@ -117,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         // Sets up UI references
         connectButton = findViewById(R.id.main_button_connect);
         disconnectButton = findViewById(R.id.main_button_disconnect);
-        odometerButton = findViewById(R.id.odometer_button);
 
         toolbar = findViewById(R.id.main_toolbar);
         toolbar.setSubtitle(getString(R.string.bluetooth_connection_status) + " " + getString(R.string.bluetooth_connection_disconnected));
@@ -130,13 +126,9 @@ public class MainActivity extends AppCompatActivity {
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
-        connectButton.setOnClickListener(view -> {
-            bluetoothLeService.connect(deviceAddress);
-        });
+        connectButton.setOnClickListener(view -> bluetoothLeService.connect(deviceAddress));
 
-        disconnectButton.setOnClickListener(view -> {
-            bluetoothLeService.disconnect();
-        });
+        disconnectButton.setOnClickListener(view -> bluetoothLeService.disconnect());
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -152,16 +144,10 @@ public class MainActivity extends AppCompatActivity {
     private void toggleButtons() {
         disconnectButton.setEnabled(!disconnectButton.isEnabled());
         connectButton.setEnabled(!connectButton.isEnabled());
-        odometerButton.setEnabled(isConnected);
     }
 
     public void goToEngineRPM(View view) {
         Intent intent = new Intent(this, EngineRPM.class);
-        startActivity(intent);
-    }
-
-    public void readOdometer(View view) {
-        Intent intent = new Intent(this, OdometerActivity.class);
         startActivity(intent);
     }
 

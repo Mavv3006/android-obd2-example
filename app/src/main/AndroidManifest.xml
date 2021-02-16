@@ -17,7 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.NoActionBar">
         <activity android:name=".Activities.VehicleSpeedActivity" />
-        <activity android:name=".Activities.OdometerActivity" />
         <activity
             android:name=".Activities.MainActivity"
             android:screenOrientation="portrait" />
