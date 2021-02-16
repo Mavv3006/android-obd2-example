@@ -62,6 +62,7 @@ public abstract class ObdCommand implements IObdCommand {
     protected boolean imperialUnits = false;
     protected String rawData = null;
     protected Long responseDelayInMs = null;
+    protected InputStream inputStream;
     private long start;
     private long end;
 
@@ -105,9 +106,8 @@ public abstract class ObdCommand implements IObdCommand {
         // Only one command can write and read a data in one time.
         synchronized (ObdCommand.class) {
             start = System.currentTimeMillis();
+            inputStream = in;
             sendCommand(out);
-            readResult(in);
-            end = System.currentTimeMillis();
         }
     }
 
@@ -135,11 +135,11 @@ public abstract class ObdCommand implements IObdCommand {
      * <p>
      * This method may be overridden in subclasses, such as ObdMultiCommand.
      *
-     * @param in a {@link java.io.InputStream} object.
      * @throws java.io.IOException if any.
      */
-    protected void readResult(InputStream in) throws IOException {
-        readRawData(in);
+    public void readResult() throws IOException {
+        end = System.currentTimeMillis();
+        readRawData(inputStream);
         checkForErrors();
         fillBuffer();
         performCalculations();

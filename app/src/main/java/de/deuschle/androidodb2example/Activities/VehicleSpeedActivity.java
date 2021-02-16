@@ -53,6 +53,13 @@ public class VehicleSpeedActivity extends AppCompatActivity {
                 if (data != null) {
                     Log.i(LogTags.OBD2, "Data: " + data);
                     bleInputStream.setData(data);
+                    try {
+                        command.readResult();
+                        valueTextView.setText(command.getFormattedResult());
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error in processing the input data: " + e.getMessage());
+                        e.printStackTrace();
+                    }
                 }
             }
         }
