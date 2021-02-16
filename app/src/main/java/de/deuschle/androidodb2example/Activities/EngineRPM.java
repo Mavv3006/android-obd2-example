@@ -17,9 +17,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import java.io.IOException;
 
-import br.ufrn.imd.obd.commands.ObdCommand;
-import br.ufrn.imd.obd.commands.engine.ThrottlePositionCommand;
-import br.ufrn.imd.obd.exceptions.NonNumericResponseException;
 import de.deuschle.androidodb2example.BluetoothLeService;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
@@ -27,6 +24,9 @@ import de.deuschle.androidodb2example.Streams.BleInputStream;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
 import de.deuschle.androidodb2example.Streams.MyInputStream;
 import de.deuschle.androidodb2example.Streams.MyOutputStream;
+import de.deuschle.obd.commands.ObdCommand;
+import de.deuschle.obd.commands.engine.ThrottlePositionCommand;
+import de.deuschle.obd.exceptions.NonNumericResponseException;
 
 public class EngineRPM extends AppCompatActivity {
     private static final String TAG = EngineRPM.class.getSimpleName();

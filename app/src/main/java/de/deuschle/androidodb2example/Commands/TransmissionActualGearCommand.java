@@ -1,7 +1,7 @@
 package de.deuschle.androidodb2example.Commands;
 
-import br.ufrn.imd.obd.commands.ObdCommand;
-import br.ufrn.imd.obd.enums.AvailableCommand;
+import de.deuschle.obd.commands.ObdCommand;
+import de.deuschle.obd.enums.AvailableCommand;
 
 public class TransmissionActualGearCommand extends ObdCommand {
     public TransmissionActualGearCommand(TransmissionActualGearCommand other) {
