@@ -165,6 +165,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void readVehicleSpeed(View view) {
+        Intent intent = new Intent(this, VehicleSpeedActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();

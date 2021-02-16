@@ -42,8 +42,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="odometer_toolbar_title">Odometer Activity</string>
     <string name="command_read_data">Lese Daten</string>
     <string name="odometer_text_view_description">Aktueller Kilometerstand:</string>
@@ -53,5 +51,8 @@
     <string name="shared_preferences_device_address">shared_preferences_device_address</string>
     <string name="shared_preferences_device_name">shared_preferences_device_name</string>
 
+    <string name="vehicle_speed">Vehicle Speed</string>
+    <string name="vehicle_speed_toolbar_title">Vehicle Speed Activity</string>
+    <string name="vehicle_speed_text_view_description">Aktuelle Geschwindigkeit:</string>
 
 </resources>
