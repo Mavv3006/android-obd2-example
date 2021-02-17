@@ -9,6 +9,11 @@ public class MockInputStream extends MyInputStream {
 
     private final List<Integer> values = new ArrayList<>();
 
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+
     public MockInputStream() {
         this.values.add(0x0131);
         this.values.add(0x41);

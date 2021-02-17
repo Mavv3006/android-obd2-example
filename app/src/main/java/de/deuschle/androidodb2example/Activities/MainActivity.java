@@ -159,8 +159,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
-        unbindService(mServiceConnection);
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+            unbindService(mServiceConnection);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

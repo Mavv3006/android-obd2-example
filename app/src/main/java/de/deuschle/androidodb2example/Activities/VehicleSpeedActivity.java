@@ -46,19 +46,22 @@ public class VehicleSpeedActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-
-            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+            if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                valueTextView.setText(getString(R.string.connected));
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.e(TAG, "RECV DATA");
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                 if (data != null) {
                     Log.i(LogTags.OBD2, "Data: " + data);
                     bleInputStream.setData(data);
-                    try {
-                        command.readResult();
-                        valueTextView.setText(command.getFormattedResult());
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error in processing the input data: " + e.getMessage());
-                        e.printStackTrace();
+                    if (bleInputStream.isFinished()) {
+                        try {
+                            command.readResult();
+                            valueTextView.setText(command.getFormattedResult());
+                        } catch (IOException e) {
+                            Log.e(TAG, "Error in processing the input data: " + e.getMessage());
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

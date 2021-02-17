@@ -4,19 +4,35 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import de.deuschle.androidodb2example.LogTags.LogTags;
 
 public class BleInputStream extends MyInputStream {
+    private static final String TAG = BleInputStream.class.getSimpleName();
     private String inputData;
-    private final Queue<Integer> integerList = new LinkedList<>();
+    private final Deque<Integer> integerList = new LinkedList<>();
+
+    public boolean isFinished() {
+        if (integerList.size() == 0) {
+            return false;
+        }
+        Log.d(LogTags.OBD2, "is finished: " + (integerList.peekLast() == 62));
+        if (integerList.peekLast() == 62) {
+            Log.d(LogTags.OBD2, "Integer List: " + Arrays.toString(integerList.toArray()));
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public int read() {
-        return integerList.remove();
+        if (integerList.size() > 0) {
+            return integerList.removeFirst();
+        }
+        return 62;
     }
 
     @Override

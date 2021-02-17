@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class EngineRPM extends AppCompatActivity {
     private final MyInputStream bleInputStream = new BleInputStream();
     private final MyOutputStream bleOutputStream = new BleOutputStream();
     private BluetoothLeService bluetoothLeService;
+    private SharedPreferences sharedPreferences;
 
     private TextView resultTextView;
     private ObdCommand command;
@@ -49,6 +51,15 @@ public class EngineRPM extends AppCompatActivity {
 
             Log.e(TAG, "mBluetoothLeService is okay");
             bleOutputStream.setBleService(bluetoothLeService);
+
+            String deviceAddress = sharedPreferences.getString(getString(R.string.shared_preferences_device_address), null);
+            Log.d(LogTags.SHARED_PREFERENCES, "Device Address read: " + deviceAddress);
+            if (deviceAddress != null) {
+                // Automatically connects to the device upon successful start-up initialization.
+                bluetoothLeService.connect(deviceAddress);
+            } else {
+                Log.e(LogTags.SHARED_PREFERENCES, "unable to connect to device, device address not saved");
+            }
         }
 
         @Override
@@ -118,6 +129,8 @@ public class EngineRPM extends AppCompatActivity {
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         Log.d(TAG, "Try to bindService = " + bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE));
+
+        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
     }
 
     @Override

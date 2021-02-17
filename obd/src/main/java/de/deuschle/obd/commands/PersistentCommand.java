@@ -60,8 +60,8 @@ public abstract class PersistentCommand extends ObdCommand {
      * {@inheritDoc}
      */
     @Override
-    protected void readResult(InputStream in) throws IOException {
-        super.readResult(in);
+    public void readResult() throws IOException {
+        super.readResult();
         String key = getKey();
         knownValues.put(key, rawData);
         knownBuffers.put(key, new ArrayList<>(buffer));
