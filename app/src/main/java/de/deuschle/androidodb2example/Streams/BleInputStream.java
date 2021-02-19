@@ -16,13 +16,18 @@ public class BleInputStream extends MyInputStream {
     private final Deque<Integer> integerList = new LinkedList<>();
 
     public boolean isFinished() {
-        if (integerList.size() == 0) {
-            return false;
-        }
-        Log.d(LogTags.OBD2, "is finished: " + (integerList.peekLast() == 62));
-        if (integerList.peekLast() == 62) {
-            Log.d(LogTags.OBD2, "Integer List: " + Arrays.toString(integerList.toArray()));
-            return true;
+        Log.d(TAG, "size of list" + integerList.size());
+        try {
+            int last = integerList.peekLast();
+            boolean is62 = last == 62;
+            Log.d(TAG, "is finished: " + is62);
+            if (is62) {
+                Log.d(LogTags.OBD2, "Integer List: " + Arrays.toString(integerList.toArray()));
+                return true;
+            }
+        } catch (NullPointerException e) {
+            Log.e(TAG, "peeking the last element produced a NullPointerException: " + e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
