@@ -20,12 +20,12 @@
         android:id="@+id/vehicle_speed_button_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="20dp"
         android:onClick="readData"
         android:text="@string/command_read_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/vehicle_speed_toolbar" />
 
     <TextView
         android:id="@+id/vehicle_speed_text_view_value"
@@ -37,5 +37,13 @@
         app:layout_constraintStart_toEndOf="@+id/vehicle_speed_text_view_description"
         app:layout_constraintTop_toBottomOf="@+id/vehicle_speed_button_start" />
 
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/vehicle_speed_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/elevation_default_top_app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

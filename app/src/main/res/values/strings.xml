@@ -54,5 +54,6 @@
     <string name="vehicle_speed">Vehicle Speed</string>
     <string name="vehicle_speed_toolbar_title">Vehicle Speed Activity</string>
     <string name="vehicle_speed_text_view_description">Aktuelle Geschwindigkeit:</string>
+    <string name="engine_rpm_text_view_description">Aktuelle Umdrehungen:</string>
 
 </resources>
