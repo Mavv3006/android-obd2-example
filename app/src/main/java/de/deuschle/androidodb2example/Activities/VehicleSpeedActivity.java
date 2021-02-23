@@ -28,8 +28,6 @@ public class VehicleSpeedActivity extends CommandActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(getString(R.string.vehicle_speed_toolbar_title));
-        } else {
-            Log.e(TAG, "actionBar is null");
         }
 
         valueTextView = findViewById(R.id.vehicle_speed_text_view_value);
