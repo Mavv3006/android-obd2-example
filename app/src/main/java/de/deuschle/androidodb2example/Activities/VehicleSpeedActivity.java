@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import java.io.IOException;
 
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.obd.commands.engine.SpeedCommand;
+import de.deuschle.obd.exceptions.NonNumericResponseException;
 
 public class VehicleSpeedActivity extends CommandActivity {
     private final String TAG = VehicleSpeedActivity.class.getSimpleName();
@@ -17,7 +21,16 @@ public class VehicleSpeedActivity extends CommandActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_speed);
-        setActionBar(R.string.vehicle_speed_toolbar_title);
+        Toolbar toolbar = findViewById(R.id.vehicle_speed_toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getString(R.string.vehicle_speed_toolbar_title));
+        } else {
+            Log.e(TAG, "actionBar is null");
+        }
 
         valueTextView = findViewById(R.id.vehicle_speed_text_view_value);
         command = new SpeedCommand();
@@ -34,7 +47,7 @@ public class VehicleSpeedActivity extends CommandActivity {
                 try {
                     command.readResult();
                     valueTextView.setText(command.getFormattedResult());
-                } catch (IOException e) {
+                } catch (IOException | NonNumericResponseException e) {
                     Log.e(TAG, "Error in processing the input data: " + e.getMessage());
                     e.printStackTrace();
                 }

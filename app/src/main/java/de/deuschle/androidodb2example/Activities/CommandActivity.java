@@ -112,6 +112,17 @@ abstract public class CommandActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+            unbindService(mServiceConnection);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
