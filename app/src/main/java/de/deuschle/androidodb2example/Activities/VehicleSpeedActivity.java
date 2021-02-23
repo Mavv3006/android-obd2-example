@@ -40,17 +40,17 @@ public class VehicleSpeedActivity extends CommandActivity {
 
     @Override
     protected void handleData(String data) {
-        if (data != null) {
-            Log.i(LogTags.OBD2, "Data: " + data);
-            bleInputStream.setData(data);
-            if (bleInputStream.isFinished()) {
-                try {
-                    command.readResult();
-                    valueTextView.setText(command.getFormattedResult());
-                } catch (IOException | NonNumericResponseException e) {
-                    Log.e(TAG, "Error in processing the input data: " + e.getMessage());
-                    e.printStackTrace();
-                }
+        if (data == null) return;
+
+        Log.i(LogTags.OBD2, "Data: " + data);
+        bleInputStream.setData(data);
+        if (bleInputStream.isFinished()) {
+            try {
+                command.readResult();
+                valueTextView.setText(command.getFormattedResult());
+            } catch (IOException | NonNumericResponseException e) {
+                Log.e(TAG, "Error in processing the input data: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }

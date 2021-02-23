@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
     private final BleOutputStream bleOutputStream = new BleOutputStream();
     private BluetoothLeService bluetoothLeService;
-    private boolean isConnected = false;
     Button disconnectButton;
     Button connectButton;
     Toolbar toolbar;
@@ -81,11 +80,9 @@ public class MainActivity extends AppCompatActivity {
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 Log.e(TAG, "Only gatt, just wait");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                isConnected = false;
                 toolbar.setSubtitle(getString(R.string.bluetooth_connection_status) + " " + getString(R.string.bluetooth_connection_disconnected));
                 toggleButtons();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                isConnected = true;
                 toolbar.setSubtitle(getString(R.string.bluetooth_connection_status) + " " + getString(R.string.bluetooth_connection_connected));
                 ShowDialog();
                 toggleButtons();
