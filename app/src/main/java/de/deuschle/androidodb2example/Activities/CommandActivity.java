@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
+
 import de.deuschle.androidodb2example.BluetoothLeService;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
@@ -23,6 +25,7 @@ import de.deuschle.androidodb2example.Streams.BleOutputStream;
 import de.deuschle.androidodb2example.Streams.MyInputStream;
 import de.deuschle.androidodb2example.Streams.MyOutputStream;
 import de.deuschle.obd.commands.ObdCommand;
+import de.deuschle.obd.exceptions.NonNumericResponseException;
 
 abstract public class CommandActivity extends AppCompatActivity {
     private static final String TAG = CommandActivity.class.getSimpleName();
@@ -99,9 +102,25 @@ abstract public class CommandActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
     }
 
-    protected abstract void handleData(String data);
+    protected void handleData(String data) {
+        if (data == null) return;
 
-    protected abstract void handleDisconnect();
+        Log.i(LogTags.OBD2, "Data: " + data);
+        bleInputStream.setData(data);
+        if (bleInputStream.isFinished()) {
+            try {
+                command.readResult();
+                valueTextView.setText(command.getFormattedResult());
+            } catch (IOException | NonNumericResponseException e) {
+                Log.e(TAG, "Error in processing the input data: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void handleDisconnect() {
+        Log.i(TAG, "disconnected");
+    }
 
     protected void setActionBar(int stringId) {
         ActionBar actionBar = getSupportActionBar();
@@ -133,5 +152,10 @@ abstract public class CommandActivity extends AppCompatActivity {
         Log.d(TAG, "Try to bindService = " + bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE));
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+    }
+
+    protected void handleCommandError(Exception e) {
+        Log.e(TAG, "Command failed with: " + e.getMessage());
+        e.printStackTrace();
     }
 }
