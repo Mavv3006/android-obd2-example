@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidODB2Example</string>
+    <string name="app_name">OBD-II Fahrtenbuch</string>
     <string name="main_text">Ich bin eine App</string>
     <string name="ble_not_supported">BLE not supported</string>
     <string name="label_data">Data:</string>
@@ -22,4 +22,32 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
+
+    <!-- Main Activity -->
+    <string name="main_toolbar_title">Hauptmenü</string>
+
+    <string name="bluetooth_connection_status">Status:</string>
+    <string name="bluetooth_connection_connected">Verbunden</string>
+    <string name="bluetooth_connection_disconnected">Getrennt</string>
+    <string name="bluetooth_connect">Verbinden</string>
+    <string name="bluetooth_disconnect">Trennen</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="command_read_data">Lese Daten</string>
+    <string name="shared_preferences_file_key">de.deuschle.android_obd2.shared_preferences_file_key</string>
+    <string name="shared_preferences_device_address">shared_preferences_device_address</string>
+    <string name="shared_preferences_device_name">shared_preferences_device_name</string>
+
+    <string name="vehicle_speed">Vehicle Speed</string>
+    <string name="vehicle_speed_toolbar_title">@string/vehicle_speed</string>
+    <string name="vehicle_speed_description">Aktuelle Geschwindigkeit:</string>
+
+    <string name="engine_speed">Engine Speed</string>
+    <string name="rpm_description">Aktuelle Umdrehungen:</string>
+    <string name="rpm_toolbar_title">@string/engine_speed</string>
+
+    <string name="ambient_temperature_description">aktuelle Umgebungstemperatur:</string>
+    <string name="ambient_temperature_toolbar_title">@string/ambient_temperature</string>
+    <string name="ambient_temperature">Ambient Temperature</string>
 </resources>

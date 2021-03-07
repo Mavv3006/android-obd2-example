@@ -1,2 +1,3 @@
+include ':obd'
 include ':app'
 rootProject.name = "AndroidODB2Example"

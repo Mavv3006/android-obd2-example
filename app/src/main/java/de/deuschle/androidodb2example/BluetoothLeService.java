@@ -73,11 +73,6 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
     }
 
-    public void writeValue(String strValue) {
-        mNotifyCharacteristic.setValue(strValue);
-        mBluetoothGatt.writeCharacteristic(mNotifyCharacteristic);
-    }
-
     public void findService(List<BluetoothGattService> gattServices) {
         Log.i(TAG, "Count is:" + gattServices.size());
         for (BluetoothGattService gattService : gattServices) {
@@ -90,17 +85,17 @@ public class BluetoothLeService extends Service {
                         Log.i(TAG, gattCharacteristic.getUuid().toString());
                         Log.i(TAG, UUID_UCSI_NOTIFY_TX.toString());
                         mNotifyCharacteristic = gattCharacteristic;
+                        Log.d(TAG, "Notify Characteristic set");
                         setCharacteristicNotification(gattCharacteristic, true);
                         broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
-                        //return;
                     }
                     if (gattCharacteristic.getUuid().toString().equalsIgnoreCase(UUID_UCSI_NOTIFY_RX.toString())) {
                         Log.i(TAG, gattCharacteristic.getUuid().toString());
                         Log.i(TAG, UUID_UCSI_NOTIFY_RX.toString());
                         mRxCharacteristic = gattCharacteristic;
+                        Log.d(TAG, "Rx Characteristic set");
                         setCharacteristicNotification(gattCharacteristic, true);
                         broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
-                        //return;
                     }
                 }
             } else {
@@ -215,9 +210,19 @@ public class BluetoothLeService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        BluetoothLeService getService() {
+        public BluetoothLeService getService() {
             return BluetoothLeService.this;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "the service is about to be destoryed");
+    }
+
+    @Override
+    public void onCreate() {
+        Log.i(TAG, "the service is about to be created");
     }
 
     @Override
