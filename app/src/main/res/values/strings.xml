@@ -50,4 +50,12 @@
     <string name="ambient_temperature_description">aktuelle Umgebungstemperatur:</string>
     <string name="ambient_temperature_toolbar_title">@string/ambient_temperature</string>
     <string name="ambient_temperature">Ambient Temperature</string>
+    <string name="init_toolbar_title">Init Activity</string>
+    <string name="init_button">Starten</string>
+    <string name="init_restart_adapter">Adapter neustarten</string>
+    <string name="init_deactivate_space_separation">Leerzeichentrennung deaktivieren</string>
+    <string name="init_success">success - OK</string>
+    <string name="init_error">error - Error</string>
+    <string name="init_empty" />
+    <string name="main_init_button_name">Init Adapter</string>
 </resources>

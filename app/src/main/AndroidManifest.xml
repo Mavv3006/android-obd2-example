@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.NoActionBar">
-        <activity android:name=".Activities.AmbientTemperatureActivity"></activity>
+        <activity android:name=".Activities.InitActivity" />
+        <activity android:name=".Activities.AmbientTemperatureActivity" />
         <activity android:name=".Activities.VehicleSpeedActivity" />
         <activity
             android:name=".Activities.MainActivity"

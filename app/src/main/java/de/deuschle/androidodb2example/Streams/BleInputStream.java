@@ -15,6 +15,10 @@ public class BleInputStream extends MyInputStream {
     private String inputData;
     private final Deque<Integer> integerList = new LinkedList<>();
 
+    // Arrays that from init commands (ObdResetCommand and SpacesOffCommand)
+    private static final String restartHexArray = "[E, L, M, 3, 2, 7, v, 2, ., 1]";
+    private static final String okHexArray = "[O, K, >]";
+
     public boolean isFinished() {
         Log.d(TAG, "size of list" + integerList.size());
         try {
@@ -72,6 +76,17 @@ public class BleInputStream extends MyInputStream {
         }
 
         Log.d(LogTags.INPUT_STREAM_DATA, "Hex Array: " + hexArray);
+
+        String hexArrayString = hexArray.toString();
+
+        if (hexArrayString.equals(restartHexArray)) {
+            Log.i(TAG, "Restart hex array recognised");
+            return;
+        }
+        if (hexArrayString.equals(okHexArray)) {
+            Log.i(TAG, "Ok hex array recognised");
+            return;
+        }
 
         for (String s : hexArray) {
             if (s.equals(">")) {

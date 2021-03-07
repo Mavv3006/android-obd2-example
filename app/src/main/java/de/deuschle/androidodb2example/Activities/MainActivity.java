@@ -40,4 +40,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AmbientTemperatureActivity.class);
         startActivity(intent);
     }
+
+    public void goToInit(View view) {
+        Intent intent = new Intent(this, InitActivity.class);
+        startActivity(intent);
+    }
 }
