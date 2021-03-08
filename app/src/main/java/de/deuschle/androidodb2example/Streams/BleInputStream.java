@@ -16,11 +16,16 @@ public class BleInputStream extends MyInputStream {
     private final Deque<Integer> integerList = new LinkedList<>();
 
     // Arrays that from init commands (ObdResetCommand and SpacesOffCommand)
-    private static final String restartHexArray = "[E, L, M, 3, 2, 7, v, 2, ., 1]";
-    private static final String okHexArray = "[O, K, >]";
+    private static final String restartHexArray = "[ELM327, v2.1, >]";
+    private static final String okHexArray = "[OK, >]";
 
+    /**
+     * @return {@code true} if the stream is empty or the "end-of data"-signal (>)
+     * is the last element in the stream. {@code false} otherwise
+     */
     public boolean isFinished() {
-        Log.d(TAG, "size of list" + integerList.size());
+        Log.d(TAG, "size of list: " + integerList.size());
+        if (integerList.isEmpty()) return true;
         try {
             int last = integerList.peekLast();
             boolean is62 = last == 62;
@@ -30,8 +35,7 @@ public class BleInputStream extends MyInputStream {
                 return true;
             }
         } catch (NullPointerException e) {
-            Log.e(TAG, "peeking the last element produced a NullPointerException: " + e.getMessage());
-            e.printStackTrace();
+            return true;
         }
         return false;
     }
@@ -41,29 +45,42 @@ public class BleInputStream extends MyInputStream {
         if (integerList.size() > 0) {
             return integerList.removeFirst();
         }
-        return 62;
+        return -1;
     }
 
     @Override
     public void setData(String data) {
         this.inputData = data;
+        Log.i(TAG, "The data to process: " + data);
         processData();
     }
 
     private void processData() {
-        String[] dataArray = inputData.split("[ \n\r]");
+        String[] splittedDataArray = inputData.split("[ \n\r]");
 
-        Log.d(LogTags.INPUT_STREAM_DATA, "Splitted Data: " + Arrays.toString(dataArray));
+        Log.d(LogTags.INPUT_STREAM_DATA, "Splitted Data: " + Arrays.toString(splittedDataArray));
+
+        String splittedDataArrayString = Arrays.toString(splittedDataArray);
+
+        if (splittedDataArrayString.equals(restartHexArray)) {
+            Log.i(TAG, "Restart hex array recognised");
+            return;
+        }
+        if (splittedDataArrayString.equals(okHexArray)) {
+            Log.i(TAG, "Ok hex array recognised");
+            return;
+        }
 
         List<String> clearedData = new ArrayList<>();
 
-        for (int i = 0; i < dataArray.length; i++) {
+        for (int i = 0; i < splittedDataArray.length; i++) {
             if (i >= 2) {
-                clearedData.add(dataArray[i]);
+                clearedData.add(splittedDataArray[i]);
             }
         }
 
         Log.d(LogTags.INPUT_STREAM_DATA, "Cleared Splitted Data: " + clearedData);
+        if (clearedData.isEmpty()) return;
 
         List<String> hexArray = new ArrayList<>();
         for (String data : clearedData) {
@@ -76,17 +93,6 @@ public class BleInputStream extends MyInputStream {
         }
 
         Log.d(LogTags.INPUT_STREAM_DATA, "Hex Array: " + hexArray);
-
-        String hexArrayString = hexArray.toString();
-
-        if (hexArrayString.equals(restartHexArray)) {
-            Log.i(TAG, "Restart hex array recognised");
-            return;
-        }
-        if (hexArrayString.equals(okHexArray)) {
-            Log.i(TAG, "Ok hex array recognised");
-            return;
-        }
 
         for (String s : hexArray) {
             if (s.equals(">")) {
