@@ -10,7 +10,7 @@
         android:id="@+id/init_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="@dimen/elevation_default_top_app_bar"
+        android:theme="@style/Widget.MyTheme.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

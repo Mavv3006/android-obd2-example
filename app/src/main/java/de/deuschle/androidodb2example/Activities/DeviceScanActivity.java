@@ -30,7 +30,6 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -66,7 +65,6 @@ public class DeviceScanActivity extends ListActivity {
     private BluetoothLeScanner bluetoothLeScanner;
     private boolean mScanning;
     private ObdApplication application;
-    SharedPreferences sharedPreferences;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
@@ -108,8 +106,6 @@ public class DeviceScanActivity extends ListActivity {
         }
 
         bluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-
-        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
 
         //Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter();
@@ -411,12 +407,9 @@ public class DeviceScanActivity extends ListActivity {
                 .show();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private boolean addPermission(List<String> permissionsList) {
-
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionsList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-            // Check for Rationale Option
             return shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
         }
         return true;
