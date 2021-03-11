@@ -39,6 +39,9 @@ public class BluetoothScanActivity extends AppCompatActivity {
     static final long SCAN_PERIOD = 10_000; // Stops scanning after 10 seconds
     static final String TAG = BluetoothScanActivity.class.getSimpleName();
     static final String[] NEEDED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+    static final String PERMISSION_DIALOG_TITLE = "This app needs to access the location";
+    static final String PERMISSION_DIALOG_MESSAGE = "This is because BLE only works with " +
+            "the location permission granted.";
 
     final Map<String, BluetoothDevice> bluetoothDevices = new HashMap<>();
 
@@ -125,7 +128,6 @@ public class BluetoothScanActivity extends AppCompatActivity {
         application = (ObdApplication) (getApplication());
         handler = new Handler();
 
-        askForPermission();
         checkForBluetooth();
 
         bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
@@ -144,11 +146,11 @@ public class BluetoothScanActivity extends AppCompatActivity {
     private void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             new AlertDialog.Builder(this)
-                    .setTitle("permission needed")
-                    .setMessage("this permission is needed: why?")
-                    .setPositiveButton("ok", (dialog, which) ->
+                    .setTitle(PERMISSION_DIALOG_TITLE)
+                    .setMessage(PERMISSION_DIALOG_MESSAGE)
+                    .setPositiveButton("Ok", (dialog, which) ->
                             ActivityCompat.requestPermissions(BluetoothScanActivity.this, NEEDED_PERMISSIONS, REQUEST_ENABLE_BT))
-                    .setNegativeButton("cancel", (dialog, which) -> dialog.dismiss())
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .create()
                     .show();
         } else {
@@ -161,6 +163,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         if (requestCode == REQUEST_ENABLE_BT) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                startScanning();
             } else {
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
             }
@@ -216,6 +219,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_scan) {
+            askForPermission();
             startScanning();
         } else if (itemId == R.id.menu_stop) {
             stopScanning();
