@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.deuschle.androidodb2example;
+package de.deuschle.androidodb2example.Activities;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -52,8 +52,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.deuschle.androidodb2example.Activities.MainActivity;
-import de.deuschle.androidodb2example.LogTags.LogTags;
+import de.deuschle.androidodb2example.ObdApplication;
+import de.deuschle.androidodb2example.R;
 
 
 /**
@@ -65,6 +65,7 @@ public class DeviceScanActivity extends ListActivity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
     private boolean mScanning;
+    private ObdApplication application;
     SharedPreferences sharedPreferences;
 
     private static final int REQUEST_ENABLE_BT = 1;
@@ -75,6 +76,8 @@ public class DeviceScanActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setTitle(R.string.title_devices);
+
+        this.application = (ObdApplication) (getApplication());
 
         requestLocationPermission();
 
@@ -119,11 +122,11 @@ public class DeviceScanActivity extends ListActivity {
         if (!mScanning) {
             menu.findItem(R.id.menu_stop).setVisible(false);
             menu.findItem(R.id.menu_scan).setVisible(true);
-            menu.findItem(R.id.menu_refresh).setActionView(null);
+            menu.findItem(R.id.menu_refresh).setVisible(false).setActionView(null);
         } else {
             menu.findItem(R.id.menu_stop).setVisible(true);
             menu.findItem(R.id.menu_scan).setVisible(false);
-            menu.findItem(R.id.menu_refresh).setActionView(
+            menu.findItem(R.id.menu_refresh).setVisible(true).setActionView(
                     R.layout.actionbar_indeterminate_progress);
         }
         return true;
@@ -155,22 +158,6 @@ public class DeviceScanActivity extends ListActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
-        // fire an intent to display a dialog asking the user to grant permission to enable it.
-        /*
-        if (!mBluetoothAdapter.isEnabled()) {
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
-        }
-        */
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         scanLeDevice(false);
@@ -180,26 +167,17 @@ public class DeviceScanActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
-//        final Intent intent = new Intent(this, DeviceControlActivity.class);
-        final Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
 
-        writeToSharedPreferences(getString(R.string.shared_preferences_device_address), device.getAddress());
-        writeToSharedPreferences(getString(R.string.shared_preferences_device_name), device.getName());
+        final Intent intent = new Intent(this, MainActivity.class);
+
+        application.setDeviceAdress(device.getAddress());
+        application.setDeviceName(device.getName());
 
         if (mScanning) {
             bluetoothLeScanner.stopScan(scanCallback);
             mScanning = false;
         }
         startActivity(intent);
-    }
-
-    private void writeToSharedPreferences(String key, String value) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, value);
-        Log.d(LogTags.SHARED_PREFERENCES, String.format("Written: %s-%s", key, value));
-        editor.apply();
     }
 
     private void scanLeDevice(final boolean enable) {

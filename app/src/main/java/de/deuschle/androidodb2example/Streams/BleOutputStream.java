@@ -4,10 +4,11 @@ import androidx.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
-import de.deuschle.androidodb2example.BluetoothLeService;
+import de.deuschle.androidodb2example.Services.BluetoothLeService;
 
-public class BleOutputStream extends MyOutputStream {
+public class BleOutputStream extends OutputStream implements SetBleService {
 
     private BluetoothLeService bleService;
     private final ByteArrayOutputStream valueToWrite = new ByteArrayOutputStream();

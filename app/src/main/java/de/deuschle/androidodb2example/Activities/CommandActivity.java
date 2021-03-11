@@ -7,34 +7,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Queue;
 
-import de.deuschle.androidodb2example.BluetoothLeService;
+import de.deuschle.androidodb2example.Conversion.ProcessRawData;
 import de.deuschle.androidodb2example.LogTags.LogTags;
+import de.deuschle.androidodb2example.ObdApplication;
 import de.deuschle.androidodb2example.R;
-import de.deuschle.androidodb2example.Streams.BleInputStream;
+import de.deuschle.androidodb2example.Services.BluetoothLeService;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
-import de.deuschle.androidodb2example.Streams.MyInputStream;
-import de.deuschle.androidodb2example.Streams.MyOutputStream;
 import de.deuschle.obd.commands.ObdCommand;
-import de.deuschle.obd.exceptions.NonNumericResponseException;
 
 abstract public class CommandActivity extends AppCompatActivity {
     private static final String TAG = CommandActivity.class.getSimpleName();
-    protected final MyInputStream bleInputStream = new BleInputStream();
-    protected final MyOutputStream bleOutputStream = new BleOutputStream();
+    protected final BleOutputStream bleOutputStream = new BleOutputStream();
     protected BluetoothLeService bluetoothLeService;
     protected TextView valueTextView;
-    protected ObdCommand command;
-    protected SharedPreferences sharedPreferences;
+    //    protected SharedPreferences sharedPreferences;
+    protected ObdApplication application;
     // Handles various events fired by the Service.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
     //                        or notification operations.
@@ -71,7 +68,8 @@ abstract public class CommandActivity extends AppCompatActivity {
             Log.i(TAG, "mBluetoothLeService is okay");
             bleOutputStream.setBleService(bluetoothLeService);
 
-            String deviceAddress = sharedPreferences.getString(getString(R.string.shared_preferences_device_address), null);
+//            String deviceAddress = sharedPreferences.getString(getString(R.string.shared_preferences_device_address), null);
+            String deviceAddress = application.getDeviceAdress();
             Log.d(LogTags.SHARED_PREFERENCES, "Device Address read: " + deviceAddress);
             if (deviceAddress != null) {
                 // Automatically connects to the device upon successful start-up initialization.
@@ -99,35 +97,41 @@ abstract public class CommandActivity extends AppCompatActivity {
 
     void setup() {
         registerService();
-        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
+        application = (ObdApplication) (getApplication());
+//        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
     }
 
     protected void handleData(String data) {
         if (data == null) return;
-
         Log.i(LogTags.OBD2, "Data: " + data);
-        bleInputStream.setData(data);
-        if (bleInputStream.isFinished()) {
-            try {
-                command.readResult();
-                valueTextView.setText(command.getFormattedResult());
-            } catch (IOException | NonNumericResponseException e) {
-                Log.e(TAG, "Error in processing the input data: " + e.getMessage());
-                e.printStackTrace();
-            }
+
+        ObdCommand command = application.getCommandQueue().poll();
+        byte[] processedData = ProcessRawData.convert(data);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
+        try {
+            assert command != null;
+            command.readResult(inputStream);
+        } catch (Exception e) {
+            handleCommandError(e, command);
         }
+
+        valueTextView.setText(command.getFormattedResult());
+        sendCommand();
+
+//        bleInputStream.setData(data);
+//        if (bleInputStream.isFinished()) {
+//            try {
+//                activeCommand.readResult();
+//                valueTextView.setText(activeCommand.getFormattedResult());
+//            } catch (IOException | NonNumericResponseException e) {
+//                Log.e(TAG, "Error in processing the input data: " + e.getMessage());
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     protected void handleDisconnect() {
         Log.i(TAG, "disconnected");
-    }
-
-    protected void setActionBar(int stringId) {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getString(stringId));
-        }
     }
 
     @Override
@@ -154,8 +158,26 @@ abstract public class CommandActivity extends AppCompatActivity {
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
-    protected void handleCommandError(Exception e) {
-        Log.e(TAG, "Command failed with: " + e.getMessage());
+    protected void handleCommandError(Exception e, ObdCommand command) {
+        Log.e(TAG, "Command " + command.getName() + " failed with: " + e.getMessage());
         e.printStackTrace();
+    }
+
+    protected void addCommand(ObdCommand command) {
+        application.getCommandQueue().offer(command);
+        sendCommand();
+    }
+
+    protected void sendCommand() {
+        Queue<ObdCommand> queue = application.getCommandQueue();
+        if (queue.size() > 0) {
+            try {
+                ObdCommand command = queue.peek();
+                assert command != null;
+                command.sendCommand(bleOutputStream);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
