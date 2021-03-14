@@ -1,8 +1,13 @@
 package de.deuschle.androidodb2example.Conversion;
 
+import android.util.Log;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,12 +21,6 @@ public class ProcessRawDataTest {
         final String[] result = ProcessRawData.splitData(rawData);
 
         Assert.assertArrayEquals(expectedResult, result);
-    }
-
-    @Test
-    public void testInfoMessage() {
-        Assert.assertTrue(ProcessRawData.isInfoMessage(ProcessRawData.restartHexArray));
-        Assert.assertTrue(ProcessRawData.isInfoMessage(ProcessRawData.okHexArray));
     }
 
     @Test
@@ -72,5 +71,17 @@ public class ProcessRawDataTest {
         final byte[] result = ProcessRawData.convert(rawData);
 
         Assert.assertArrayEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testInputStreamWithEmptyList() {
+        final byte[] array = new byte[0];
+        Log.i("test", Arrays.toString(array));
+        InputStream inputStream = new ByteArrayInputStream(array);
+        try {
+            Log.i("test", String.valueOf(inputStream.read()));
+        } catch (IOException e) {
+            Log.e("test", "reading failed because: " + e.getMessage());
+        }
     }
 }

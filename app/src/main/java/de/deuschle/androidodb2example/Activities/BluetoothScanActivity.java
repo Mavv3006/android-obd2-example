@@ -242,7 +242,8 @@ public class BluetoothScanActivity extends AppCompatActivity {
         }, SCAN_PERIOD);
 
         isScanning = true;
-        this.linearLayout.removeAllViews();
+        bluetoothDevices.clear();
+        linearLayout.removeAllViews();
         bluetoothLeScanner.startScan(scanCallback);
         invalidateOptionsMenu();
     }

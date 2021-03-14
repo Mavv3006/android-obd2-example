@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Queue;
 
 import de.deuschle.androidodb2example.Conversion.ProcessRawData;
@@ -27,15 +28,14 @@ import de.deuschle.obd.commands.ObdCommand;
 
 abstract public class CommandActivity extends AppCompatActivity {
     private static final String TAG = CommandActivity.class.getSimpleName();
+    private ObdCommand activeCommand;
+    private StringBuilder stringBuilder;
+
     protected final BleOutputStream bleOutputStream = new BleOutputStream();
     protected BluetoothLeService bluetoothLeService;
     protected TextView valueTextView;
-    //    protected SharedPreferences sharedPreferences;
     protected ObdApplication application;
-    // Handles various events fired by the Service.
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
-    //                        or notification operations.
-    final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+    protected final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -55,8 +55,7 @@ abstract public class CommandActivity extends AppCompatActivity {
         }
     };
 
-
-    final ServiceConnection mServiceConnection = new ServiceConnection() {
+    protected final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             bluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
@@ -68,7 +67,6 @@ abstract public class CommandActivity extends AppCompatActivity {
             Log.i(TAG, "mBluetoothLeService is okay");
             bleOutputStream.setBleService(bluetoothLeService);
 
-//            String deviceAddress = sharedPreferences.getString(getString(R.string.shared_preferences_device_address), null);
             String deviceAddress = application.getDeviceAdress();
             Log.d(LogTags.SHARED_PREFERENCES, "Device Address read: " + deviceAddress);
             if (deviceAddress != null) {
@@ -98,36 +96,41 @@ abstract public class CommandActivity extends AppCompatActivity {
     void setup() {
         registerService();
         application = (ObdApplication) (getApplication());
-//        sharedPreferences = getSharedPreferences(getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
     }
 
     protected void handleData(String data) {
         if (data == null) return;
         Log.i(LogTags.OBD2, "Data: " + data);
 
-        ObdCommand command = application.getCommandQueue().poll();
+        stringBuilder.append(data);
+
+        if (!data.contains(">")) {
+            return;
+        }
+
+        data = stringBuilder.toString();
+        stringBuilder = new StringBuilder();
+
         byte[] processedData = ProcessRawData.convert(data);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
         try {
-            assert command != null;
-            command.readResult(inputStream);
+            assert activeCommand != null;
+            activeCommand.readResult(inputStream);
+            Log.i(TAG, "Result: " + activeCommand.getFormattedResult());
+            valueTextView.setText(activeCommand.getFormattedResult());
         } catch (Exception e) {
-            handleCommandError(e, command);
+            handleCommandError(e, activeCommand);
+        } catch (AssertionError e) {
+            handleAsserionError(e, processedData);
         }
 
-        valueTextView.setText(command.getFormattedResult());
         sendCommand();
+    }
 
-//        bleInputStream.setData(data);
-//        if (bleInputStream.isFinished()) {
-//            try {
-//                activeCommand.readResult();
-//                valueTextView.setText(activeCommand.getFormattedResult());
-//            } catch (IOException | NonNumericResponseException e) {
-//                Log.e(TAG, "Error in processing the input data: " + e.getMessage());
-//                e.printStackTrace();
-//            }
-//        }
+    private void handleAsserionError(AssertionError e, byte[] processedData) {
+        Log.e(TAG, "AssertionError: " + e.getMessage() + ". With data: '"
+                + Arrays.toString(processedData) + "'");
+        e.printStackTrace();
     }
 
     protected void handleDisconnect() {
@@ -168,14 +171,23 @@ abstract public class CommandActivity extends AppCompatActivity {
         sendCommand();
     }
 
+    protected void addCommand(ObdCommand[] commands) {
+        Queue<ObdCommand> commandQueue = application.getCommandQueue();
+        for (ObdCommand command : commands) {
+            commandQueue.offer(command);
+        }
+        sendCommand();
+    }
+
     protected void sendCommand() {
         Queue<ObdCommand> queue = application.getCommandQueue();
         if (queue.size() > 0) {
             try {
-                ObdCommand command = queue.peek();
+                ObdCommand command = queue.poll();
                 assert command != null;
-                command.sendCommand(bleOutputStream);
-            } catch (IOException | InterruptedException e) {
+                activeCommand = command;
+                activeCommand.sendCommand(bleOutputStream);
+            } catch (IOException | AssertionError | InterruptedException e) {
                 e.printStackTrace();
             }
         }

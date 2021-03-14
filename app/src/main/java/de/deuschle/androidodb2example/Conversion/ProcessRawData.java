@@ -4,25 +4,24 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ProcessRawData {
     private static final String TAG = ProcessRawData.class.getSimpleName();
-    protected static final String restartHexArray = "[ELM327, v2.1, >]";
-    protected static final String okHexArray = "[OK, >]";
+    protected static final List<String> infoStringList = Arrays.asList(
+            "[AT, Z, , ELM327, v2.1]",
+            "[AT, S0, , OK, , , , >]",
+            "[, >]"
+    );
+    protected static final List<String> greaterSign = Collections.singletonList(">");
 
     public static byte[] convert(String inputData) {
         List<String> hexArray = preprocess(inputData);
 
-        if (hexArray == null) return null;
+        if (hexArray == null) return new byte[0];
 
-        byte[] resultArray;
-
-        if (hexArray.get(0).equals(">")) {
-            resultArray = new byte[]{62};
-        } else {
-            resultArray = fillRestultArray(hexArray);
-        }
+        byte[] resultArray = fillRestultArray(hexArray);
 
         Log.d(TAG, "Integer Array: " + Arrays.toString(resultArray));
         return resultArray;
@@ -44,6 +43,9 @@ public class ProcessRawData {
         }
 
         List<String> hexArray = toHexStringList(clearedData);
+
+        if (hexArray.equals(greaterSign)) return null;
+
         Log.d(TAG, "Hex Array: " + hexArray);
         return hexArray;
     }
@@ -53,7 +55,8 @@ public class ProcessRawData {
     }
 
     protected static boolean isInfoMessage(String splittedData) {
-        return splittedData.equals(restartHexArray) | splittedData.equals(okHexArray);
+        Log.d(TAG, "checking for info message: '" + splittedData + "'");
+        return infoStringList.contains(splittedData);
     }
 
     protected static List<String> clearData(String[] splitted) {
@@ -82,6 +85,8 @@ public class ProcessRawData {
     protected static byte[] fillRestultArray(List<String> hexArray) {
         byte[] resultArray = new byte[hexArray.size()];
         for (int i = 0; i < hexArray.size(); i++) {
+            if (hexArray.get(i).equals(">")) continue;
+
             byte parsedByte = Byte.parseByte(hexArray.get(i), 16);
             if (parsedByte >= 0 && parsedByte <= 9) {
                 resultArray[i] = (byte) (parsedByte + 48);
