@@ -8,12 +8,11 @@ import java.io.OutputStream;
 
 import de.deuschle.androidodb2example.Services.BluetoothLeService;
 
-public class BleOutputStream extends OutputStream implements SetBleService {
+public class BleOutputStream extends OutputStream {
 
     private BluetoothLeService bleService;
     private final ByteArrayOutputStream valueToWrite = new ByteArrayOutputStream();
 
-    @Override
     public void setBleService(BluetoothLeService bleService) {
         this.bleService = bleService;
     }
