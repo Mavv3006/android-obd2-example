@@ -61,7 +61,7 @@ public class InitActivity extends CommandActivity {
         addCommand(new LineFeedOffCommand());
     }
 
-    public void onReadControlUnitsButtonClick(View view) {
+    public void onSelectEcuButtonClick(View view) {
         ObdCommand[] commandList = {
                 new HeadersOnCommand(),
                 new AvailablePidsCommand01to20(),

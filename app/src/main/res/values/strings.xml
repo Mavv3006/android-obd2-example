@@ -56,6 +56,7 @@
     <string name="init_deactivate_space_separation">Leerzeichentrennung deaktivieren</string>
     <string name="init_success">success - OK</string>
     <string name="init_error">error - Error</string>
-    <string name="init_empty" />
     <string name="main_init_button_name">Init Adapter</string>
+    <string name="init_select_ecu">Steuergerät auswählen</string>
+    <string name="init_line_feed_off">Zeilenumbrüche entfernen</string>
 </resources>
