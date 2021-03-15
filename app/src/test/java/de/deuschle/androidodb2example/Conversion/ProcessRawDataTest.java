@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class ProcessRawDataTest {
+    private static final String TAG = "test";
+
     @Test
     public void testSplittingData() {
         final String rawData = "41 46 2B";
@@ -21,16 +23,6 @@ public class ProcessRawDataTest {
         final String[] result = ProcessRawData.splitData(rawData);
 
         Assert.assertArrayEquals(expectedResult, result);
-    }
-
-    @Test
-    public void testClearingData() {
-        final String[] splitData = new String[]{"41", "46", "2B"};
-        final List<String> expectedResult = Collections.singletonList("2B");
-
-        final List<String> result = ProcessRawData.clearData(splitData);
-
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
@@ -76,12 +68,35 @@ public class ProcessRawDataTest {
     @Test
     public void testInputStreamWithEmptyList() {
         final byte[] array = new byte[0];
-        Log.i("test", Arrays.toString(array));
+        Log.i(TAG, Arrays.toString(array));
         InputStream inputStream = new ByteArrayInputStream(array);
         try {
-            Log.i("test", String.valueOf(inputStream.read()));
+            Log.i(TAG, String.valueOf(inputStream.read()));
         } catch (IOException e) {
-            Log.e("test", "reading failed because: " + e.getMessage());
+            Log.e(TAG, "reading failed because: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void testProcessingAvailablePids() {
+        final String rawData = "7e8 06 41 00 be 3f a8 13\n7ea 06 41 00 98 3a 80 13\r\n\r\n>";
+        final byte[] processedData = ProcessRawData.convert(rawData);
+        Log.i(TAG, Arrays.toString(processedData));
+    }
+
+    @Test
+    public void testHaveColon() {
+        final String rawData = "41 00 be 3f a8 13\n>";
+        final byte[] processedData = ProcessRawData.convert(rawData);
+        final byte last = processedData[processedData.length - 1];
+        Assert.assertEquals(62, last);
+    }
+
+    @Test
+    public void testFillHexArrayWithColon() {
+        final List<String> hexArray = Collections.singletonList(">");
+        final byte[] result = ProcessRawData.fillRestultArray(hexArray);
+        Assert.assertEquals(1, result.length);
+        Assert.assertEquals(62, result[0]);
     }
 }

@@ -108,23 +108,30 @@ abstract public class CommandActivity extends AppCompatActivity {
             return;
         }
 
-        data = stringBuilder.toString();
+        String commandResult = stringBuilder.toString();
         stringBuilder = new StringBuilder();
 
+        processData(commandResult);
+        sendCommand();
+    }
+
+    protected void processData(String data) {
         byte[] processedData = ProcessRawData.convert(data);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
         try {
             assert activeCommand != null;
             activeCommand.readResult(inputStream);
             Log.i(TAG, "Result: " + activeCommand.getFormattedResult());
-            valueTextView.setText(activeCommand.getFormattedResult());
+            handleProcessedData(activeCommand, processedData);
         } catch (Exception e) {
             handleCommandError(e, activeCommand);
         } catch (AssertionError e) {
             handleAsserionError(e, processedData);
         }
+    }
 
-        sendCommand();
+    protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
+        valueTextView.setText(activeCommand.getFormattedResult());
     }
 
     private void handleAsserionError(AssertionError e, byte[] processedData) {

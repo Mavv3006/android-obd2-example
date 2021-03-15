@@ -34,15 +34,7 @@ public class ProcessRawData {
             return null;
         }
 
-        List<String> clearedData = clearData(splitted);
-
-        Log.d(TAG, "Cleared Splitted Data: " + clearedData);
-
-        if (clearedData.isEmpty()) {
-            return null;
-        }
-
-        List<String> hexArray = toHexStringList(clearedData);
+        List<String> hexArray = toHexStringList(Arrays.asList(splitted));
 
         if (hexArray.equals(greaterSign)) return null;
 
@@ -57,16 +49,6 @@ public class ProcessRawData {
     protected static boolean isInfoMessage(String splittedData) {
         Log.d(TAG, "checking for info message: '" + splittedData + "'");
         return infoStringList.contains(splittedData);
-    }
-
-    protected static List<String> clearData(String[] splitted) {
-        List<String> clearedData = new ArrayList<>();
-        for (int i = 0; i < splitted.length; i++) {
-            if (i >= 2) {
-                clearedData.add(splitted[i]);
-            }
-        }
-        return clearedData;
     }
 
     protected static List<String> toHexStringList(List<String> clearedData) {
@@ -85,15 +67,23 @@ public class ProcessRawData {
     protected static byte[] fillRestultArray(List<String> hexArray) {
         byte[] resultArray = new byte[hexArray.size()];
         for (int i = 0; i < hexArray.size(); i++) {
-            if (hexArray.get(i).equals(">")) continue;
-
-            byte parsedByte = Byte.parseByte(hexArray.get(i), 16);
-            if (parsedByte >= 0 && parsedByte <= 9) {
-                resultArray[i] = (byte) (parsedByte + 48);
-            } else if (parsedByte >= 10 && parsedByte <= 15) {
-                resultArray[i] = (byte) (parsedByte + 55);
-            }
+            resultArray[i] = getByte(hexArray.get(i));
         }
         return resultArray;
+    }
+
+    private static byte getByte(String currentValue) {
+        if (currentValue.equals(">")) {
+            return 62;
+        }
+
+        byte parsedByte = Byte.parseByte(currentValue, 16);
+        if (parsedByte >= 0 && parsedByte <= 9) {
+            return (byte) (parsedByte + 48);
+        } else if (parsedByte >= 10 && parsedByte <= 15) {
+            return (byte) (parsedByte + 55);
+        }
+
+        return 0;
     }
 }
