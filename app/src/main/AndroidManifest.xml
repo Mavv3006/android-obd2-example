@@ -29,15 +29,6 @@
         <activity android:name=".Activities.VehicleSpeedActivity" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.RPMActivity" />
-        <activity
-            android:name=".Activities.DeviceScanActivity"
-            android:theme="@android:style/Theme.Material.Light.DarkActionBar">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
-        </activity>
 
         <service
             android:name=".Services.BluetoothLeService"
