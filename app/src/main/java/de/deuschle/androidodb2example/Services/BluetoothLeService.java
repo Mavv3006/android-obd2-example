@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.deuschle.androidodb2example;
+package de.deuschle.androidodb2example.Services;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;

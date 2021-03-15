@@ -62,7 +62,6 @@ public abstract class ObdCommand implements IObdCommand {
     protected boolean imperialUnits = false;
     protected String rawData = null;
     protected Long responseDelayInMs = null;
-    protected InputStream inputStream;
     private long start;
     private long end;
 
@@ -106,8 +105,8 @@ public abstract class ObdCommand implements IObdCommand {
         // Only one command can write and read a data in one time.
         synchronized (ObdCommand.class) {
             start = System.currentTimeMillis();
-            inputStream = in;
             sendCommand(out);
+            readResult(in);
         }
     }
 
@@ -121,7 +120,7 @@ public abstract class ObdCommand implements IObdCommand {
      * @throws java.io.IOException            if any.
      * @throws java.lang.InterruptedException if any.
      */
-    protected void sendCommand(OutputStream out) throws IOException, InterruptedException {
+    public void sendCommand(OutputStream out) throws IOException, InterruptedException {
         // write to OutputStream (i.e.: a BluetoothSocket) with an added Carriage return
         out.write((cmd.getCommand() + "\r").getBytes());
         out.flush();
@@ -137,7 +136,7 @@ public abstract class ObdCommand implements IObdCommand {
      *
      * @throws java.io.IOException if any.
      */
-    public void readResult() throws IOException {
+    public void readResult(InputStream inputStream) throws IOException {
         end = System.currentTimeMillis();
         readRawData(inputStream);
         checkForErrors();

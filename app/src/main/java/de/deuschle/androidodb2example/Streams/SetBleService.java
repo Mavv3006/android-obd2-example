@@ -1,6 +1,6 @@
 package de.deuschle.androidodb2example.Streams;
 
-import de.deuschle.androidodb2example.BluetoothLeService;
+import de.deuschle.androidodb2example.Services.BluetoothLeService;
 
 public interface SetBleService {
     void setBleService(BluetoothLeService bleService);
