@@ -20,7 +20,6 @@ import de.deuschle.obd.commands.protocol.HeadersOffCommand;
 import de.deuschle.obd.commands.protocol.LineFeedOffCommand;
 import de.deuschle.obd.commands.protocol.ObdResetCommand;
 import de.deuschle.obd.commands.protocol.SpacesOffCommand;
-import de.deuschle.obd.enums.AvailableCommand;
 
 public class InitActivity extends CommandActivity {
 
@@ -72,15 +71,17 @@ public class InitActivity extends CommandActivity {
 
     @Override
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
-        if (!activeCommand.getCommandPID().equals(AvailableCommand.PIDS_01_20.getValue().substring(3))) {
+        if (!activeCommand.getCommandPID().equals("00")) {
             return;
         }
 
         // get ecu byte values
-        int ecuCount = (processedData.length - 1) % 16;
+        int ecuCount = processedData.length / 17;
+        Log.d(TAG, "ECU count: " + ecuCount);
         byte[][] ecuArray = new byte[ecuCount][3];
         for (int i = 0; i < ecuCount; i++) {
-            System.arraycopy(processedData, i, ecuArray[i], 0, 3);
+            Log.d(TAG, "i = " + i);
+            System.arraycopy(processedData, i * 17, ecuArray[i], 0, 3);
         }
 
         Log.i(TAG, "ecu Array: " + Arrays.deepToString(ecuArray));
@@ -97,17 +98,13 @@ public class InitActivity extends CommandActivity {
         }
 
         Log.i(TAG, "ecu String Array: " + Arrays.toString(ecuStringArray));
-        final String[] selectedEcu = new String[1];
 
         new AlertDialog.Builder(this)
                 .setTitle("Select an ECU")
-                .setItems(ecuStringArray, (dialog, which) -> selectedEcu[0] = ecuStringArray[which])
+                .setItems(ecuStringArray, (dialog, which) -> {
+                    Log.i(TAG, "ECU set to " + ecuStringArray[which]);
+                    addCommand(new SetEcuCommand(ecuStringArray[which]));
+                })
                 .show();
-
-        if (selectedEcu[0] != null && selectedEcu[0].length() > 0) {
-            addCommand(new SetEcuCommand(selectedEcu[0]));
-        } else {
-            Log.e(TAG, "No ECU has been selected");
-        }
     }
 }

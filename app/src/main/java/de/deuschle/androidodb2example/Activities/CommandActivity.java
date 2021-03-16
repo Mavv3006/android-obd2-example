@@ -29,7 +29,7 @@ import de.deuschle.obd.commands.ObdCommand;
 abstract public class CommandActivity extends AppCompatActivity {
     private static final String TAG = CommandActivity.class.getSimpleName();
     private ObdCommand activeCommand;
-    private StringBuilder stringBuilder;
+    private StringBuilder stringBuilder = new StringBuilder();
 
     protected final BleOutputStream bleOutputStream = new BleOutputStream();
     protected BluetoothLeService bluetoothLeService;
@@ -184,6 +184,12 @@ abstract public class CommandActivity extends AppCompatActivity {
             commandQueue.offer(command);
         }
         sendCommand();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
     }
 
     protected void sendCommand() {

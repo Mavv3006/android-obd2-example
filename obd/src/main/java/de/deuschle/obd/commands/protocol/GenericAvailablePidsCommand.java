@@ -55,9 +55,13 @@ public abstract class GenericAvailablePidsCommand extends PersistentCommand {
      */
     @Override
     protected void performCalculations() {
-        supportedCommands.clear();
-        String bits = getBinaryStringHex(getCalculatedResult());
-        fillAvailableCommands(bits, padding);
+        try {
+            supportedCommands.clear();
+            String bits = getBinaryStringHex(getCalculatedResult());
+            fillAvailableCommands(bits, padding);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

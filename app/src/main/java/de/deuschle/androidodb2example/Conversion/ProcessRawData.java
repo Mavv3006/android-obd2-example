@@ -5,16 +5,13 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ProcessRawData {
     private static final String TAG = ProcessRawData.class.getSimpleName();
-    protected static final List<String> infoStringList = Arrays.asList(
-            "[AT, Z, , ELM327, v2.1]",
-            "[AT, S0, , OK, , , , >]",
-            "[, >]"
-    );
     protected static final List<String> greaterSign = Collections.singletonList(">");
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     public static byte[] convert(String inputData) {
         List<String> hexArray = preprocess(inputData);
@@ -29,9 +26,18 @@ public class ProcessRawData {
 
     protected static List<String> preprocess(String inputData) {
         String[] splitted = splitData(inputData);
+        Log.d(TAG, "splitted: " + Arrays.toString(splitted));
 
-        if (isInfoMessage(Arrays.toString(splitted))) {
+        if (isInfoMessage(splitted)) {
             return null;
+        }
+
+        if (splitted[0].equals("01")) {
+            List<String> list = new LinkedList<>(Arrays.asList(splitted));
+            list.remove(0);
+            list.remove(0);
+            splitted = list.toArray(EMPTY_STRING_ARRAY);
+            Log.d(TAG, "splitted2: " + Arrays.toString(splitted));
         }
 
         List<String> hexArray = toHexStringList(Arrays.asList(splitted));
@@ -46,9 +52,15 @@ public class ProcessRawData {
         return data.split("[ \n\r]");
     }
 
-    protected static boolean isInfoMessage(String splittedData) {
-        Log.d(TAG, "checking for info message: '" + splittedData + "'");
-        return infoStringList.contains(splittedData);
+    protected static boolean isInfoMessage(String[] splittedData) {
+        Log.d(TAG, "checking for info message: '" + Arrays.toString(splittedData) + "'");
+        if (splittedData[0].equals("AT")) return true;
+
+        for (String data : splittedData) {
+            if (data.equals("NO") || data.equals("DATA")) return true;
+        }
+
+        return false;
     }
 
     protected static List<String> toHexStringList(List<String> clearedData) {
@@ -77,11 +89,15 @@ public class ProcessRawData {
             return 62;
         }
 
-        byte parsedByte = Byte.parseByte(currentValue, 16);
-        if (parsedByte >= 0 && parsedByte <= 9) {
-            return (byte) (parsedByte + 48);
-        } else if (parsedByte >= 10 && parsedByte <= 15) {
-            return (byte) (parsedByte + 55);
+        try {
+            byte parsedByte = Byte.parseByte(currentValue, 16);
+            if (parsedByte >= 0 && parsedByte <= 9) {
+                return (byte) (parsedByte + 48);
+            } else if (parsedByte >= 10 && parsedByte <= 15) {
+                return (byte) (parsedByte + 55);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
 
         return 0;
