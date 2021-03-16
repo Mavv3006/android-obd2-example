@@ -88,13 +88,23 @@ public class InitActivity extends CommandActivity {
 
         // get ecu string values
         StringBuilder stringBuilder;
-        String[] ecuStringArray = new String[ecuCount];
+        StringBuilder stringBuilder2;
+        String[] ecuStringArray = new String[ecuCount];  // [7E8, 7EA]
+        String[] ecuStringArray2 = new String[ecuCount]; // [7E0, 7E2]
         for (int i = 0; i < ecuCount; i++) {
             stringBuilder = new StringBuilder();
+            stringBuilder2 = new StringBuilder();
             for (int j = 0; j < 3; j++) {
-                stringBuilder.append((char) ecuArray[i][j]);
+                byte value = ecuArray[i][j];
+                stringBuilder.append((char) value);
+                if (j == 2) {
+                    value -= 8;
+                }
+                stringBuilder2.append((char) value);
+
             }
             ecuStringArray[i] = stringBuilder.toString();
+            ecuStringArray2[i] = stringBuilder2.toString();
         }
 
         Log.i(TAG, "ecu String Array: " + Arrays.toString(ecuStringArray));
@@ -102,8 +112,8 @@ public class InitActivity extends CommandActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Select an ECU")
                 .setItems(ecuStringArray, (dialog, which) -> {
-                    Log.i(TAG, "ECU set to " + ecuStringArray[which]);
-                    addCommand(new SetEcuCommand(ecuStringArray[which]));
+                    Log.i(TAG, "ECU set to " + ecuStringArray2[which]);
+                    addCommand(new SetEcuCommand(ecuStringArray2[which]));
                 })
                 .show();
     }
