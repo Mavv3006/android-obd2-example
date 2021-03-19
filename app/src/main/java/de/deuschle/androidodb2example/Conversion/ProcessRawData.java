@@ -84,18 +84,17 @@ public class ProcessRawData {
         return resultArray;
     }
 
-    private static byte getByte(String currentValue) {
+    protected static byte getByte(String currentValue) {
         if (currentValue.equals(">")) {
             return 62;
         }
 
         try {
             byte parsedByte = Byte.parseByte(currentValue, 16);
-            if (parsedByte >= 0 && parsedByte <= 9) {
+            if (parsedByte < 10) {
                 return (byte) (parsedByte + 48);
-            } else if (parsedByte >= 10 && parsedByte <= 15) {
-                return (byte) (parsedByte + 55);
             }
+            return (byte) (parsedByte + 55);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

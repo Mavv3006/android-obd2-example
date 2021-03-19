@@ -38,7 +38,7 @@ public class ProcessRawDataTest {
     @Test
     public void testPreprocess() {
         final String rawData = "41 46 2B";
-        final List<String> expectedResult = Arrays.asList("2", "B");
+        final List<String> expectedResult = Arrays.asList("4", "1", "4", "6", "2", "B");
 
         final List<String> result = ProcessRawData.preprocess(rawData);
 
@@ -58,7 +58,17 @@ public class ProcessRawDataTest {
     @Test
     public void testConvertRawData() {
         final String rawData = "41 46 2B";
-        final byte[] expectedResult = new byte[]{2 + 48, 11 + 55};
+        final byte[] expectedResult = new byte[]{4 + 48, 1 + 48, 4 + 48, 6 + 48, 2 + 48, 11 + 55};
+
+        final byte[] result = ProcessRawData.convert(rawData);
+
+        Assert.assertArrayEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testConvertRawData2() {
+        final String rawData = "41462B";
+        final byte[] expectedResult = new byte[]{4 + 48, 1 + 48, 4 + 48, 6 + 48, 2 + 48, 11 + 55};
 
         final byte[] result = ProcessRawData.convert(rawData);
 
@@ -98,5 +108,27 @@ public class ProcessRawDataTest {
         final byte[] result = ProcessRawData.fillRestultArray(hexArray);
         Assert.assertEquals(1, result.length);
         Assert.assertEquals(62, result[0]);
+    }
+
+    @Test
+    public void testGetByte() {
+        // values in 0, 1, ..., 9
+        for (int i = 0; i < 10; i++) {
+            final byte result = ProcessRawData.getByte(String.valueOf(i));
+            Assert.assertEquals(i + 48, result);
+        }
+
+        // values in A, B, ..., F
+        int value;
+        for (int i = 10; i < 16; i++) {
+            value = i + 55;
+            Assert.assertEquals(value, ProcessRawData.getByte(Character.toString((char) value)));
+        }
+
+        // stop sign
+        Assert.assertEquals(62, ProcessRawData.getByte(">"));
+
+        // everything else
+        Assert.assertEquals(0, ProcessRawData.getByte("z"));
     }
 }
