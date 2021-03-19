@@ -78,6 +78,11 @@ public class InitActivity extends CommandActivity {
         // get ecu byte values
         int ecuCount = processedData.length / 17;
         Log.d(TAG, "ECU count: " + ecuCount);
+
+        if (ecuCount == 1) {
+            return;
+        }
+
         byte[][] ecuArray = new byte[ecuCount][3];
         for (int i = 0; i < ecuCount; i++) {
             Log.d(TAG, "i = " + i);
