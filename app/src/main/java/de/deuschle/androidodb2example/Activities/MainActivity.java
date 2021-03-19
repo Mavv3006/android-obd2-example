@@ -46,4 +46,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InitActivity.class);
         startActivity(intent);
     }
+
+    public void goToRpmStreaming(View view) {
+        Intent intent = new Intent(this, RPMStreamingActivity.class);
+        startActivity(intent);
+    }
 }

@@ -17,6 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.NoActionBar">
+        <activity android:name=".Activities.RPMStreamingActivity"></activity>
+        <activity android:name=".Activities.StreamingActivity" />
         <activity android:name=".Activities.BluetoothScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

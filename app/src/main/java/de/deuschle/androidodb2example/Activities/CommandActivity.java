@@ -68,12 +68,9 @@ abstract public class CommandActivity extends AppCompatActivity {
             bleOutputStream.setBleService(bluetoothLeService);
 
             String deviceAddress = application.getDeviceAdress();
-            Log.d(LogTags.SHARED_PREFERENCES, "Device Address read: " + deviceAddress);
             if (deviceAddress != null) {
                 // Automatically connects to the device upon successful start-up initialization.
                 bluetoothLeService.connect(deviceAddress);
-            } else {
-                Log.e(LogTags.SHARED_PREFERENCES, "unable to connect to device, device address not saved");
             }
         }
 
@@ -98,7 +95,7 @@ abstract public class CommandActivity extends AppCompatActivity {
         application = (ObdApplication) (getApplication());
     }
 
-    protected void handleData(String data) {
+    private void handleData(String data) {
         if (data == null) return;
         Log.i(LogTags.OBD2, "Data: " + data);
 
@@ -115,13 +112,14 @@ abstract public class CommandActivity extends AppCompatActivity {
         sendCommand();
     }
 
-    protected void processData(String data) {
+    private void processData(String data) {
         byte[] processedData = ProcessRawData.convert(data);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
         try {
             assert activeCommand != null;
             activeCommand.readResult(inputStream);
-            Log.i(TAG, "Result: " + activeCommand.getFormattedResult());
+            Log.i(LogTags.STREAMING, "recieving " + getCommandLogString(activeCommand));
+            Log.i(LogTags.STREAMING_DATA, "Result: " + activeCommand.getFormattedResult());
             handleProcessedData(activeCommand, processedData);
         } catch (Exception e) {
             handleCommandError(e, activeCommand);
@@ -147,7 +145,12 @@ abstract public class CommandActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        disconnectBluetooth();
+    }
+
+    private void disconnectBluetooth() {
         try {
+            bluetoothLeService.disconnect();
             unregisterReceiver(mGattUpdateReceiver);
             unbindService(mServiceConnection);
         } catch (IllegalArgumentException e) {
@@ -190,6 +193,7 @@ abstract public class CommandActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy");
+        disconnectBluetooth();
     }
 
     protected void sendCommand() {
@@ -198,6 +202,7 @@ abstract public class CommandActivity extends AppCompatActivity {
             try {
                 ObdCommand command = queue.poll();
                 assert command != null;
+                Log.i(LogTags.STREAMING, "sending " + getCommandLogString(command));
                 activeCommand = command;
                 activeCommand.sendCommand(bleOutputStream);
             } catch (IOException | AssertionError | InterruptedException e) {
@@ -205,4 +210,9 @@ abstract public class CommandActivity extends AppCompatActivity {
             }
         }
     }
+
+    protected String getCommandLogString(ObdCommand command) {
+        return command.getName() + " [" + command.getCommandPID() + "]";
+    }
+
 }
