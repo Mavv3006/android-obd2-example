@@ -62,4 +62,6 @@
     <string name="streaming_start">Start</string>
     <string name="streaming_stop">Stop</string>
     <string name="main_rpm_streaming">RPM Streaming</string>
+    <string name="main_ambient_temperature_streaming">Ambient Temperature Streaming</string>
+    <string name="main_combined_streaming">Combined Streaming</string>
 </resources>

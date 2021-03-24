@@ -15,10 +15,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.NoActionBar">
-        <activity android:name=".Activities.RPMStreamingActivity"></activity>
-        <activity android:name=".Activities.StreamingActivity" />
+        <activity android:name=".Activities.Streaming.RPMStreamingActivity" />
+        <activity android:name=".Activities.Streaming.AmbientTemperatureStreamingActivity" />
+        <activity android:name=".Activities.Streaming.StreamingActivity" />
+        <activity android:name=".Activities.Streaming.CombinedStreamingActivity" />
         <activity android:name=".Activities.BluetoothScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

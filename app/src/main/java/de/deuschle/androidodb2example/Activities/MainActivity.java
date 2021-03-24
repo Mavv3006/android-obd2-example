@@ -7,6 +7,9 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import de.deuschle.androidodb2example.Activities.Streaming.AmbientTemperatureStreamingActivity;
+import de.deuschle.androidodb2example.Activities.Streaming.CombinedStreamingActivity;
+import de.deuschle.androidodb2example.Activities.Streaming.RPMStreamingActivity;
 import de.deuschle.androidodb2example.ObdApplication;
 import de.deuschle.androidodb2example.R;
 
@@ -50,5 +53,14 @@ public class MainActivity extends AppCompatActivity {
     public void goToRpmStreaming(View view) {
         Intent intent = new Intent(this, RPMStreamingActivity.class);
         startActivity(intent);
+    }
+
+    public void goToAmbientTemperatureStreaming(View view) {
+        Intent intent = new Intent(this, AmbientTemperatureStreamingActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToCombinedStreaming(View view) {
+        startActivity(new Intent(this, CombinedStreamingActivity.class));
     }
 }
