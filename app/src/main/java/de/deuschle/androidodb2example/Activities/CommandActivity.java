@@ -25,6 +25,7 @@ import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Services.BluetoothLeService;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
 import de.deuschle.obd.commands.ObdCommand;
+import de.deuschle.obd.exceptions.NonNumericResponseException;
 
 abstract public class CommandActivity extends AppCompatActivity {
     private static final String TAG = CommandActivity.class.getSimpleName();
@@ -117,11 +118,15 @@ abstract public class CommandActivity extends AppCompatActivity {
         byte[] processedData = ProcessRawData.convert(data);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
         Log.d(TAG, "currentlySending: " + currentlySending);
+        Log.i(TAG, Arrays.toString(processedData));
         try {
             assert activeCommand != null;
             activeCommand.readResult(inputStream);
             Log.d(LogTags.STREAMING, getCommandLogString(activeCommand));
             Log.d(LogTags.STREAMING_DATA, "Result: " + activeCommand.getFormattedResult());
+            currentlySending = false;
+            handleProcessedData(activeCommand, processedData);
+        } catch (NonNumericResponseException e) {
             currentlySending = false;
             handleProcessedData(activeCommand, processedData);
         } catch (Exception e) {
@@ -183,6 +188,7 @@ abstract public class CommandActivity extends AppCompatActivity {
 
     protected void handleCommandError(Exception e, ObdCommand command) {
         Log.e(TAG, "Command " + command.getName() + " failed with: " + e.getMessage());
+        Log.e(TAG, "raw data: " + command.getResult());
         e.printStackTrace();
     }
 
@@ -213,6 +219,7 @@ abstract public class CommandActivity extends AppCompatActivity {
     protected void sendCommand() {
         Queue<ObdCommand> queue = application.getCommandQueue();
         Log.d(TAG, "currentlySending: " + currentlySending);
+        Log.d(TAG, "queue.isEmpty(): " + queue.isEmpty());
 
         if (queue.isEmpty() || currentlySending) return;
 

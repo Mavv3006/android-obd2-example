@@ -28,7 +28,10 @@ public class ProcessRawData {
         String[] splitted = splitData(inputData);
         Log.d(TAG, "splitted: " + Arrays.toString(splitted));
 
-        if (isInfoMessage(splitted)) {
+        boolean infoMessage = isInfoMessage(splitted);
+        Log.d(TAG, "isInfoMessage: " + infoMessage);
+
+        if (infoMessage) {
             return null;
         }
 
