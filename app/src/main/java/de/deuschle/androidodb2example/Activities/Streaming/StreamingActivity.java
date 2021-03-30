@@ -9,6 +9,8 @@ import androidx.appcompat.widget.Toolbar;
 import de.deuschle.androidodb2example.Activities.CommandActivity;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
+import de.deuschle.androidodb2example.Session.Session;
+import de.deuschle.androidodb2example.Session.StreamingSession;
 import de.deuschle.obd.commands.ObdCommand;
 
 public abstract class StreamingActivity extends CommandActivity {
@@ -16,6 +18,7 @@ public abstract class StreamingActivity extends CommandActivity {
     static final String STREAMING = "streaming";
     static final String NOT_STREAMING = "not streaming";
 
+    Session session;
     Button startStreamingButton;
     Button stopStreamingButton;
     Toolbar toolbar;
@@ -31,6 +34,7 @@ public abstract class StreamingActivity extends CommandActivity {
     @Override
     protected void setup() {
         initLayout();
+        session = new StreamingSession();
         toolbar.setSubtitle(NOT_STREAMING);
         startStreamingButton.setOnClickListener(this::onStartStreamingButtonClick);
         stopStreamingButton.setOnClickListener(this::onStopStreamingButtonClick);
@@ -42,6 +46,7 @@ public abstract class StreamingActivity extends CommandActivity {
     }
 
     public void onStartStreamingButtonClick(View view) {
+        session.start();
         toggleStreamingButton();
         addStreamingCommand();
     }
@@ -69,12 +74,13 @@ public abstract class StreamingActivity extends CommandActivity {
 
     @Override
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
-        // TODO: Grab data from here to store into session
+        session.addValue(activeCommand);
 
         addStreamingCommand(activeCommand);
     }
 
     protected void stopStreaming() {
+        session.stop();
         toggleStreamingButton();
         Log.i(LogTags.STREAMING, "Stopped Streaming");
         application.getCommandQueue().clear();
