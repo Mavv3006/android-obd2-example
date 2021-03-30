@@ -55,16 +55,12 @@ public abstract class StreamingActivity extends CommandActivity {
 
     @Override
     protected void addCommand(ObdCommand command) {
-        Log.d(TAG, "Size of command queue: " + application.getCommandQueue().size());
-        Log.d(TAG, "isStreaming: " + isStreaming);
         if (!isStreaming) return;
         super.addCommand(command);
     }
 
     @Override
     protected void addCommand(ObdCommand[] commands) {
-        Log.d(TAG, "Size of command queue: " + application.getCommandQueue().size());
-        Log.d(TAG, "isStreaming: " + isStreaming);
         if (!isStreaming) return;
         super.addCommand(commands);
     }
@@ -72,7 +68,6 @@ public abstract class StreamingActivity extends CommandActivity {
     @Override
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
         // TODO: Grab data from here to store into session
-        Log.d(TAG, "handleProcessedData, command: " + activeCommand.getName());
         addStreamingCommand(activeCommand);
     }
 

@@ -118,6 +118,7 @@ abstract public class CommandActivity extends AppCompatActivity {
         byte[] processedData = ProcessRawData.convert(data);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
         Log.d(TAG, "currentlySending: " + currentlySending);
+        Log.i(TAG, Arrays.toString(processedData));
         try {
             assert activeCommand != null;
             activeCommand.readResult(inputStream);
