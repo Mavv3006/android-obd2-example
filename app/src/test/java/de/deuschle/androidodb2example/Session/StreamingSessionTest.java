@@ -106,6 +106,15 @@ public class StreamingSessionTest {
     }
 
     @Test
+    public void testAddingValuesWhenStopped() {
+        session.start();
+        session.stop();
+        session.addValue(new TestCommand());
+
+        assertEquals(0, session.getValues().size(), 0);
+    }
+
+    @Test
     public void testAddingFirstValue() {
         final ObdCommand command = new TestCommand();
 
