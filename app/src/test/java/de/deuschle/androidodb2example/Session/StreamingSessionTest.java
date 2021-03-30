@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 
 public class StreamingSessionTest {
     static String testCommandPID = "FF";
-    StreamingSession session;
+    StreamingSession streamingSession;
 
     static class TestCommand extends ObdCommand {
         int[] values = {14, 16};
@@ -52,16 +52,16 @@ public class StreamingSessionTest {
 
     @Before
     public void setUp() {
-        session = new StreamingSession();
+        streamingSession = new StreamingSession();
     }
 
     @Test
     public void testSettingUsedCommands() {
         final List<ObdCommand> commandList = Collections.singletonList(new TestCommand());
 
-        session.setUsedCommands(commandList);
+        streamingSession.setUsedCommands(commandList);
 
-        assertEquals(commandList, session.getMetadata().getUsedCommands());
+        assertEquals(commandList, streamingSession.getMetadata().getUsedCommands());
     }
 
     @Test
@@ -69,13 +69,13 @@ public class StreamingSessionTest {
         final int delay = 1000;
         final Duration expectedResult = Duration.of(delay, ChronoUnit.MILLIS);
 
-        session.start();
+        streamingSession.start();
 
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                session.stop();
-                assertTrue(expectedResult.minus(session.getMetadata().getDuration()).isZero());
+                streamingSession.stop();
+                assertTrue(expectedResult.minus(streamingSession.getMetadata().getDuration()).isZero());
             }
         }, delay);
     }
@@ -85,7 +85,7 @@ public class StreamingSessionTest {
         final SessionData sessionData = new SessionData();
         final double newValue = 10.0;
 
-        SessionData newSession = session.calcNextValue(sessionData, newValue);
+        SessionData newSession = streamingSession.calcNextValue(sessionData, newValue);
 
         assertEquals(newValue, newSession.value, 0.0);
     }
@@ -100,27 +100,27 @@ public class StreamingSessionTest {
         sessionData.value = startingValue;
         sessionData.n = n;
 
-        SessionData newSessionData = session.calcNextValue(sessionData, nextValue);
+        SessionData newSessionData = streamingSession.calcNextValue(sessionData, nextValue);
 
         assertEquals(expectedResult, newSessionData.value, 0.0);
     }
 
     @Test
     public void testAddingValuesWhenStopped() {
-        session.start();
-        session.stop();
-        session.addValue(new TestCommand());
+        streamingSession.start();
+        streamingSession.stop();
+        streamingSession.addValue(new TestCommand());
 
-        assertEquals(0, session.getValues().size(), 0);
+        assertEquals(0, streamingSession.getValues().size(), 0);
     }
 
     @Test
     public void testAddingFirstValue() {
         final ObdCommand command = new TestCommand();
 
-        session.addValue(command);
+        streamingSession.addValue(command);
 
-        Map<String, SessionData> sessionValues = session.getValues();
+        Map<String, SessionData> sessionValues = streamingSession.getValues();
         assertEquals(1, sessionValues.size());
         assertTrue(sessionValues.containsKey(testCommandPID));
         assertEquals(14, sessionValues.get(testCommandPID).value, 0);
@@ -128,20 +128,20 @@ public class StreamingSessionTest {
 
     @Test
     public void testDate() {
-        session.start();
+        streamingSession.start();
 
-        assertEquals(LocalDate.now(), session.getMetadata().getDate());
+        assertEquals(LocalDate.now(), streamingSession.getMetadata().getDate());
     }
 
     @Test
     public void testAddingNextValue() {
         final ObdCommand command = new TestCommand();
 
-        session.addValue(command);
-        session.addValue(command);
+        streamingSession.addValue(command);
+        streamingSession.addValue(command);
 
 
-        Map<String, SessionData> values = session.getValues();
+        Map<String, SessionData> values = streamingSession.getValues();
         assertEquals(1, values.size());
         assertTrue(values.containsKey(testCommandPID));
         assertEquals(15, values.get(testCommandPID).value, 0);

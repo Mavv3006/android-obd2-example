@@ -8,15 +8,15 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
+
 public class ProcessRawData {
     private static final String TAG = ProcessRawData.class.getSimpleName();
     protected static final List<String> greaterSign = Collections.singletonList(">");
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-    public static byte[] convert(String inputData) {
+    public static byte[] convert(String inputData) throws InfoMessageExcpetion {
         List<String> hexArray = preprocess(inputData);
-
-        if (hexArray == null) return new byte[0];
 
         byte[] resultArray = fillRestultArray(hexArray);
 
@@ -24,7 +24,7 @@ public class ProcessRawData {
         return resultArray;
     }
 
-    protected static List<String> preprocess(String inputData) {
+    protected static List<String> preprocess(String inputData) throws InfoMessageExcpetion {
         String[] splitted = splitData(inputData);
         Log.d(TAG, "splitted: " + Arrays.toString(splitted));
 
@@ -32,7 +32,7 @@ public class ProcessRawData {
         Log.d(TAG, "isInfoMessage: " + infoMessage);
 
         if (infoMessage) {
-            return null;
+            throw new InfoMessageExcpetion();
         }
 
         if (splitted[0].equals("01")) {

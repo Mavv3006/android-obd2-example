@@ -19,13 +19,13 @@ import java.util.Arrays;
 import java.util.Queue;
 
 import de.deuschle.androidodb2example.Conversion.ProcessRawData;
+import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.ObdApplication;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Services.BluetoothLeService;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
 import de.deuschle.obd.commands.ObdCommand;
-import de.deuschle.obd.exceptions.NonNumericResponseException;
 
 abstract public class CommandActivity extends AppCompatActivity {
     private static final String TAG = CommandActivity.class.getSimpleName();
@@ -115,18 +115,17 @@ abstract public class CommandActivity extends AppCompatActivity {
     }
 
     private void processData(String data) {
-        byte[] processedData = ProcessRawData.convert(data);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
-        Log.d(TAG, "currentlySending: " + currentlySending);
-        Log.i(TAG, Arrays.toString(processedData));
+        byte[] processedData = new byte[0];
         try {
+            processedData = ProcessRawData.convert(data);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
             assert activeCommand != null;
             activeCommand.readResult(inputStream);
             Log.d(LogTags.STREAMING, getCommandLogString(activeCommand));
             Log.d(LogTags.STREAMING_DATA, "Result: " + activeCommand.getFormattedResult());
             currentlySending = false;
             handleProcessedData(activeCommand, processedData);
-        } catch (NonNumericResponseException e) {
+        } catch (InfoMessageExcpetion e) {
             currentlySending = false;
             handleProcessedData(activeCommand, processedData);
         } catch (Exception e) {

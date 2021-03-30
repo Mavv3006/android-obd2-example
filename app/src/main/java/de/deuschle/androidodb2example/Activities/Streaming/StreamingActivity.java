@@ -9,16 +9,14 @@ import androidx.appcompat.widget.Toolbar;
 import de.deuschle.androidodb2example.Activities.CommandActivity;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
-import de.deuschle.androidodb2example.Session.Session;
 import de.deuschle.androidodb2example.Session.StreamingSession;
 import de.deuschle.obd.commands.ObdCommand;
 
 public abstract class StreamingActivity extends CommandActivity {
-    private static final String TAG = StreamingActivity.class.getSimpleName();
     static final String STREAMING = "streaming";
     static final String NOT_STREAMING = "not streaming";
 
-    Session session;
+    StreamingSession streamingSessionInterface;
     Button startStreamingButton;
     Button stopStreamingButton;
     Toolbar toolbar;
@@ -34,7 +32,7 @@ public abstract class StreamingActivity extends CommandActivity {
     @Override
     protected void setup() {
         initLayout();
-        session = new StreamingSession();
+        streamingSessionInterface = new StreamingSession();
         toolbar.setSubtitle(NOT_STREAMING);
         startStreamingButton.setOnClickListener(this::onStartStreamingButtonClick);
         stopStreamingButton.setOnClickListener(this::onStopStreamingButtonClick);
@@ -46,7 +44,7 @@ public abstract class StreamingActivity extends CommandActivity {
     }
 
     public void onStartStreamingButtonClick(View view) {
-        session.start();
+        streamingSessionInterface.start();
         toggleStreamingButton();
         addStreamingCommand();
     }
@@ -72,13 +70,17 @@ public abstract class StreamingActivity extends CommandActivity {
 
     @Override
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
-        session.addValue(activeCommand);
-
+        // TODO: remove try-catch when possible
+        try {
+            streamingSessionInterface.addValue(activeCommand);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         addStreamingCommand(activeCommand);
     }
 
     protected void stopStreaming() {
-        session.stop();
+        streamingSessionInterface.stop();
         toggleStreamingButton();
         Log.i(LogTags.STREAMING, "Stopped Streaming");
         application.getCommandQueue().clear();

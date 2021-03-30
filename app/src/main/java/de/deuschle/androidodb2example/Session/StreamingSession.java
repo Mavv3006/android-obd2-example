@@ -1,5 +1,7 @@
 package de.deuschle.androidodb2example.Session;
 
+import android.util.Log;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.Map;
 import de.deuschle.obd.commands.ObdCommand;
 
 public class StreamingSession implements Session {
+    private static final String TAG = StreamingSession.class.getSimpleName();
     private final Metadata metadata = new StreamingMetadata();
     private final Map<String, SessionData> values = new HashMap<>();
     private boolean isStoped = false;
@@ -23,11 +26,11 @@ public class StreamingSession implements Session {
         return this.values;
     }
 
-    @Override
     public void addValue(ObdCommand command) {
         if (isStoped) return;
 
         String commandPID = command.getCommandPID();
+        Log.d(TAG, "commandPID: " + commandPID);
 
         if (!values.containsKey(commandPID)) {
             values.put(commandPID, new SessionData());
@@ -35,10 +38,11 @@ public class StreamingSession implements Session {
 
         SessionData currentSessionData = values.get(commandPID);
         String commandStringValue = command.getCalculatedResult();
-        int endIndex = commandStringValue.length() - command.getResultUnit().length();
-        double commandValue = Double.parseDouble(commandStringValue.substring(0, endIndex));
+        Log.d(TAG, "value to add: " + commandStringValue);
+        double commandValue = Double.parseDouble(commandStringValue);
         SessionData nextValue = calcNextValue(currentSessionData, commandValue);
         values.put(commandPID, nextValue);
+        Log.i(TAG, command.getName() + " [" + commandPID + "] added (" + commandStringValue + "): " + nextValue.toString());
     }
 
     protected SessionData calcNextValue(SessionData sessionData, double commandValue) {
@@ -46,18 +50,15 @@ public class StreamingSession implements Session {
         return sessionData;
     }
 
-    @Override
     public void setUsedCommands(List<ObdCommand> commands) {
         this.metadata.setUsedCommands(commands);
     }
 
-    @Override
     public void stop() {
         this.isStoped = true;
         this.metadata.calcDrivingTime(LocalTime.now());
     }
 
-    @Override
     public void start() {
         this.metadata.setStartingTime(LocalTime.now());
         this.metadata.setDate(LocalDate.now());
