@@ -5,8 +5,11 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
 
 import de.deuschle.androidodb2example.Activities.CommandActivity;
+import de.deuschle.androidodb2example.Database.MyDatabase;
+import de.deuschle.androidodb2example.Database.SaveSession;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Session.StreamingSession;
@@ -16,7 +19,7 @@ public abstract class StreamingActivity extends CommandActivity {
     static final String STREAMING = "streaming";
     static final String NOT_STREAMING = "not streaming";
 
-    StreamingSession streamingSessionInterface;
+    StreamingSession session;
     Button startStreamingButton;
     Button stopStreamingButton;
     Toolbar toolbar;
@@ -32,7 +35,7 @@ public abstract class StreamingActivity extends CommandActivity {
     @Override
     protected void setup() {
         initLayout();
-        streamingSessionInterface = new StreamingSession();
+        session = new StreamingSession();
         toolbar.setSubtitle(NOT_STREAMING);
         startStreamingButton.setOnClickListener(this::onStartStreamingButtonClick);
         stopStreamingButton.setOnClickListener(this::onStopStreamingButtonClick);
@@ -44,7 +47,7 @@ public abstract class StreamingActivity extends CommandActivity {
     }
 
     public void onStartStreamingButtonClick(View view) {
-        streamingSessionInterface.start();
+        session.start();
         toggleStreamingButton();
         addStreamingCommand();
     }
@@ -72,7 +75,7 @@ public abstract class StreamingActivity extends CommandActivity {
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
         // TODO: remove try-catch when possible
         try {
-            streamingSessionInterface.addValue(activeCommand);
+            session.addValue(activeCommand);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -80,10 +83,13 @@ public abstract class StreamingActivity extends CommandActivity {
     }
 
     protected void stopStreaming() {
-        streamingSessionInterface.stop();
+        session.stop();
         toggleStreamingButton();
         Log.i(LogTags.STREAMING, "Stopped Streaming");
         application.getCommandQueue().clear();
+        MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, getString(R.string.database_name)).build();
+        SaveSession saveSession = new SaveSession(session, db);
+        saveSession.save();
     }
 
     @Override

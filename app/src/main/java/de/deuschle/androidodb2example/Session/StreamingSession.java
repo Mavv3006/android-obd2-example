@@ -2,7 +2,7 @@ package de.deuschle.androidodb2example.Session;
 
 import android.util.Log;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import de.deuschle.obd.commands.ObdCommand;
 
 public class StreamingSession implements Session {
     private static final String TAG = StreamingSession.class.getSimpleName();
-    private final Metadata metadata = new StreamingMetadata();
+    private final StreamingMetadata metadata = new StreamingMetadata();
     private final Map<String, SessionData> values = new HashMap<>();
     private boolean isStoped = false;
 
@@ -53,6 +53,6 @@ public class StreamingSession implements Session {
     }
 
     public void start() {
-        this.metadata.setDate(LocalDate.now());
+        this.metadata.setDate(LocalDateTime.now());
     }
 }

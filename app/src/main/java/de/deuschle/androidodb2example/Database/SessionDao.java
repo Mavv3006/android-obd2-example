@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import de.deuschle.androidodb2example.Session.SessionData;
 
@@ -17,9 +18,13 @@ public interface SessionDao {
     @Query("SELECT sessionId FROM SessionEntity ORDER BY date DESC LIMIT 1")
     int getLatestSessionId();
 
-    @Insert(entity = SessionData.class)
-    void insert(LocalDateTime dateTime);
+    @Query("SELECT * FROM SessionEntity")
+    List<SessionEntity> getAll();
+
+    @Insert
+    void insert(SessionEntity sessionEntity);
 
     @Delete
     void delete(SessionEntity sessionId);
+
 }

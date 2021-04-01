@@ -63,4 +63,8 @@ public class MainActivity extends AppCompatActivity {
     public void goToCombinedStreaming(View view) {
         startActivity(new Intent(this, CombinedStreamingActivity.class));
     }
+
+    public void goToPreviousSessions(View view) {
+        startActivity(new Intent(this, SessionListActivity.class));
+    }
 }

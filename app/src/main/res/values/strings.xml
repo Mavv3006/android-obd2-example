@@ -65,4 +65,10 @@
     <string name="main_rpm_streaming">RPM Streaming</string>
     <string name="main_ambient_temperature_streaming">Ambient Temperature Streaming</string>
     <string name="main_combined_streaming">Combined Streaming</string>
+    <string name="displayDataEngineRPM">Engine RPM:</string>
+    <string name="displayDataVehicleSpeed">Vehicle Speed:</string>
+    <string name="displayDataAmbientTemperature">Ambient Temperature:</string>
+    <string name="displayDataSessionDate">Datum:</string>
+    <string name="displayDataToolbarTitle">Datacollection</string>
+    <string name="main_previous_sessions">Previous Sessions</string>
 </resources>
