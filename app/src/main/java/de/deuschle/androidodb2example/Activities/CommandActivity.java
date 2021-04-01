@@ -30,6 +30,7 @@ abstract public class CommandActivity extends AppCompatActivity {
     private static final String TAG = CommandActivity.class.getSimpleName();
     private ObdCommand activeCommand;
     private StringBuilder stringBuilder = new StringBuilder();
+    private volatile boolean currentlySending = false;
 
     protected final BleOutputStream bleOutputStream = new BleOutputStream();
     protected BluetoothLeService bluetoothLeService;
@@ -40,7 +41,9 @@ abstract public class CommandActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                valueTextView.setText(getString(R.string.connected));
+                if (valueTextView != null) {
+                    valueTextView.setText(getString(R.string.connected));
+                }
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 Log.e(TAG, "RECV DATA");
                 String data = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
@@ -68,12 +71,9 @@ abstract public class CommandActivity extends AppCompatActivity {
             bleOutputStream.setBleService(bluetoothLeService);
 
             String deviceAddress = application.getDeviceAdress();
-            Log.d(LogTags.SHARED_PREFERENCES, "Device Address read: " + deviceAddress);
             if (deviceAddress != null) {
                 // Automatically connects to the device upon successful start-up initialization.
                 bluetoothLeService.connect(deviceAddress);
-            } else {
-                Log.e(LogTags.SHARED_PREFERENCES, "unable to connect to device, device address not saved");
             }
         }
 
@@ -93,20 +93,18 @@ abstract public class CommandActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    void setup() {
+    protected void setup() {
         registerService();
         application = (ObdApplication) (getApplication());
     }
 
-    protected void handleData(String data) {
+    private void handleData(String data) {
         if (data == null) return;
         Log.i(LogTags.OBD2, "Data: " + data);
 
         stringBuilder.append(data);
 
-        if (!data.contains(">")) {
-            return;
-        }
+        if (!data.contains(">")) return;
 
         String commandResult = stringBuilder.toString();
         stringBuilder = new StringBuilder();
@@ -115,13 +113,16 @@ abstract public class CommandActivity extends AppCompatActivity {
         sendCommand();
     }
 
-    protected void processData(String data) {
+    private void processData(String data) {
         byte[] processedData = ProcessRawData.convert(data);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
+        Log.d(TAG, "currentlySending: " + currentlySending);
         try {
             assert activeCommand != null;
             activeCommand.readResult(inputStream);
-            Log.i(TAG, "Result: " + activeCommand.getFormattedResult());
+            Log.d(LogTags.STREAMING, getCommandLogString(activeCommand));
+            Log.d(LogTags.STREAMING_DATA, "Result: " + activeCommand.getFormattedResult());
+            currentlySending = false;
             handleProcessedData(activeCommand, processedData);
         } catch (Exception e) {
             handleCommandError(e, activeCommand);
@@ -130,6 +131,13 @@ abstract public class CommandActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the data and currently active command for further processing saving.
+     * May be overriden by subclasses.
+     *
+     * @param activeCommand The currently active Obd command.
+     * @param processedData The processed data in a byte array of representing ASCII characters.
+     */
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
         valueTextView.setText(activeCommand.getFormattedResult());
     }
@@ -147,10 +155,15 @@ abstract public class CommandActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        disconnectBluetooth();
+    }
+
+    private void disconnectBluetooth() {
         try {
+            bluetoothLeService.disconnect();
             unregisterReceiver(mGattUpdateReceiver);
             unbindService(mServiceConnection);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -174,7 +187,12 @@ abstract public class CommandActivity extends AppCompatActivity {
     }
 
     protected void addCommand(ObdCommand command) {
-        application.getCommandQueue().offer(command);
+        Queue<ObdCommand> queue = application.getCommandQueue();
+        if (queue == null) {
+            Log.w(TAG, "application.getCommandQueue() produced null");
+            return;
+        }
+        queue.offer(command);
         sendCommand();
     }
 
@@ -189,20 +207,28 @@ abstract public class CommandActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy");
+        disconnectBluetooth();
     }
 
     protected void sendCommand() {
         Queue<ObdCommand> queue = application.getCommandQueue();
-        if (queue.size() > 0) {
-            try {
-                ObdCommand command = queue.poll();
-                assert command != null;
-                activeCommand = command;
-                activeCommand.sendCommand(bleOutputStream);
-            } catch (IOException | AssertionError | InterruptedException e) {
-                e.printStackTrace();
-            }
+        Log.d(TAG, "currentlySending: " + currentlySending);
+
+        if (queue.isEmpty() || currentlySending) return;
+
+        try {
+            ObdCommand command = queue.poll();
+            assert command != null;
+            Log.i(LogTags.STREAMING, "sending " + getCommandLogString(command));
+            currentlySending = true;
+            activeCommand = command;
+            activeCommand.sendCommand(bleOutputStream);
+        } catch (IOException | AssertionError | InterruptedException e) {
+            e.printStackTrace();
         }
+    }
+
+    protected String getCommandLogString(ObdCommand command) {
+        return command.getName() + " [" + command.getCommandPID() + "]";
     }
 }
