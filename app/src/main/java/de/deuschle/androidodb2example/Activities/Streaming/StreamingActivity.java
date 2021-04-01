@@ -9,13 +9,14 @@ import androidx.appcompat.widget.Toolbar;
 import de.deuschle.androidodb2example.Activities.CommandActivity;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
+import de.deuschle.androidodb2example.Session.StreamingSession;
 import de.deuschle.obd.commands.ObdCommand;
 
 public abstract class StreamingActivity extends CommandActivity {
-    private static final String TAG = StreamingActivity.class.getSimpleName();
     static final String STREAMING = "streaming";
     static final String NOT_STREAMING = "not streaming";
 
+    StreamingSession streamingSessionInterface;
     Button startStreamingButton;
     Button stopStreamingButton;
     Toolbar toolbar;
@@ -31,6 +32,7 @@ public abstract class StreamingActivity extends CommandActivity {
     @Override
     protected void setup() {
         initLayout();
+        streamingSessionInterface = new StreamingSession();
         toolbar.setSubtitle(NOT_STREAMING);
         startStreamingButton.setOnClickListener(this::onStartStreamingButtonClick);
         stopStreamingButton.setOnClickListener(this::onStopStreamingButtonClick);
@@ -42,6 +44,7 @@ public abstract class StreamingActivity extends CommandActivity {
     }
 
     public void onStartStreamingButtonClick(View view) {
+        streamingSessionInterface.start();
         toggleStreamingButton();
         addStreamingCommand();
     }
@@ -55,26 +58,29 @@ public abstract class StreamingActivity extends CommandActivity {
 
     @Override
     protected void addCommand(ObdCommand command) {
-        Log.d(TAG, "Size of command queue: " + application.getCommandQueue().size());
         if (!isStreaming) return;
         super.addCommand(command);
     }
 
     @Override
     protected void addCommand(ObdCommand[] commands) {
-        Log.d(TAG, "Size of command queue: " + application.getCommandQueue().size());
         if (!isStreaming) return;
         super.addCommand(commands);
     }
 
     @Override
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
-        // TODO: Grab data from here to store into session
-
+        // TODO: remove try-catch when possible
+        try {
+            streamingSessionInterface.addValue(activeCommand);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         addStreamingCommand(activeCommand);
     }
 
     protected void stopStreaming() {
+        streamingSessionInterface.stop();
         toggleStreamingButton();
         Log.i(LogTags.STREAMING, "Stopped Streaming");
         application.getCommandQueue().clear();

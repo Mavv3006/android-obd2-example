@@ -2,7 +2,6 @@ package de.deuschle.androidodb2example.Conversion;
 
 import android.util.Log;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -11,6 +10,9 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ProcessRawDataTest {
     private static final String TAG = "test";
@@ -22,7 +24,7 @@ public class ProcessRawDataTest {
 
         final String[] result = ProcessRawData.splitData(rawData);
 
-        Assert.assertArrayEquals(expectedResult, result);
+        assertArrayEquals(expectedResult, result);
     }
 
     @Test
@@ -32,7 +34,7 @@ public class ProcessRawDataTest {
 
         final List<String> result = ProcessRawData.toHexStringList(clearedData);
 
-        Assert.assertEquals(expectedResult, result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -42,7 +44,7 @@ public class ProcessRawDataTest {
 
         final List<String> result = ProcessRawData.preprocess(rawData);
 
-        Assert.assertEquals(expectedResult, result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -52,7 +54,7 @@ public class ProcessRawDataTest {
 
         final byte[] result = ProcessRawData.fillRestultArray(hexArray);
 
-        Assert.assertArrayEquals(expectedResult, result);
+        assertArrayEquals(expectedResult, result);
     }
 
     @Test
@@ -62,7 +64,7 @@ public class ProcessRawDataTest {
 
         final byte[] result = ProcessRawData.convert(rawData);
 
-        Assert.assertArrayEquals(expectedResult, result);
+        assertArrayEquals(expectedResult, result);
     }
 
     @Test
@@ -72,7 +74,7 @@ public class ProcessRawDataTest {
 
         final byte[] result = ProcessRawData.convert(rawData);
 
-        Assert.assertArrayEquals(expectedResult, result);
+        assertArrayEquals(expectedResult, result);
     }
 
     @Test
@@ -99,15 +101,15 @@ public class ProcessRawDataTest {
         final String rawData = "41 00 be 3f a8 13\n>";
         final byte[] processedData = ProcessRawData.convert(rawData);
         final byte last = processedData[processedData.length - 1];
-        Assert.assertEquals(62, last);
+        assertEquals(62, last);
     }
 
     @Test
     public void testFillHexArrayWithColon() {
         final List<String> hexArray = Collections.singletonList(">");
         final byte[] result = ProcessRawData.fillRestultArray(hexArray);
-        Assert.assertEquals(1, result.length);
-        Assert.assertEquals(62, result[0]);
+        assertEquals(1, result.length);
+        assertEquals(62, result[0]);
     }
 
     @Test
@@ -115,20 +117,20 @@ public class ProcessRawDataTest {
         // values in 0, 1, ..., 9
         for (int i = 0; i < 10; i++) {
             final byte result = ProcessRawData.getByte(String.valueOf(i));
-            Assert.assertEquals(i + 48, result);
+            assertEquals(i + 48, result);
         }
 
         // values in A, B, ..., F
         int value;
         for (int i = 10; i < 16; i++) {
             value = i + 55;
-            Assert.assertEquals(value, ProcessRawData.getByte(Character.toString((char) value)));
+            assertEquals(value, ProcessRawData.getByte(Character.toString((char) value)));
         }
 
         // stop sign
-        Assert.assertEquals(62, ProcessRawData.getByte(">"));
+        assertEquals(62, ProcessRawData.getByte(">"));
 
         // everything else
-        Assert.assertEquals(0, ProcessRawData.getByte("z"));
+        assertEquals(0, ProcessRawData.getByte("z"));
     }
 }

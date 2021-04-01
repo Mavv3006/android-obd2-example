@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Queue;
 
 import de.deuschle.androidodb2example.Conversion.ProcessRawData;
+import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.ObdApplication;
 import de.deuschle.androidodb2example.R;
@@ -114,14 +115,17 @@ abstract public class CommandActivity extends AppCompatActivity {
     }
 
     private void processData(String data) {
-        byte[] processedData = ProcessRawData.convert(data);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
-        Log.d(TAG, "currentlySending: " + currentlySending);
+        byte[] processedData = new byte[0];
         try {
+            processedData = ProcessRawData.convert(data);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
             assert activeCommand != null;
             activeCommand.readResult(inputStream);
             Log.d(LogTags.STREAMING, getCommandLogString(activeCommand));
             Log.d(LogTags.STREAMING_DATA, "Result: " + activeCommand.getFormattedResult());
+            currentlySending = false;
+            handleProcessedData(activeCommand, processedData);
+        } catch (InfoMessageExcpetion e) {
             currentlySending = false;
             handleProcessedData(activeCommand, processedData);
         } catch (Exception e) {
@@ -183,6 +187,7 @@ abstract public class CommandActivity extends AppCompatActivity {
 
     protected void handleCommandError(Exception e, ObdCommand command) {
         Log.e(TAG, "Command " + command.getName() + " failed with: " + e.getMessage());
+        Log.e(TAG, "raw data: " + command.getResult());
         e.printStackTrace();
     }
 
@@ -213,6 +218,7 @@ abstract public class CommandActivity extends AppCompatActivity {
     protected void sendCommand() {
         Queue<ObdCommand> queue = application.getCommandQueue();
         Log.d(TAG, "currentlySending: " + currentlySending);
+        Log.d(TAG, "queue.isEmpty(): " + queue.isEmpty());
 
         if (queue.isEmpty() || currentlySending) return;
 
