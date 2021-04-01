@@ -5,12 +5,12 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity(tableName = "SessionEntity")
 public class SessionEntity {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int sessionId;
 
-    @ColumnInfo(name = "date")
-    public LocalDate date;
+    public LocalDateTime date;
 }

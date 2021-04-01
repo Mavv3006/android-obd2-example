@@ -9,9 +9,7 @@ public class VehicleSpeedEntity {
     @PrimaryKey
     public int sessionId;
 
-    @ColumnInfo(name = "Value")
     public double value;
 
-    @ColumnInfo(name = "n")
     public int n;
 }

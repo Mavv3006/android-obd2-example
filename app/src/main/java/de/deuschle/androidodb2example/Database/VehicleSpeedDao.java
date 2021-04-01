@@ -5,13 +5,15 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import de.deuschle.androidodb2example.Session.SessionData;
+
 @Dao
 public interface VehicleSpeedDao {
     @Query("SELECT * FROM VehicleSpeedEntity WHERE sessionId = :sessionId")
     VehicleSpeedEntity getVehicleSpeedById(int sessionId);
 
-    @Insert
-    void insert(VehicleSpeedEntity... vehicleSpeedEntities);
+    @Insert(entity = VehicleSpeedEntity.class)
+    void insert(SessionData vehicleSpeedEntities);
 
     @Delete
     void delete(VehicleSpeedEntity sessionId);
