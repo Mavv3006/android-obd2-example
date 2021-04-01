@@ -50,4 +50,5 @@
     <string name="ambient_temperature_description">aktuelle Umgebungstemperatur:</string>
     <string name="ambient_temperature_toolbar_title">@string/ambient_temperature</string>
     <string name="ambient_temperature">Ambient Temperature</string>
+    <string name="database_name">Database</string>
 </resources>
