@@ -3,9 +3,7 @@ package de.deuschle.androidodb2example.Session;
 import android.util.Log;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.deuschle.obd.commands.ObdCommand;
@@ -50,17 +48,11 @@ public class StreamingSession implements Session {
         return sessionData;
     }
 
-    public void setUsedCommands(List<ObdCommand> commands) {
-        this.metadata.setUsedCommands(commands);
-    }
-
     public void stop() {
         this.isStoped = true;
-        this.metadata.calcDrivingTime(LocalTime.now());
     }
 
     public void start() {
-        this.metadata.setStartingTime(LocalTime.now());
         this.metadata.setDate(LocalDate.now());
     }
 }
