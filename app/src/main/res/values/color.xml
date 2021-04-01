@@ -55,11 +55,11 @@
     <color name="deep_orange_200">#ffab91</color>
     <color name="deep_orange_600">#f4511e</color>
 
-    <color name="defaultRed">#a5383d</color>
     <color name="lightRed">#db6767</color>
+    <color name="defaultRed">#a5383d</color>
     <color name="darkRed">#710017</color>
-    <color name="defaultBlue">#466c9d</color>
     <color name="lightBlue">#779ace</color>
+    <color name="defaultBlue">#466c9d</color>
     <color name="darkBlue">#0d416e</color>
 
     <!--Color surface (light), color on error (light), -->

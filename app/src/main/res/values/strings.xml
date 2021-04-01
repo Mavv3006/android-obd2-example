@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">OBD-II Fahrtenbuch</string>
-    <string name="main_text">Ich bin eine App</string>
     <string name="ble_not_supported">BLE not supported</string>
     <string name="label_data">Data:</string>
     <string name="label_device_address">Device address:</string>
@@ -22,6 +21,7 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
+    <string name="menu_refresh">Refresh</string>
 
     <!-- Main Activity -->
     <string name="main_toolbar_title">Hauptmenü</string>
@@ -50,4 +50,13 @@
     <string name="ambient_temperature_description">aktuelle Umgebungstemperatur:</string>
     <string name="ambient_temperature_toolbar_title">@string/ambient_temperature</string>
     <string name="ambient_temperature">Ambient Temperature</string>
+    <string name="init_toolbar_title">Init Activity</string>
+    <string name="init_button">Starten</string>
+    <string name="init_restart_adapter">Adapter neustarten</string>
+    <string name="init_deactivate_space_separation">Leerzeichentrennung deaktivieren</string>
+    <string name="init_success">success - OK</string>
+    <string name="init_error">error - Error</string>
+    <string name="main_init_button_name">Init Adapter</string>
+    <string name="init_select_ecu">Steuergerät auswählen</string>
+    <string name="init_line_feed_off">Zeilenumbrüche entfernen</string>
 </resources>
