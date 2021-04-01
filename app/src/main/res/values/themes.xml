@@ -24,6 +24,7 @@
         <!--selection controls.-->
         <item name="colorPrimary">@color/defaultRed</item>
         <item name="colorPrimaryVariant">@color/darkRed</item>
+        <item name="colorPrimaryDark">?attr/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/defaultBlue</item>
         <item name="colorSecondaryVariant">@color/darkBlue</item>
         <!--colorBackground appears behind scrollable content and is used for the default window-->
@@ -71,11 +72,8 @@
     </style>
 
     <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">
-            ?android:attr/colorBackground
-        </item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">?android:attr/colorBackground</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">
             ?attr/colorControlHighlight
@@ -90,7 +88,7 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.Button.SecondaryColor</item>
     </style>
 
-    <style name="Theme.MyApp.NoActionBar">
+    <style name="Theme.MyApp.NoActionBar" parent="Theme.MyApp">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

@@ -19,6 +19,7 @@
         <!--Material color attributes (dark theme) -->
         <item name="colorPrimary">@color/lightRed</item>
         <item name="colorPrimaryVariant">@color/defaultRed</item>
+        <item name="colorPrimaryDark">?attr/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/lightBlue</item>
         <item name="colorSecondaryVariant">@color/defaultBlue</item>
         <item name="android:colorBackground">@color/black_900</item>
@@ -31,5 +32,15 @@
         <item name="colorOnError">@color/black_900</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
+    </style>
+
+    <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/black_900</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">?android:attr/colorBackground</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">
+            ?attr/colorControlHighlight
+        </item>
     </style>
 </resources>

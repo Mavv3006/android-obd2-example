@@ -13,6 +13,8 @@
 package de.deuschle.obd.commands.temperature;
 
 
+import android.util.Log;
+
 import java.util.Locale;
 
 import de.deuschle.obd.commands.ObdCommand;
@@ -25,6 +27,7 @@ import de.deuschle.obd.enums.AvailableCommand;
  */
 public abstract class TemperatureCommand extends ObdCommand implements SystemOfUnits {
 
+    public static final String TAG = TemperatureCommand.class.getSimpleName();
     private float temperature = 0.0f;
 
     /**
@@ -51,6 +54,7 @@ public abstract class TemperatureCommand extends ObdCommand implements SystemOfU
     @Override
     protected void performCalculations() {
         // ignore first two bytes [hh hh] of the response
+        Log.i(TAG, buffer.toString());
         temperature = buffer.get(2) - 40f;
     }
 
