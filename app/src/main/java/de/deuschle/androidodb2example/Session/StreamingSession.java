@@ -36,11 +36,13 @@ public class StreamingSession implements Session {
 
         SessionData currentSessionData = values.get(commandPID);
         String commandStringValue = command.getCalculatedResult();
-        Log.d(TAG, "value to add: " + commandStringValue);
-        double commandValue = Double.parseDouble(commandStringValue);
+        int lastIndex = commandStringValue.length() - command.getResultUnit().length();
+        String stringValue = commandStringValue.substring(0, lastIndex);
+        Log.d(TAG, "value to add: " + stringValue);
+        double commandValue = Double.parseDouble(stringValue);
         SessionData nextValue = calcNextValue(currentSessionData, commandValue);
         values.put(commandPID, nextValue);
-        Log.i(TAG, command.getName() + " [" + commandPID + "] added (" + commandStringValue + "): " + nextValue.toString());
+        Log.i(TAG, command.getName() + " [" + commandPID + "] added (" + stringValue + "): " + nextValue.toString());
     }
 
     protected SessionData calcNextValue(SessionData sessionData, double commandValue) {

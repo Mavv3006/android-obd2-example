@@ -1,6 +1,10 @@
 package de.deuschle.androidodb2example.Database;
 
+import androidx.lifecycle.LiveData;
+
 import org.junit.Test;
+
+import java.util.List;
 
 import de.deuschle.androidodb2example.Session.SessionData;
 
@@ -8,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AmbientTemperatureDaoTest extends DatabaseTest {
+
     @Test
     public void getById() {
         final int sessionId = 1;
@@ -34,8 +39,10 @@ public class AmbientTemperatureDaoTest extends DatabaseTest {
         ambientTemperatureDao.insert(data);
         ambientTemperatureDao.delete(entity);
 
-        assertEquals(0, ambientTemperatureDao.getAll().size());
-        assertTrue(ambientTemperatureDao.getAll().isEmpty());
+        LiveData<List<AmbientTemperatureEntity>> all = ambientTemperatureDao.getAll();
+        all.observeForever(entities -> assertEquals(0, entities.size()));
+        all.observeForever(entities -> assertTrue(entities.isEmpty()));
+
     }
 
     @Test
@@ -44,6 +51,8 @@ public class AmbientTemperatureDaoTest extends DatabaseTest {
         data.sessionId = 0;
 
         ambientTemperatureDao.insert(data);
-        assertEquals(1, ambientTemperatureDao.getAll().size());
+        LiveData<List<AmbientTemperatureEntity>> all = ambientTemperatureDao.getAll();
+        all.observeForever(entities -> assertEquals(1, entities.size()));
+
     }
 }

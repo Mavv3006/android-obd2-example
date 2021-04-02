@@ -1,5 +1,6 @@
 package de.deuschle.androidodb2example.Database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -15,7 +16,7 @@ public interface VehicleSpeedDao {
     VehicleSpeedEntity getVehicleSpeedById(int sessionId);
 
     @Query("SELECT * FROM VehicleSpeedEntity")
-    List<VehicleSpeedEntity> getAll();
+    LiveData<List<VehicleSpeedEntity>> getAll();
 
     @Insert(entity = VehicleSpeedEntity.class)
     void insert(SessionData vehicleSpeedEntities);

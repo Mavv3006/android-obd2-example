@@ -30,7 +30,7 @@ public class VehicleSpeedDaoTest extends DatabaseTest {
 
         vehicleSpeedDao.insert(data);
 
-        assertEquals(1, vehicleSpeedDao.getAll().size());
+        vehicleSpeedDao.getAll().observeForever(entities -> assertEquals(1, entities.size()));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class VehicleSpeedDaoTest extends DatabaseTest {
         vehicleSpeedDao.insert(data);
         vehicleSpeedDao.delete(entity);
 
-        assertEquals(0, vehicleSpeedDao.getAll().size());
+        vehicleSpeedDao.getAll().observeForever(entities -> assertEquals(0, entities.size()));
     }
 
     @Test
@@ -56,6 +56,6 @@ public class VehicleSpeedDaoTest extends DatabaseTest {
             vehicleSpeedDao.insert(data);
         }
 
-        assertEquals(count, vehicleSpeedDao.getAll().size());
+        vehicleSpeedDao.getAll().observeForever(entities -> assertEquals(count, entities.size()));
     }
 }

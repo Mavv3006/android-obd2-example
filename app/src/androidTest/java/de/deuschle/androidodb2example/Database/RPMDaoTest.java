@@ -5,8 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 import de.deuschle.androidodb2example.Session.SessionData;
 
 import static org.junit.Assert.assertEquals;
@@ -42,9 +40,7 @@ public class RPMDaoTest extends DatabaseTest {
 
         rpmDao.delete(rpmEntity);
 
-        List<RPMEntity> all = rpmDao.getAll();
-
-        assertEquals(0, all.size());
+        rpmDao.getAll().observeForever(entities -> assertEquals(0, entities.size()));
     }
 
     @Test
@@ -56,8 +52,6 @@ public class RPMDaoTest extends DatabaseTest {
             rpmDao.insert(data);
         }
 
-        List<RPMEntity> all = rpmDao.getAll();
-
-        assertEquals(entitiesCount, all.size());
+        rpmDao.getAll().observeForever(entities -> assertEquals(entitiesCount, entities.size()));
     }
 }

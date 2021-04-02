@@ -1,5 +1,6 @@
 package de.deuschle.androidodb2example.Database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -15,7 +16,7 @@ public interface RPMDao {
     RPMEntity getRPMById(int sessionId);
 
     @Query("SELECT * FROM RPMEntity")
-    List<RPMEntity> getAll();
+    LiveData<List<RPMEntity>> getAll();
 
     @Insert(entity = RPMEntity.class)
     void insert(SessionData rpmEntities);

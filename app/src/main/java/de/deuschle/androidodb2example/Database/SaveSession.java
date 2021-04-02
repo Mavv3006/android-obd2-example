@@ -4,15 +4,14 @@ import java.util.Map;
 
 import de.deuschle.androidodb2example.Session.Session;
 import de.deuschle.androidodb2example.Session.SessionData;
-import de.deuschle.obd.enums.AvailableCommand;
 
-import static de.deuschle.androidodb2example.Conversion.SupportedCommands.ambient_air_temp;
-import static de.deuschle.androidodb2example.Conversion.SupportedCommands.engine_rpm;
-import static de.deuschle.androidodb2example.Conversion.SupportedCommands.speed;
+import static de.deuschle.androidodb2example.Conversion.SupportedCommands.AMBIENT_AIR_TEMP;
+import static de.deuschle.androidodb2example.Conversion.SupportedCommands.ENGINE_RPM;
+import static de.deuschle.androidodb2example.Conversion.SupportedCommands.SPEED;
 
 public class SaveSession {
-    Session session;
-    MyDatabase db;
+    private final Session session;
+    private final MyDatabase db;
 
     public SaveSession(Session session, MyDatabase db) {
         this.session = session;
@@ -37,11 +36,11 @@ public class SaveSession {
         for (Map.Entry<String, SessionData> value : session.getValues().entrySet()) {
             SessionData sessionData = value.getValue();
             sessionData.sessionId = sessionId;
-            if (engine_rpm.equals(value.getKey())) {
+            if (ENGINE_RPM.equals(value.getKey())) {
                 rpmDao.insert(sessionData);
-            } else if (speed.equals(value.getKey())) {
+            } else if (SPEED.equals(value.getKey())) {
                 vehicleSpeedDao.insert(sessionData);
-            } else if (ambient_air_temp.equals(value.getKey())) {
+            } else if (AMBIENT_AIR_TEMP.equals(value.getKey())) {
                 ambientTemperatureDao.insert(sessionData);
             }
         }

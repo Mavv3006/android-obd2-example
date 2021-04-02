@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -38,7 +40,7 @@ public class ProcessRawDataTest {
     }
 
     @Test
-    public void testPreprocess() {
+    public void testPreprocess() throws InfoMessageExcpetion {
         final String rawData = "41 46 2B";
         final List<String> expectedResult = Arrays.asList("4", "1", "4", "6", "2", "B");
 
@@ -58,7 +60,7 @@ public class ProcessRawDataTest {
     }
 
     @Test
-    public void testConvertRawData() {
+    public void testConvertRawData() throws InfoMessageExcpetion {
         final String rawData = "41 46 2B";
         final byte[] expectedResult = new byte[]{4 + 48, 1 + 48, 4 + 48, 6 + 48, 2 + 48, 11 + 55};
 
@@ -68,7 +70,7 @@ public class ProcessRawDataTest {
     }
 
     @Test
-    public void testConvertRawData2() {
+    public void testConvertRawData2() throws InfoMessageExcpetion {
         final String rawData = "41462B";
         final byte[] expectedResult = new byte[]{4 + 48, 1 + 48, 4 + 48, 6 + 48, 2 + 48, 11 + 55};
 
@@ -90,14 +92,14 @@ public class ProcessRawDataTest {
     }
 
     @Test
-    public void testProcessingAvailablePids() {
+    public void testProcessingAvailablePids() throws InfoMessageExcpetion {
         final String rawData = "7e8 06 41 00 be 3f a8 13\n7ea 06 41 00 98 3a 80 13\r\n\r\n>";
         final byte[] processedData = ProcessRawData.convert(rawData);
         Log.i(TAG, Arrays.toString(processedData));
     }
 
     @Test
-    public void testHaveColon() {
+    public void testHaveColon() throws InfoMessageExcpetion {
         final String rawData = "41 00 be 3f a8 13\n>";
         final byte[] processedData = ProcessRawData.convert(rawData);
         final byte last = processedData[processedData.length - 1];

@@ -1,11 +1,13 @@
 package de.deuschle.androidodb2example.Database;
 
+import androidx.lifecycle.LiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -35,7 +37,9 @@ public class SessionDaoTest extends DatabaseTest {
         }
 
         assertEquals(entitiesCount, sessionDao.getLatestSessionId());
-        assertEquals(entitiesCount, sessionDao.getAll().size());
+        LiveData<List<SessionEntity>> liveData = sessionDao.getAll();
+        liveData.observeForever(entities -> assertEquals(entitiesCount, entities.size()));
+
     }
 
     @Test
@@ -47,7 +51,8 @@ public class SessionDaoTest extends DatabaseTest {
         sessionDao.insert(entity);
 
         assertEquals(2, sessionDao.getLatestSessionId());
-        assertEquals(1, sessionDao.getAll().size());
+        LiveData<List<SessionEntity>> liveData = sessionDao.getAll();
+        liveData.observeForever(entities -> assertEquals(1, entities.size()));
     }
 
     @Test
@@ -78,6 +83,6 @@ public class SessionDaoTest extends DatabaseTest {
         int result = sessionDao.delete(entity);
 
         assertEquals(1, result);
-        assertEquals(0, sessionDao.getAll().size());
+        sessionDao.getAll().observeForever(entities -> assertEquals(0, entities.size()));
     }
 }
