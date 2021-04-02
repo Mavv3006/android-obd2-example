@@ -1,4 +1,4 @@
-package de.deuschle.androidodb2example.Activities;
+package de.deuschle.androidodb2example.Activities.Session;
 
 import android.content.Intent;
 import android.graphics.Typeface;

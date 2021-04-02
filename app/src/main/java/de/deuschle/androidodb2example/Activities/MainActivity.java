@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import de.deuschle.androidodb2example.Activities.Session.SessionListActivity;
 import de.deuschle.androidodb2example.Activities.Streaming.AmbientTemperatureStreamingActivity;
 import de.deuschle.androidodb2example.Activities.Streaming.CombinedStreamingActivity;
 import de.deuschle.androidodb2example.Activities.Streaming.RPMStreamingActivity;

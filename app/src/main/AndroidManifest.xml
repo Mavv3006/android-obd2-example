@@ -18,8 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.NoActionBar">
-        <activity android:name=".Activities.SessionListActivity" />
-        <activity android:name=".Activities.DisplayDataActivity" />
+        <activity android:name=".Activities.Session.SessionListActivity" />
+        <activity android:name=".Activities.Session.DisplayDataActivity" />
         <activity android:name=".Activities.Streaming.RPMStreamingActivity" />
         <activity android:name=".Activities.Streaming.AmbientTemperatureStreamingActivity" />
         <activity android:name=".Activities.Streaming.StreamingActivity" />

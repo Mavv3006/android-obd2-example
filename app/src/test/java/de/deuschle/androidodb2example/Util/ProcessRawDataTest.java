@@ -1,4 +1,4 @@
-package de.deuschle.androidodb2example.Conversion;
+package de.deuschle.androidodb2example.Util;
 
 import android.util.Log;
 

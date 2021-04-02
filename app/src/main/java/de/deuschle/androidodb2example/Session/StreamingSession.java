@@ -5,12 +5,13 @@ import android.util.Log;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import de.deuschle.obd.commands.ObdCommand;
 
 public class StreamingSession implements Session {
     private static final String TAG = StreamingSession.class.getSimpleName();
-    private final StreamingMetadata metadata = new StreamingMetadata();
+    private StreamingMetadata metadata = new StreamingMetadata();
     private final Map<String, SessionData> values = new HashMap<>();
     private boolean isStoped = false;
 
@@ -63,5 +64,17 @@ public class StreamingSession implements Session {
 
     public void start() {
         this.metadata.setDate(LocalDateTime.now());
+    }
+
+    public void setValues(Map<String, SessionData> newValues) {
+        Set<String> keySet = newValues.keySet();
+        values.clear();
+        for (String key : keySet) {
+            values.put(key, newValues.get(key));
+        }
+    }
+
+    public void setMetadata(Metadata metadata) {
+        this.metadata = (StreamingMetadata) metadata;
     }
 }

@@ -1,5 +1,7 @@
 package de.deuschle.androidodb2example.Session;
 
+import de.deuschle.androidodb2example.Database.SessionDataPointEntity;
+
 public class SessionData {
     public double value = 0;
     public int n = 0;
@@ -16,6 +18,10 @@ public class SessionData {
         this.value = value;
         this.n = n;
         this.sessionId = sessionId;
+    }
+
+    public static SessionData fromDbEntity(SessionDataPointEntity entity) {
+        return new SessionData(entity.value, entity.n, entity.sessionId);
     }
 
     @Override

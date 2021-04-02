@@ -18,13 +18,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Queue;
 
-import de.deuschle.androidodb2example.Conversion.ProcessRawData;
 import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.ObdApplication;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Services.BluetoothLeService;
 import de.deuschle.androidodb2example.Streams.BleOutputStream;
+import de.deuschle.androidodb2example.Util.ProcessRawData;
 import de.deuschle.obd.commands.ObdCommand;
 
 abstract public class CommandActivity extends AppCompatActivity {

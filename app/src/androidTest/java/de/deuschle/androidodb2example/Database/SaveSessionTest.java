@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.deuschle.androidodb2example.Conversion.SupportedCommands;
 import de.deuschle.androidodb2example.Session.Metadata;
 import de.deuschle.androidodb2example.Session.Session;
 import de.deuschle.androidodb2example.Session.SessionData;
 import de.deuschle.androidodb2example.Session.StreamingMetadata;
+import de.deuschle.androidodb2example.Util.SupportedCommands;
 
 import static org.junit.Assert.assertEquals;
 
@@ -63,7 +63,7 @@ public class SaveSessionTest {
     @Test
     public void save() {
         Session session = new TestSession();
-        SaveSession saveSession = new SaveSession(session, db, weakReference);
+        SaveSession saveSession = new SaveSession(session, db, ApplicationProvider.getApplicationContext());
 
         saveSession.save();
 

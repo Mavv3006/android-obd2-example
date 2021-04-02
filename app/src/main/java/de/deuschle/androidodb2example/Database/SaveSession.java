@@ -11,9 +11,9 @@ import de.deuschle.androidodb2example.Activities.Streaming.StreamingActivity;
 import de.deuschle.androidodb2example.Session.Session;
 import de.deuschle.androidodb2example.Session.SessionData;
 
-import static de.deuschle.androidodb2example.Conversion.SupportedCommands.AMBIENT_AIR_TEMP;
-import static de.deuschle.androidodb2example.Conversion.SupportedCommands.ENGINE_RPM;
-import static de.deuschle.androidodb2example.Conversion.SupportedCommands.SPEED;
+import static de.deuschle.androidodb2example.Util.SupportedCommands.AMBIENT_AIR_TEMP;
+import static de.deuschle.androidodb2example.Util.SupportedCommands.ENGINE_RPM;
+import static de.deuschle.androidodb2example.Util.SupportedCommands.SPEED;
 
 public class SaveSession {
     private static final String TAG = SaveSession.class.getSimpleName();
