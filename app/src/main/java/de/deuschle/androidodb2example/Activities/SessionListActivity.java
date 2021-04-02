@@ -3,6 +3,8 @@ package de.deuschle.androidodb2example.Activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,6 +13,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import java.util.HashMap;
@@ -24,7 +27,8 @@ import de.deuschle.androidodb2example.R;
 
 public class SessionListActivity extends AppCompatActivity {
 
-    LinearLayout linearLayout;
+    private static final String TAG = SessionListActivity.class.getSimpleName();
+    private LinearLayout linearLayout;
     final Map<String, SessionEntity> sessionList = new HashMap<>();
 
     @Override
@@ -43,13 +47,19 @@ public class SessionListActivity extends AppCompatActivity {
 
         MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, getString(R.string.database_name)).build();
         SessionDao sessionDao = db.getSessionDao();
-        List<SessionEntity> sessionEntityList = sessionDao.getAll();
+        LiveData<List<SessionEntity>> listLiveData = sessionDao.getAll();
 
-        if (sessionEntityList.isEmpty()) {
-            showEmptyIndicator();
-        } else {
-            showSessionEntities(sessionEntityList);
-        }
+        listLiveData.observe(this, sessionEntityList -> {
+            listLiveData.removeObservers(this);
+
+            Log.d(TAG, sessionEntityList.toString());
+            if (sessionEntityList.isEmpty()) {
+                showEmptyIndicator();
+            } else {
+                showSessionEntities(sessionEntityList);
+            }
+        });
+
     }
 
     private void showSessionEntities(List<SessionEntity> sessionEntityList) {
@@ -80,6 +90,10 @@ public class SessionListActivity extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText(R.string.session_list_empty_text);
         textView.setTypeface(textView.getTypeface(), Typeface.ITALIC);
+        textView.setGravity(Gravity.CENTER);
+
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_BEGINNING);
+        linearLayout.setDividerDrawable(AppCompatResources.getDrawable(this, R.drawable.empty_tall_divider));
         linearLayout.addView(textView);
     }
 

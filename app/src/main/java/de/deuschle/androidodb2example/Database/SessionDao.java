@@ -1,5 +1,6 @@
 package de.deuschle.androidodb2example.Database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -16,7 +17,7 @@ public interface SessionDao {
     int getLatestSessionId();
 
     @Query("SELECT * FROM SessionEntity")
-    List<SessionEntity> getAll();
+    LiveData<List<SessionEntity>> getAll();
 
     @Insert
     void insert(SessionEntity sessionEntity);
