@@ -71,4 +71,5 @@
     <string name="displayDataSessionDate">Datum:</string>
     <string name="displayDataToolbarTitle">Datacollection</string>
     <string name="main_previous_sessions">Previous Sessions</string>
+    <string name="session_list_empty_text">There are no sessions in the database. Please record one first.</string>
 </resources>

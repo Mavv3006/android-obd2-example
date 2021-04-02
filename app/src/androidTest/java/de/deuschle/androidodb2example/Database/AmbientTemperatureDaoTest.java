@@ -5,6 +5,7 @@ import org.junit.Test;
 import de.deuschle.androidodb2example.Session.SessionData;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class AmbientTemperatureDaoTest extends DatabaseTest {
     @Test
@@ -34,6 +35,7 @@ public class AmbientTemperatureDaoTest extends DatabaseTest {
         ambientTemperatureDao.delete(entity);
 
         assertEquals(0, ambientTemperatureDao.getAll().size());
+        assertTrue(ambientTemperatureDao.getAll().isEmpty());
     }
 
     @Test

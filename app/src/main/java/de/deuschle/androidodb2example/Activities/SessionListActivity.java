@@ -1,25 +1,22 @@
 package de.deuschle.androidodb2example.Activities;
 
-import androidx.annotation.DrawableRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.Toolbar;
-import androidx.room.Database;
-import androidx.room.Room;
-
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.deuschle.androidodb2example.Activities.DisplayDataActivity;
-import de.deuschle.androidodb2example.Database.AmbientTemperatureDao;
 import de.deuschle.androidodb2example.Database.MyDatabase;
 import de.deuschle.androidodb2example.Database.SessionDao;
 import de.deuschle.androidodb2example.Database.SessionEntity;
@@ -48,6 +45,14 @@ public class SessionListActivity extends AppCompatActivity {
         SessionDao sessionDao = db.getSessionDao();
         List<SessionEntity> sessionEntityList = sessionDao.getAll();
 
+        if (sessionEntityList.isEmpty()) {
+            showEmptyIndicator();
+        } else {
+            showSessionEntities(sessionEntityList);
+        }
+    }
+
+    private void showSessionEntities(List<SessionEntity> sessionEntityList) {
         for (int i = 0; i < sessionEntityList.size(); i++) {
             SessionEntity session = sessionEntityList.get(i);
             LinearLayout sessionLayout = new LinearLayout(this);
@@ -69,6 +74,13 @@ public class SessionListActivity extends AppCompatActivity {
             sessionLayout.setOnClickListener(this::onSessionLayoutClicked);
             linearLayout.addView(sessionLayout);
         }
+    }
+
+    private void showEmptyIndicator() {
+        TextView textView = new TextView(this);
+        textView.setText(R.string.session_list_empty_text);
+        textView.setTypeface(textView.getTypeface(), Typeface.ITALIC);
+        linearLayout.addView(textView);
     }
 
     protected void onSessionLayoutClicked(View view) {
