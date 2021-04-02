@@ -69,7 +69,8 @@ public class SessionListActivity extends AppCompatActivity {
             TextView sessionIdTextView = new TextView(this);
             TextView sessionDateTextView = new TextView(this);
 
-            sessionIdTextView.setText(session.sessionId);
+            String text = "value: " + session.sessionId;
+            sessionIdTextView.setText(text);
             sessionDateTextView.setText(session.date.toString());
 
             sessionLayout.setWeightSum(2);

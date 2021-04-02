@@ -63,7 +63,7 @@ public class SaveSessionTest {
     @Test
     public void save() {
         Session session = new TestSession();
-        SaveSession saveSession = new SaveSession(session, db);
+        SaveSession saveSession = new SaveSession(session, db, weakReference);
 
         saveSession.save();
 

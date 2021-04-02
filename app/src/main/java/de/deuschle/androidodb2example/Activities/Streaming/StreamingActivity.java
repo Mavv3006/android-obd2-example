@@ -88,7 +88,7 @@ public abstract class StreamingActivity extends CommandActivity {
         Log.i(LogTags.STREAMING, "Stopped Streaming");
         application.getCommandQueue().clear();
         MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, getString(R.string.database_name)).build();
-        SaveSession saveSession = new SaveSession(session, db);
+        SaveSession saveSession = new SaveSession(session, db, this);
         saveSession.save();
     }
 
