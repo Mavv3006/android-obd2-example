@@ -5,10 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
-import de.deuschle.androidodb2example.Session.SessionData;
 
 @Dao
 public interface SessionDao {
@@ -25,6 +22,5 @@ public interface SessionDao {
     void insert(SessionEntity sessionEntity);
 
     @Delete
-    void delete(SessionEntity sessionId);
-
+    int delete(SessionEntity sessionEntity);
 }
