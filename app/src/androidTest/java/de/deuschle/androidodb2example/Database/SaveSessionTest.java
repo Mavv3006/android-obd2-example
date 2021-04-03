@@ -47,6 +47,25 @@ public class SaveSessionTest {
             map.put(SupportedCommands.AMBIENT_AIR_TEMP, new SessionData(5, 0, 20));
             return map;
         }
+
+        @Override
+        public void willBeSaved() {
+        }
+
+        @Override
+        public boolean isSaved() {
+            return false;
+        }
+
+        @Override
+        public boolean needsToBeSaved() {
+            return false;
+        }
+
+        @Override
+        public boolean isStarted() {
+            return false;
+        }
     }
 
     @Before
