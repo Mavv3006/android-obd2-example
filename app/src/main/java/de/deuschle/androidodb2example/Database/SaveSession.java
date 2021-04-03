@@ -28,6 +28,8 @@ public class SaveSession {
     }
 
     public void save() {
+        Log.i(TAG, "starting saving the current session");
+        session.willBeSaved();
         new SavingTask(session, db, weakReference.get()).execute();
     }
 
@@ -42,7 +44,6 @@ public class SaveSession {
             this.weakReference = new WeakReference<>(activity);
         }
 
-
         @Override
         protected Boolean doInBackground(Session... sessions) {
             try {
@@ -51,6 +52,7 @@ public class SaveSession {
                 SessionEntity sessionEntity = new SessionEntity();
                 sessionEntity.date = session.getMetadata().getDate();
                 sessionEntity.sessionId = 0;
+                Log.w(TAG, "saving new session");
                 sessionDao.insert(sessionEntity);
                 RPMDao rpmDao = db.getRPMDao();
                 VehicleSpeedDao vehicleSpeedDao = db.getVehicleSpeedDao();
@@ -58,16 +60,20 @@ public class SaveSession {
 
                 // Neueste SessionID holen
                 int sessionId = sessionDao.getLatestSessionId();
+                Log.d(TAG, "latest sessionId: " + sessionId);
 
                 // Über Datenpunkte iterieren und speichern
                 for (Map.Entry<String, SessionData> value : session.getValues().entrySet()) {
                     SessionData sessionData = value.getValue();
                     sessionData.sessionId = sessionId;
                     if (ENGINE_RPM.equals(value.getKey())) {
+                        Log.d(TAG, "saved Engine RPM");
                         rpmDao.insert(sessionData);
                     } else if (SPEED.equals(value.getKey())) {
+                        Log.d(TAG, "saved Vehicle Speed");
                         vehicleSpeedDao.insert(sessionData);
                     } else if (AMBIENT_AIR_TEMP.equals(value.getKey())) {
+                        Log.d(TAG, "saved Ambient Temperature");
                         ambientTemperatureDao.insert(sessionData);
                     }
                 }

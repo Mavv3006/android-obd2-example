@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
@@ -18,6 +19,7 @@ import de.deuschle.obd.commands.ObdCommand;
 public abstract class StreamingActivity extends CommandActivity {
     static final String STREAMING = "streaming";
     static final String NOT_STREAMING = "not streaming";
+    public static final String TAG = StreamingActivity.class.getSimpleName();
 
     StreamingSession session;
     Button startStreamingButton;
@@ -28,6 +30,11 @@ public abstract class StreamingActivity extends CommandActivity {
     protected void initLayout() {
         setContentView(R.layout.activity_streaming);
         toolbar = findViewById(R.id.streaming_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         startStreamingButton = findViewById(R.id.streaming_button_start);
         stopStreamingButton = findViewById(R.id.streaming_button_stop);
     }
@@ -77,6 +84,7 @@ public abstract class StreamingActivity extends CommandActivity {
         try {
             session.addValue(activeCommand);
         } catch (NumberFormatException e) {
+            Log.e(TAG, "NumberFormatException");
             e.printStackTrace();
         }
         addStreamingCommand(activeCommand);
@@ -87,6 +95,8 @@ public abstract class StreamingActivity extends CommandActivity {
         toggleStreamingButton();
         Log.i(LogTags.STREAMING, "Stopped Streaming");
         application.getCommandQueue().clear();
+        if (!session.needsToBeSaved()) return;
+
         MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, getString(R.string.database_name)).build();
         SaveSession saveSession = new SaveSession(session, db, this);
         saveSession.save();

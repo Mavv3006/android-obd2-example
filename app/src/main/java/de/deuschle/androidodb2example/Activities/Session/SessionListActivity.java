@@ -16,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ import de.deuschle.androidodb2example.Database.SessionEntity;
 import de.deuschle.androidodb2example.R;
 
 public class SessionListActivity extends AppCompatActivity {
-
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.MEDIUM);
     private static final String TAG = SessionListActivity.class.getSimpleName();
     private LinearLayout linearLayout;
     final Map<String, SessionEntity> sessionList = new HashMap<>();
@@ -63,17 +65,24 @@ public class SessionListActivity extends AppCompatActivity {
     }
 
     private void showSessionEntities(List<SessionEntity> sessionEntityList) {
+        Log.d(TAG, sessionEntityList.toString());
         for (int i = 0; i < sessionEntityList.size(); i++) {
+            if (sessionEntityList.get(i).date == null) continue;
+
             SessionEntity session = sessionEntityList.get(i);
             LinearLayout sessionLayout = new LinearLayout(this);
             TextView sessionIdTextView = new TextView(this);
             TextView sessionDateTextView = new TextView(this);
 
-            String text = "value: " + session.sessionId;
+            String text = "id: " + session.sessionId;
             sessionIdTextView.setText(text);
-            sessionDateTextView.setText(session.date.toString());
+            text = "date: " + session.date.format(formatter);
+            sessionDateTextView.setText(text);
 
-            sessionLayout.setWeightSum(2);
+            sessionDateTextView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 3));
+            sessionIdTextView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+
+            sessionLayout.setWeightSum(4);
             sessionLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             sessionLayout.setDividerDrawable(AppCompatResources.getDrawable(this, R.drawable.empty_tall_divider));
             sessionLayout.addView(sessionIdTextView);

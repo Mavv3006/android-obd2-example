@@ -11,4 +11,14 @@ public class SessionEntity {
     public int sessionId;
 
     public LocalDateTime date;
+
+    @Override
+    public String toString() {
+        String s = "SessionEntity{" +
+                "sessionId=" + sessionId;
+        if (date == null) {
+            return s + '}';
+        }
+        return s + ", date=" + date.toString() + '}';
+    }
 }

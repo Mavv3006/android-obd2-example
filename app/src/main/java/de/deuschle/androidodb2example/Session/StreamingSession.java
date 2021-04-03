@@ -14,6 +14,8 @@ public class StreamingSession implements Session {
     private StreamingMetadata metadata = new StreamingMetadata();
     private final Map<String, SessionData> values = new HashMap<>();
     private boolean isStoped = false;
+    private boolean isStarted = false;
+    private boolean isSaved = false;
 
     @Override
     public Metadata getMetadata() {
@@ -63,6 +65,7 @@ public class StreamingSession implements Session {
     }
 
     public void start() {
+        this.isStarted = true;
         this.metadata.setDate(LocalDateTime.now());
     }
 
@@ -76,5 +79,25 @@ public class StreamingSession implements Session {
 
     public void setMetadata(Metadata metadata) {
         this.metadata = (StreamingMetadata) metadata;
+    }
+
+    @Override
+    public void willBeSaved() {
+        this.isSaved = true;
+    }
+
+    @Override
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    @Override
+    public boolean isSaved() {
+        return this.isSaved;
+    }
+
+    @Override
+    public boolean needsToBeSaved() {
+        return !this.isSaved() && this.isStarted();
     }
 }

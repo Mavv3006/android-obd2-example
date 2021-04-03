@@ -68,8 +68,9 @@
     <string name="displayDataEngineRPM">Engine RPM:</string>
     <string name="displayDataVehicleSpeed">Vehicle Speed:</string>
     <string name="displayDataAmbientTemperature">Ambient Temperature:</string>
-    <string name="displayDataSessionDate">Datum:</string>
+    <string name="displayDataSessionDate">Datum und Uhrzeit:</string>
     <string name="displayDataToolbarTitle">Datacollection</string>
     <string name="main_previous_sessions">Previous Sessions</string>
     <string name="session_list_empty_text">There are no sessions in the database.\nPlease record one first.</string>
+    <string name="display_data_id">Id:</string>
 </resources>
