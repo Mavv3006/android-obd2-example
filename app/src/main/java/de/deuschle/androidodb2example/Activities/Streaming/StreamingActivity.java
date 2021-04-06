@@ -9,8 +9,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import de.deuschle.androidodb2example.Activities.CommandActivity;
-import de.deuschle.androidodb2example.Database.MyDatabase;
 import de.deuschle.androidodb2example.Database.SaveSession;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase;
 import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Session.StreamingSession;
@@ -97,7 +97,7 @@ public abstract class StreamingActivity extends CommandActivity {
         application.getCommandQueue().clear();
         if (!session.needsToBeSaved()) return;
 
-        MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, getString(R.string.database_name)).build();
+        StreamingDataDatabase db = Room.databaseBuilder(getApplicationContext(), StreamingDataDatabase.class, getString(R.string.database_name)).build();
         SaveSession saveSession = new SaveSession(session, db, this);
         saveSession.save();
     }

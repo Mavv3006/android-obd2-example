@@ -18,10 +18,10 @@ import static de.deuschle.androidodb2example.Util.SupportedCommands.SPEED;
 public class SaveSession {
     private static final String TAG = SaveSession.class.getSimpleName();
     private final Session session;
-    private final MyDatabase db;
+    private final StreamingDataDatabase db;
     private final WeakReference<StreamingActivity> weakReference;
 
-    public SaveSession(Session session, MyDatabase db, StreamingActivity activity) {
+    public SaveSession(Session session, StreamingDataDatabase db, StreamingActivity activity) {
         this.session = session;
         this.db = db;
         this.weakReference = new WeakReference<>(activity);
@@ -35,10 +35,10 @@ public class SaveSession {
 
     private static class SavingTask extends AsyncTask<Session, Void, Boolean> {
         private final Session session;
-        private final MyDatabase db;
+        private final StreamingDataDatabase db;
         private final WeakReference<StreamingActivity> weakReference;
 
-        public SavingTask(Session session, MyDatabase db, StreamingActivity activity) {
+        public SavingTask(Session session, StreamingDataDatabase db, StreamingActivity activity) {
             this.session = session;
             this.db = db;
             this.weakReference = new WeakReference<>(activity);

@@ -8,7 +8,7 @@ import de.deuschle.androidodb2example.Util.LocalDateTimeConverter;
 
 @Database(entities = {SessionEntity.class, AmbientTemperatureEntity.class, RPMEntity.class, VehicleSpeedEntity.class}, version = 1, exportSchema = false)
 @TypeConverters({LocalDateTimeConverter.class})
-public abstract class MyDatabase extends RoomDatabase {
+public abstract class StreamingDataDatabase extends RoomDatabase {
     public abstract SessionDao getSessionDao();
 
     public abstract AmbientTemperatureDao getAmbientTemperatureDao();

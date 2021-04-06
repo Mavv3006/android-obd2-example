@@ -25,7 +25,7 @@ import de.deuschle.androidodb2example.Util.SupportedCommands;
 import static org.junit.Assert.assertEquals;
 
 public class SaveSessionTest {
-    private MyDatabase db;
+    private StreamingDataDatabase db;
     private static final LocalDateTime dateTime = LocalDateTime.now();
 
     @Rule
@@ -71,7 +71,7 @@ public class SaveSessionTest {
     @Before
     public void setUp() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, MyDatabase.class).build();
+        db = Room.inMemoryDatabaseBuilder(context, StreamingDataDatabase.class).build();
     }
 
     @After

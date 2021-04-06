@@ -7,7 +7,7 @@ import androidx.room.Room;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import de.deuschle.androidodb2example.Database.MyDatabase;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase;
 import de.deuschle.androidodb2example.Session.Session;
 import de.deuschle.obd.commands.ObdCommand;
 
@@ -17,8 +17,8 @@ public class ObdApplication extends Application {
     private String deviceName;
     private Session session;
 
-    public MyDatabase getDatabase() {
-        return Room.databaseBuilder(this, MyDatabase.class, getString(R.string.database_name)).build();
+    public StreamingDataDatabase getDatabase() {
+        return Room.databaseBuilder(this, StreamingDataDatabase.class, getString(R.string.database_name)).build();
     }
 
     public Session getSession() {

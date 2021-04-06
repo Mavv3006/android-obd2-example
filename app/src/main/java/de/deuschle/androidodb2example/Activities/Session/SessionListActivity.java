@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.deuschle.androidodb2example.Database.MyDatabase;
 import de.deuschle.androidodb2example.Database.SessionDao;
 import de.deuschle.androidodb2example.Database.SessionEntity;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase;
 import de.deuschle.androidodb2example.R;
 
 public class SessionListActivity extends AppCompatActivity {
@@ -47,7 +47,7 @@ public class SessionListActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, getString(R.string.database_name)).build();
+        StreamingDataDatabase db = Room.databaseBuilder(getApplicationContext(), StreamingDataDatabase.class, getString(R.string.database_name)).build();
         SessionDao sessionDao = db.getSessionDao();
         LiveData<List<SessionEntity>> listLiveData = sessionDao.getAll();
 

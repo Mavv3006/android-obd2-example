@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.rules.TestRule;
 
 public abstract class DatabaseTest {
-    protected MyDatabase db;
+    protected StreamingDataDatabase db;
     protected SessionDao sessionDao;
     protected RPMDao rpmDao;
     protected AmbientTemperatureDao ambientTemperatureDao;
@@ -24,7 +24,7 @@ public abstract class DatabaseTest {
     @Before
     public void setUp() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, MyDatabase.class).build();
+        db = Room.inMemoryDatabaseBuilder(context, StreamingDataDatabase.class).build();
         sessionDao = db.getSessionDao();
         rpmDao = db.getRPMDao();
         ambientTemperatureDao = db.getAmbientTemperatureDao();
