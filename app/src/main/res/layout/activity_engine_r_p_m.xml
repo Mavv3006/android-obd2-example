@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@android:style/Theme.Material.Light.DarkActionBar"
-    tools:context=".Activities.RPMActivity">
+    tools:context=".Activities.Commands.RPMActivity">
 
     <Button
         android:id="@+id/button"

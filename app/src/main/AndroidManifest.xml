@@ -6,9 +6,10 @@
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:name=".ObdApplication"
@@ -18,12 +19,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.NoActionBar">
-        <activity android:name=".Activities.SessionListActivity" />
-        <activity android:name=".Activities.DisplayDataActivity" />
-        <activity android:name=".Activities.Streaming.RPMStreamingActivity" />
-        <activity android:name=".Activities.Streaming.AmbientTemperatureStreamingActivity" />
-        <activity android:name=".Activities.Streaming.StreamingActivity" />
-        <activity android:name=".Activities.Streaming.CombinedStreamingActivity" />
+        <activity android:name=".Activities.Commands.InitAdapterActivity" />
+        <activity android:name=".Activities.Session.SessionListActivity"
+            android:parentActivityName=".Activities.MainActivity"/>
+        <activity android:name=".Activities.Session.DisplayDataActivity"
+            android:parentActivityName=".Activities.Session.SessionListActivity"/>
+        <activity android:name=".Activities.Commands.Streaming.RPMStreamingActivity" />
+        <activity android:name=".Activities.Commands.Streaming.AmbientTemperatureStreamingActivity" />
+        <activity android:name=".Activities.Commands.Streaming.StreamingActivity" />
+        <activity android:name=".Activities.Commands.Streaming.CombinedStreamingActivity" />
         <activity android:name=".Activities.BluetoothScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,15 +35,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.InitActivity" />
-        <activity android:name=".Activities.AmbientTemperatureActivity" />
-        <activity android:name=".Activities.VehicleSpeedActivity" />
+        <activity android:name=".Activities.Commands.InitTestActivity" />
+        <activity android:name=".Activities.Commands.AmbientTemperatureActivity" />
+        <activity android:name=".Activities.Commands.VehicleSpeedActivity" />
         <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".Activities.RPMActivity" />
+        <activity android:name=".Activities.Commands.RPMActivity" />
 
         <service
             android:name=".Services.BluetoothLeService"
             android:enabled="true" />
     </application>
-
 </manifest>
