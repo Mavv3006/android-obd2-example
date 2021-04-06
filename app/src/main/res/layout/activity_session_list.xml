@@ -10,7 +10,6 @@
         android:id="@+id/sessionListToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/Widget.MyTheme.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"

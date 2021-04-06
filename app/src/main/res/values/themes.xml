@@ -82,6 +82,7 @@
 
     <style name="ThemeOverlay.MyApp.Button.SecondaryColor" parent="">
         <item name="colorPrimary">?attr/colorSecondary</item>
+        <item name="colorOnPrimary">?attr/colorOnSecondary</item>
     </style>
 
     <style name="Widget.MyApp.Button" parent="@style/Widget.MaterialComponents.Button">
