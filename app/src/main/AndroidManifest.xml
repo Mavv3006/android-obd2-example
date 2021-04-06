@@ -24,10 +24,7 @@
             android:parentActivityName=".Activities.MainActivity"/>
         <activity android:name=".Activities.Session.DisplayDataActivity"
             android:parentActivityName=".Activities.Session.SessionListActivity"/>
-        <activity android:name=".Activities.Commands.Streaming.RPMStreamingActivity" />
-        <activity android:name=".Activities.Commands.Streaming.AmbientTemperatureStreamingActivity" />
         <activity android:name=".Activities.Commands.Streaming.StreamingActivity" />
-        <activity android:name=".Activities.Commands.Streaming.CombinedStreamingActivity" />
         <activity android:name=".Activities.BluetoothScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -11,7 +11,7 @@ import de.deuschle.androidodb2example.Activities.Commands.AmbientTemperatureActi
 import de.deuschle.androidodb2example.Activities.Commands.InitAdapterActivity;
 import de.deuschle.androidodb2example.Activities.Commands.InitTestActivity;
 import de.deuschle.androidodb2example.Activities.Commands.RPMActivity;
-import de.deuschle.androidodb2example.Activities.Commands.Streaming.CombinedStreamingActivity;
+import de.deuschle.androidodb2example.Activities.Commands.Streaming.StreamingActivity;
 import de.deuschle.androidodb2example.Activities.Commands.VehicleSpeedActivity;
 import de.deuschle.androidodb2example.Activities.Session.SessionListActivity;
 import de.deuschle.androidodb2example.ObdApplication;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToCombinedStreaming(View view) {
-        startActivity(new Intent(this, CombinedStreamingActivity.class));
+        startActivity(new Intent(this, StreamingActivity.class));
     }
 
     public void goToPreviousSessions(View view) {

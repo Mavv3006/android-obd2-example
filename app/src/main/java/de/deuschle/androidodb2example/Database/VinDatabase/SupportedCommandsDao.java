@@ -11,6 +11,9 @@ public interface SupportedCommandsDao {
     @Query("SELECT * FROM supportedCommands")
     List<SupportedCommandsEntity> getAll();
 
+    @Query("SELECT * from supportedCommands where vin = :vin and pid in (:pids)")
+    List<SupportedCommandsEntity> getSupportedPids(String vin, List<String> pids);
+
     @Insert
     void insert(List<SupportedCommandsEntity> entities);
 

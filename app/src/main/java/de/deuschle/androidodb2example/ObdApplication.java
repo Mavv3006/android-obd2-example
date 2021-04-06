@@ -17,6 +17,7 @@ public class ObdApplication extends Application {
     private String deviceAdress;
     private String deviceName;
     private Session session;
+    private String vin;
 
     public StreamingDataDatabase getStreamingDataDatabase() {
         return Room.databaseBuilder(this, StreamingDataDatabase.class, getString(R.string.streaming_data_database_name)).build();
@@ -52,5 +53,13 @@ public class ObdApplication extends Application {
 
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 }

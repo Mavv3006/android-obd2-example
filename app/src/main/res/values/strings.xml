@@ -77,4 +77,7 @@
     <string name="init_adapter_status_not_stated">Not started yet</string>
     <string name="init_adapter_status">Status:</string>
     <string name="main_init_adapter">Init Adapter</string>
+    <string name="streaming_vehicle_speed">Vehicle Speed</string>
+    <string name="streaming_engine_speed">Engine Speed</string>
+    <string name="streaming_ambient_temperature">Ambient Temperature</string>
 </resources>

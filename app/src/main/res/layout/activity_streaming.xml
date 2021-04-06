@@ -42,4 +42,40 @@
             android:layout_weight="1"
             android:text="@string/streaming_stop" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:weightSum="3"
+        app:layout_constraintTop_toBottomOf="@+id/streaming_toolbar">
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/streaming_switch_vehicle_speed"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/streaming_vehicle_speed" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/streaming_switch_engine_speed"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/streaming_engine_speed" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/streaming_switch_ambient_temperature"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="@string/streaming_ambient_temperature" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

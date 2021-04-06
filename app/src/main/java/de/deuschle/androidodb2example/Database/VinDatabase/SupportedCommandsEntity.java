@@ -2,12 +2,10 @@ package de.deuschle.androidodb2example.Database.VinDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-@Entity(tableName = "supportedCommands")
+@Entity(tableName = "supportedCommands", primaryKeys = {"vin", "pid"})
 public class SupportedCommandsEntity {
     @NonNull
-    @PrimaryKey
     public String vin;
     @NonNull
     public String pid;
