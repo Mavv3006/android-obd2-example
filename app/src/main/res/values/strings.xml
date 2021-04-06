@@ -80,4 +80,5 @@
     <string name="streaming_vehicle_speed">Vehicle Speed</string>
     <string name="streaming_engine_speed">Engine Speed</string>
     <string name="streaming_ambient_temperature">Ambient Temperature</string>
+    <string name="streaming_toolbar">Combined Streaming</string>
 </resources>

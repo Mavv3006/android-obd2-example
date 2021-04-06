@@ -39,7 +39,6 @@ public class StreamingActivity extends CommandActivity {
     private static final String TAG = StreamingActivity.class.getSimpleName();
     private static final String STREAMING = "streaming";
     private static final String NOT_STREAMING = "not streaming";
-    private static final String TOOLBAR_TITLE = "Combined Streaming";
     private StreamingSession session;
     private SwitchMaterial vehicleSpeedSwitch;
     private SwitchMaterial engineSpeedSwitch;
@@ -68,7 +67,6 @@ public class StreamingActivity extends CommandActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setup();
-        toolbar.setTitle(TOOLBAR_TITLE);
     }
 
     protected void initLayout() {
