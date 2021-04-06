@@ -10,7 +10,6 @@
         android:id="@+id/ambient_temperature_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Widget.MyTheme.ActionBar"
         app:title="@string/ambient_temperature_toolbar_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
