@@ -31,7 +31,7 @@
             android:id="@+id/sessionList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@drawable/empty_tall_divider"
+            android:divider="@drawable/vertical_divider_keyline_1"
             android:orientation="vertical"
             android:showDividers="middle" />
     </ScrollView>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -15,15 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import de.deuschle.androidodb2example.Database.AmbientTemperatureDao;
-import de.deuschle.androidodb2example.Database.AmbientTemperatureEntity;
-import de.deuschle.androidodb2example.Database.RPMDao;
-import de.deuschle.androidodb2example.Database.RPMEntity;
-import de.deuschle.androidodb2example.Database.SessionDao;
-import de.deuschle.androidodb2example.Database.SessionEntity;
-import de.deuschle.androidodb2example.Database.StreamingDataDatabase;
-import de.deuschle.androidodb2example.Database.VehicleSpeedDao;
-import de.deuschle.androidodb2example.Database.VehicleSpeedEntity;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.AmbientTemperatureDao;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.AmbientTemperatureEntity;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.RPMDao;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.RPMEntity;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.SessionDao;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.SessionEntity;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.StreamingDataDatabase;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.VehicleSpeedDao;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.VehicleSpeedEntity;
 import de.deuschle.androidodb2example.ObdApplication;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Session.Session;
@@ -55,10 +54,7 @@ public class DisplayDataActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.displayDataToolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dateTextView = findViewById(R.id.sessionDateTextView);
         rpmTextView = findViewById(R.id.RPMTextView);
@@ -68,7 +64,7 @@ public class DisplayDataActivity extends AppCompatActivity {
 
         int sessionId = Integer.parseInt(getIntent().getStringExtra(extra));
         ObdApplication application = (ObdApplication) getApplication();
-        StreamingDataDatabase db = application.getDatabase();
+        StreamingDataDatabase db = application.getStreamingDataDatabase();
 
         try {
             Log.d(TAG, "starting background task");

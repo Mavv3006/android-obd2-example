@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.VehicleSpeedActivity">
+    tools:context=".Activities.Commands.VehicleSpeedActivity">
 
     <TextView
         android:id="@+id/vehicle_speed_text_view_description"

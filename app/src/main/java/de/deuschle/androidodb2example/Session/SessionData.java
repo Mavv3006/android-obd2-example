@@ -1,6 +1,6 @@
 package de.deuschle.androidodb2example.Session;
 
-import de.deuschle.androidodb2example.Database.SessionDataPointEntity;
+import de.deuschle.androidodb2example.Database.StreamingDataDatabase.SessionDataPointEntity;
 
 public class SessionData {
     public double value = 0;

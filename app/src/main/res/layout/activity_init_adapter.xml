@@ -4,45 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Commands.AmbientTemperatureActivity">
+    tools:context=".Activities.Commands.InitAdapterActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/ambient_temperature_toolbar"
+        android:id="@+id/init_adapter_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
         android:theme="@style/Widget.MyTheme.ActionBar"
-        app:title="@string/ambient_temperature_toolbar_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/init_adapter_toolbar_tilte" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:onClick="readData"
-        android:text="@string/command_read_data"
+        android:layout_marginTop="16dp"
+        android:onClick="onStartButtonClicked"
+        android:text="@string/start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ambient_temperature_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/init_adapter_toolbar" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/init_adapter_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/ambient_temperature_description"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/init_adapter_status_not_stated"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/button12" />
 
     <TextView
-        android:id="@+id/result"
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/description"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        android:layout_marginTop="8dp"
+        android:text="@string/init_adapter_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button12" />
 </androidx.constraintlayout.widget.ConstraintLayout>
