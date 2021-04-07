@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
 import de.deuschle.androidodb2example.Activities.Commands.CommandActivity;
 import de.deuschle.androidodb2example.Database.StreamingDataDatabase.SaveSession;
@@ -50,17 +51,26 @@ public class StreamingActivity extends CommandActivity {
     private final Map<String, ObdCommand> supportedCommands = new HashMap<>();
 
     protected void addStreamingCommand() {
-        List<ObdCommand> streamingCommands = new ArrayList<>();
-        if (vehicleSpeedSwitch.isChecked()) {
-            streamingCommands.add(supportedCommands.get(SupportedCommands.SPEED));
+        ObdCommand[] obdCommandArray = {};
+        if (vehicleSpeedSwitch.isChecked() && supportedCommands.containsKey(SupportedCommands.SPEED)) {
+            ObdCommand speedCommand = supportedCommands.get(SupportedCommands.SPEED);
+            if (speedCommand != null) {
+                obdCommandArray = Stream.of(obdCommandArray, speedCommand).flatMap(Stream::of).toArray(ObdCommand[]::new);
+            }
         }
-        if (engineSpeedSwitch.isChecked()) {
-            streamingCommands.add(supportedCommands.get(SupportedCommands.ENGINE_RPM));
+        if (engineSpeedSwitch.isChecked() && supportedCommands.containsKey(SupportedCommands.ENGINE_RPM)) {
+            ObdCommand engineCommand = supportedCommands.get(SupportedCommands.ENGINE_RPM);
+            if (engineCommand != null) {
+                obdCommandArray = Stream.of(obdCommandArray, engineCommand).flatMap(Stream::of).toArray(ObdCommand[]::new);
+            }
         }
-        if (ambientTemperatureSwitch.isChecked()) {
-            streamingCommands.add(supportedCommands.get(SupportedCommands.AMBIENT_AIR_TEMP));
+        if (ambientTemperatureSwitch.isChecked() && supportedCommands.containsKey(SupportedCommands.AMBIENT_AIR_TEMP)) {
+            ObdCommand ambientTemperatureCommand = supportedCommands.get(SupportedCommands.AMBIENT_AIR_TEMP);
+            if (ambientTemperatureCommand != null) {
+                obdCommandArray = Stream.of(obdCommandArray, ambientTemperatureCommand).flatMap(Stream::of).toArray(ObdCommand[]::new);
+            }
         }
-        addCommand((ObdCommand[]) streamingCommands.toArray());
+        addCommand(obdCommandArray);
     }
 
     @Override

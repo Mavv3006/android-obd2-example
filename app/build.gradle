@@ -4,6 +4,9 @@ plugins {
 
 android {
     compileSdkVersion 29
+    lintOptions {
+        disable "MissingTranslation"
+    }
 
     defaultConfig {
         applicationId "de.deuschle.androidodb2example"
