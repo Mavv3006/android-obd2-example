@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import de.deuschle.androidodb2example.Commands.ProtocolAutoCommand;
 import de.deuschle.androidodb2example.Database.VinDatabase.SupportedCommandsEntity;
 import de.deuschle.androidodb2example.Database.VinDatabase.VinDao;
 import de.deuschle.androidodb2example.Database.VinDatabase.VinDatabase;
@@ -27,11 +26,11 @@ import de.deuschle.obd.commands.protocol.AvailablePidsCommand01to20;
 import de.deuschle.obd.commands.protocol.AvailablePidsCommand21to40;
 import de.deuschle.obd.commands.protocol.AvailablePidsCommand41to60;
 import de.deuschle.obd.commands.protocol.LineFeedOffCommand;
-import de.deuschle.obd.commands.protocol.ObdWarmStartCommand;
 import de.deuschle.obd.commands.protocol.SpacesOffCommand;
 import de.deuschle.obd.enums.AvailableCommand;
 
 public class InitAdapterActivity extends CommandActivity {
+    public static final String TAG = InitAdapterActivity.class.getSimpleName();
     private String vin;
     private TextView statusTextView;
     private boolean isFinished = false;
@@ -54,8 +53,9 @@ public class InitAdapterActivity extends CommandActivity {
     public void onStartButtonClicked(View view) {
         statusTextView.setText(R.string.init_adapter_status_running);
         ObdCommand[] commandList = {
-                new ObdWarmStartCommand(),
-                new ProtocolAutoCommand(),
+//                new ObdWarmStartCommand(),
+//                new ProtocolAutoCommand(),
+                // TODO: add ecu selection
                 new LineFeedOffCommand(),
                 new SpacesOffCommand(),
                 new VinCommand()
@@ -101,7 +101,7 @@ public class InitAdapterActivity extends CommandActivity {
     }
 
     private void updateAvailabilityMap(ObdCommand activeCommand) {
-        List<String> pidAvailabilityList = Collections.singletonList(activeCommand.getCalculatedResult());
+        List<String> pidAvailabilityList = Collections.singletonList(activeCommand.getResult());
         HashMap<String, Boolean> availabilityMap = CheckAvailableCommands.getAvailabilityMap(pidAvailabilityList);
         this.availabilityMap.putAll(availabilityMap);
         SupportedCommandsEntity[] entities = convertMapToArray(availabilityMap);

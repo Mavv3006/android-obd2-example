@@ -90,6 +90,8 @@ public class ProcessRawData {
     protected static byte getByte(String currentValue) {
         if (currentValue.equals(">")) {
             return 62;
+        } else if (currentValue.equals(":")) {
+            return 58;
         }
 
         try {

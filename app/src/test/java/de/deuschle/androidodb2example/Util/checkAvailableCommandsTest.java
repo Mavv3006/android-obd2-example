@@ -1,5 +1,7 @@
 package de.deuschle.androidodb2example.Util;
 
+import android.util.Log;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class checkAvailableCommandsTest {
@@ -21,7 +25,17 @@ public class checkAvailableCommandsTest {
         } catch (Exception e) {
             fail();
         }
+    }
 
+    @Test
+    public void testSingleValue2() {
+        String data = "4100BE3FA813";
+
+        try {
+            assertTrue(CheckAvailableCommands.getAvailability("20", data));
+        } catch (Exception e) {
+            fail();
+        }
     }
 
     @Test(expected = Exception.class)
@@ -287,4 +301,12 @@ public class checkAvailableCommandsTest {
         assertEquals("01111010000111000000000000000000", CheckAvailableCommands.hexToBin(toyota_1_40));
     }
 
+    @Test
+    public void testToyota00_20() {
+        String data = "4100BE3FA813";
+
+        Map<String, Boolean> result = CheckAvailableCommands.getAvailabilityMap(Collections.singletonList(data));
+        Log.d("", result.toString());
+        assertNotNull(result.get("20"));
+    }
 }

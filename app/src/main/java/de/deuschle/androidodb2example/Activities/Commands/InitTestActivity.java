@@ -103,7 +103,7 @@ public class InitTestActivity extends CommandActivity {
                 byte value = ecuArray[i][j];
                 stringBuilder.append((char) value);
                 if (j == 2) {
-                    value -= 8;
+                    value -= value >= 58 ? 15 : 8;
                 }
                 stringBuilder2.append((char) value);
 
@@ -112,6 +112,7 @@ public class InitTestActivity extends CommandActivity {
             ecuStringArray2[i] = stringBuilder2.toString();
         }
 
+        Log.d(TAG, Arrays.toString(ecuStringArray) + " -> " + Arrays.toString(ecuStringArray2));
         Log.i(TAG, "ecu String Array: " + Arrays.toString(ecuStringArray));
 
         new AlertDialog.Builder(this)

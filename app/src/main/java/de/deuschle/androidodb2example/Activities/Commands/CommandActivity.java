@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayInputStream;
@@ -36,6 +38,13 @@ abstract public class CommandActivity extends AppCompatActivity {
     protected final BleOutputStream bleOutputStream = new BleOutputStream();
     protected BluetoothLeService bluetoothLeService;
     protected TextView valueTextView;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(this.getClass().getSimpleName(), "created activity " + this.getClass().getSimpleName());
+    }
+
     protected ObdApplication application;
     protected final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
