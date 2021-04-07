@@ -20,7 +20,7 @@ public class ProcessRawDataTest {
     private static final String TAG = "test";
 
     @Test
-    public void testDataProcessingWithHeader() throws InfoMessageExcpetion {
+    public void testDataProcessingWithOneEcu() throws InfoMessageExcpetion {
         final String rawData = "7E8064100BE1FA813";
         final byte[] withHeader = {55, 69, 56, 48, 54, 52, 49, 48, 48, 66, 69, 49, 70, 65, 56, 49, 51};
         final byte[] withoutHeader = {52, 49, 48, 48, 66, 69, 49, 70, 65, 56, 49, 51};
@@ -29,6 +29,20 @@ public class ProcessRawDataTest {
 
         assertEquals(17, result.getWithHeader().length);
         assertEquals(12, result.getWithoutHeader().length);
+        assertEquals(Arrays.toString(withHeader), Arrays.toString(result.getWithHeader()));
+        assertEquals(Arrays.toString(withoutHeader), Arrays.toString(result.getWithoutHeader()));
+    }
+
+    @Test
+    public void testDataProcessingWithMultipleEcus() throws InfoMessageExcpetion {
+        final String rawData = "7E8064100BE1FA813 7EA064100983A8013";
+        final byte[] withHeader = {55, 69, 56, 48, 54, 52, 49, 48, 48, 66, 69, 49, 70, 65, 56, 49, 51, 55, 69, 65, 48, 54, 52, 49, 48, 48, 57, 56, 51, 65, 56, 48, 49, 51};
+        final byte[] withoutHeader = {52, 49, 48, 48, 66, 69, 49, 70, 65, 56, 49, 51, 52, 49, 48, 48, 57, 56, 51, 65, 56, 48, 49, 51};
+
+        ProcessRawData.Data result = ProcessRawData.convert(rawData);
+
+        assertEquals(2 * 17, result.getWithHeader().length);
+        assertEquals(2 * 12, result.getWithoutHeader().length);
         assertEquals(Arrays.toString(withHeader), Arrays.toString(result.getWithHeader()));
         assertEquals(Arrays.toString(withoutHeader), Arrays.toString(result.getWithoutHeader()));
     }
