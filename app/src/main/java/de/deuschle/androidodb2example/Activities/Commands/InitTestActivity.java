@@ -8,12 +8,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.Arrays;
-
 import de.deuschle.androidodb2example.Commands.HeadersOnCommand;
 import de.deuschle.androidodb2example.Commands.ProtocolAutoCommand;
 import de.deuschle.androidodb2example.Commands.SetEcuCommand;
+import de.deuschle.androidodb2example.Exception.OnlyOneEcuException;
 import de.deuschle.androidodb2example.R;
+import de.deuschle.androidodb2example.Util.EcuSelection;
 import de.deuschle.obd.commands.ObdCommand;
 import de.deuschle.obd.commands.protocol.AvailablePidsCommand01to20;
 import de.deuschle.obd.commands.protocol.HeadersOffCommand;
@@ -75,51 +75,19 @@ public class InitTestActivity extends CommandActivity {
             return;
         }
 
-        // get ecu byte values
-        int ecuCount = processedData.length / 17;
-        Log.d(TAG, "ECU count: " + ecuCount);
-
-        if (ecuCount == 1) {
-            return;
+        try {
+            EcuSelection ecuSelection = EcuSelection.process(processedData);
+            showEcuSelection(ecuSelection);
+        } catch (OnlyOneEcuException ignored) {
         }
+    }
 
-        byte[][] ecuArray = new byte[ecuCount][3];
-        for (int i = 0; i < ecuCount; i++) {
-            Log.d(TAG, "i = " + i);
-            System.arraycopy(processedData, i * 17, ecuArray[i], 0, 3);
-        }
-
-        Log.i(TAG, "ecu Array: " + Arrays.deepToString(ecuArray));
-
-        // get ecu string values
-        StringBuilder stringBuilder;
-        StringBuilder stringBuilder2;
-        String[] ecuStringArray = new String[ecuCount];  // [7E8, 7EA]
-        String[] ecuStringArray2 = new String[ecuCount]; // [7E0, 7E2]
-        for (int i = 0; i < ecuCount; i++) {
-            stringBuilder = new StringBuilder();
-            stringBuilder2 = new StringBuilder();
-            for (int j = 0; j < 3; j++) {
-                byte value = ecuArray[i][j];
-                stringBuilder.append((char) value);
-                if (j == 2) {
-                    value -= value >= 58 ? 15 : 8;
-                }
-                stringBuilder2.append((char) value);
-
-            }
-            ecuStringArray[i] = stringBuilder.toString();
-            ecuStringArray2[i] = stringBuilder2.toString();
-        }
-
-        Log.d(TAG, Arrays.toString(ecuStringArray) + " -> " + Arrays.toString(ecuStringArray2));
-        Log.i(TAG, "ecu String Array: " + Arrays.toString(ecuStringArray));
-
+    private void showEcuSelection(EcuSelection ecuSelection) {
         new AlertDialog.Builder(this)
                 .setTitle("Select an ECU")
-                .setItems(ecuStringArray, (dialog, which) -> {
-                    Log.i(TAG, "ECU set to " + ecuStringArray2[which]);
-                    addCommand(new SetEcuCommand(ecuStringArray2[which]));
+                .setItems(ecuSelection.getDisplayEcuArray(), (dialog, which) -> {
+                    Log.i(TAG, "ECU set to " + ecuSelection.getInternalEcuArray()[which]);
+                    addCommand(new SetEcuCommand(ecuSelection.getInternalEcuArray()[which]));
                 })
                 .show();
     }

@@ -8,4 +8,11 @@ public class VinEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String vin;
+
+    public VinEntity() {
+    }
+
+    public VinEntity(String vin) {
+        this.vin = vin;
+    }
 }

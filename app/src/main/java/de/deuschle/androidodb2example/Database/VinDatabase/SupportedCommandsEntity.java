@@ -22,4 +22,13 @@ public class SupportedCommandsEntity {
         this.pid = pid;
         this.isSupported = isSupported ? 1 : 0;
     }
+
+    @Override
+    public String toString() {
+        return "SupportedCommandsEntity{" +
+                "vin='" + vin + '\'' +
+                ", pid='" + pid + '\'' +
+                ", isSupported=" + isSupported +
+                '}';
+    }
 }
