@@ -11,8 +11,8 @@ import de.deuschle.obd.commands.ObdCommand;
 
 public class StreamingSession implements Session {
     private static final String TAG = StreamingSession.class.getSimpleName();
-    private StreamingMetadata metadata = new StreamingMetadata();
     private final Map<String, SessionData> values = new HashMap<>();
+    private StreamingMetadata metadata = new StreamingMetadata();
     private boolean isStoped = false;
     private boolean isStarted = false;
     private boolean isSaved = false;
@@ -22,9 +22,21 @@ public class StreamingSession implements Session {
         return this.metadata;
     }
 
+    public void setMetadata(Metadata metadata) {
+        this.metadata = (StreamingMetadata) metadata;
+    }
+
     @Override
     public Map<String, SessionData> getValues() {
         return this.values;
+    }
+
+    public void setValues(Map<String, SessionData> newValues) {
+        Set<String> keySet = newValues.keySet();
+        values.clear();
+        for (String key : keySet) {
+            values.put(key, newValues.get(key));
+        }
     }
 
     public void addValue(ObdCommand command) {
@@ -61,24 +73,15 @@ public class StreamingSession implements Session {
     }
 
     public void stop() {
+        Log.i(TAG, "recording session stopped");
+        Log.d(TAG, "data: " + values.toString());
         this.isStoped = true;
     }
 
     public void start() {
+        Log.i(TAG, "recording session started");
         this.isStarted = true;
         this.metadata.setDate(LocalDateTime.now());
-    }
-
-    public void setValues(Map<String, SessionData> newValues) {
-        Set<String> keySet = newValues.keySet();
-        values.clear();
-        for (String key : keySet) {
-            values.put(key, newValues.get(key));
-        }
-    }
-
-    public void setMetadata(Metadata metadata) {
-        this.metadata = (StreamingMetadata) metadata;
     }
 
     @Override

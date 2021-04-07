@@ -173,6 +173,7 @@ abstract public class CommandActivity extends AppCompatActivity {
 
     private void disconnectBluetooth() {
         try {
+            Log.i(TAG, "disconnecting bluetooth");
             bluetoothLeService.disconnect();
             unregisterReceiver(mGattUpdateReceiver);
             unbindService(mServiceConnection);
@@ -201,11 +202,8 @@ abstract public class CommandActivity extends AppCompatActivity {
 
     protected void addCommand(ObdCommand command) {
         Queue<ObdCommand> queue = application.getCommandQueue();
-        if (queue == null) {
-            Log.w(TAG, "application.getCommandQueue() produced null");
-            return;
-        }
         queue.offer(command);
+        Log.i(TAG, "added " + getCommandLogString(command) + " to queue");
         sendCommand();
     }
 
@@ -213,6 +211,7 @@ abstract public class CommandActivity extends AppCompatActivity {
         Queue<ObdCommand> commandQueue = application.getCommandQueue();
         for (ObdCommand command : commands) {
             commandQueue.offer(command);
+            Log.i(TAG, "added " + getCommandLogString(command) + " to queue");
         }
         sendCommand();
     }

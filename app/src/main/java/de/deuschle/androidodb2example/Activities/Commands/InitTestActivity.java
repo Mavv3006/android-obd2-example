@@ -28,6 +28,7 @@ public class InitTestActivity extends CommandActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, TAG + " started");
         setContentView(R.layout.activity_init_test);
 
         Toolbar toolbar = findViewById(R.id.init_test_toolbar);

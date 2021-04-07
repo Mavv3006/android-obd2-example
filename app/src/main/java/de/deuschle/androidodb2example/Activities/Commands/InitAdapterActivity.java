@@ -51,6 +51,7 @@ public class InitAdapterActivity extends CommandActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, TAG + " started");
         setContentView(R.layout.activity_init_adapter);
         setup();
         statusTextView = findViewById(R.id.init_adapter_status);

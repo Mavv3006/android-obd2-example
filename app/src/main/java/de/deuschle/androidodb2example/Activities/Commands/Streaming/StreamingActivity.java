@@ -75,6 +75,7 @@ public class StreamingActivity extends CommandActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, TAG + " started");
         setup();
     }
 

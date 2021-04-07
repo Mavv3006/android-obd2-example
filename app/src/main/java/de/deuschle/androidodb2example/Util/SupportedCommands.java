@@ -1,8 +1,5 @@
 package de.deuschle.androidodb2example.Util;
 
-import java.util.Arrays;
-import java.util.List;
-
 import de.deuschle.obd.enums.AvailableCommand;
 
 public class SupportedCommands {
@@ -16,9 +13,5 @@ public class SupportedCommands {
                 SPEED,
                 AMBIENT_AIR_TEMP
         };
-    }
-
-    public static List<String> getAllAsList() {
-        return Arrays.asList(getAllAsArray());
     }
 }
