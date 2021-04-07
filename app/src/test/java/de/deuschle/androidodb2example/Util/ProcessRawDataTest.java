@@ -20,6 +20,20 @@ public class ProcessRawDataTest {
     private static final String TAG = "test";
 
     @Test
+    public void testDataProcessingWithHeader() throws InfoMessageExcpetion {
+        final String rawData = "7E8064100BE1FA813";
+        final byte[] withHeader = {55, 69, 56, 48, 54, 52, 49, 48, 48, 66, 69, 49, 70, 65, 56, 49, 51};
+        final byte[] withoutHeader = {52, 49, 48, 48, 66, 69, 49, 70, 65, 56, 49, 51};
+
+        ProcessRawData.Data result = ProcessRawData.convert(rawData);
+
+        assertEquals(17, result.getWithHeader().length);
+        assertEquals(12, result.getWithoutHeader().length);
+        assertEquals(Arrays.toString(withHeader), Arrays.toString(result.getWithHeader()));
+        assertEquals(Arrays.toString(withoutHeader), Arrays.toString(result.getWithoutHeader()));
+    }
+
+    @Test
     public void testSplittingData() {
         final String rawData = "41 46 2B";
         final String[] expectedResult = new String[]{"41", "46", "2B"};
@@ -64,7 +78,7 @@ public class ProcessRawDataTest {
         final String rawData = "41 46 2B";
         final byte[] expectedResult = new byte[]{4 + 48, 1 + 48, 4 + 48, 6 + 48, 2 + 48, 11 + 55};
 
-        final byte[] result = ProcessRawData.convert(rawData);
+        final byte[] result = ProcessRawData.convert(rawData).getWithoutHeader();
 
         assertArrayEquals(expectedResult, result);
     }
@@ -74,7 +88,7 @@ public class ProcessRawDataTest {
         final String rawData = "41462B";
         final byte[] expectedResult = new byte[]{4 + 48, 1 + 48, 4 + 48, 6 + 48, 2 + 48, 11 + 55};
 
-        final byte[] result = ProcessRawData.convert(rawData);
+        final byte[] result = ProcessRawData.convert(rawData).getWithoutHeader();
 
         assertArrayEquals(expectedResult, result);
     }
@@ -94,14 +108,14 @@ public class ProcessRawDataTest {
     @Test
     public void testProcessingAvailablePids() throws InfoMessageExcpetion {
         final String rawData = "7e8 06 41 00 be 3f a8 13\n7ea 06 41 00 98 3a 80 13\r\n\r\n>";
-        final byte[] processedData = ProcessRawData.convert(rawData);
+        final byte[] processedData = ProcessRawData.convert(rawData).getWithHeader();
         Log.i(TAG, Arrays.toString(processedData));
     }
 
     @Test
     public void testHaveColon() throws InfoMessageExcpetion {
         final String rawData = "41 00 be 3f a8 13\n>";
-        final byte[] processedData = ProcessRawData.convert(rawData);
+        final byte[] processedData = ProcessRawData.convert(rawData).getWithoutHeader();
         final byte last = processedData[processedData.length - 1];
         assertEquals(62, last);
     }

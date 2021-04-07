@@ -11,17 +11,17 @@ import java.util.List;
 import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
 
 public class ProcessRawData {
-    private static final String TAG = ProcessRawData.class.getSimpleName();
-    protected static final List<String> greaterSign = Collections.singletonList(">");
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
+    protected static final List<String> greaterSign = Collections.singletonList(">");
+    private static final String TAG = ProcessRawData.class.getSimpleName();
 
-    public static byte[] convert(String inputData) throws InfoMessageExcpetion {
+    public static Data convert(String inputData) throws InfoMessageExcpetion {
         List<String> hexArray = preprocess(inputData);
 
         byte[] resultArray = fillRestultArray(hexArray);
 
         Log.d(TAG, "Integer Array: " + Arrays.toString(resultArray));
-        return resultArray;
+        return new Data(resultArray);
     }
 
     protected static List<String> preprocess(String inputData) throws InfoMessageExcpetion {
@@ -105,5 +105,43 @@ public class ProcessRawData {
         }
 
         return 0;
+    }
+
+    public static class Data {
+        private byte[] withHeader;
+        private byte[] withoutHeader;
+
+        protected Data(byte[] data) {
+            process(data);
+        }
+
+        public Data() {
+            withoutHeader = new byte[]{};
+            withHeader = new byte[]{};
+        }
+
+        public byte[] getWithHeader() {
+            return withHeader;
+        }
+
+        public byte[] getWithoutHeader() {
+            return withoutHeader;
+        }
+
+        protected void process(byte[] data) {
+            int ecuCount = data.length / 17;
+
+            withHeader = data;
+
+            if (data.length < 17) {
+                withoutHeader = data;
+                return;
+            }
+
+            withoutHeader = new byte[12 * ecuCount];
+            for (int i = 0; i < ecuCount; i++) {
+                System.arraycopy(data, 5 + 17 * i, withoutHeader, 12 * i, 12);
+            }
+        }
     }
 }

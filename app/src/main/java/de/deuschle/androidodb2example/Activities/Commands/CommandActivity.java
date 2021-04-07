@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Queue;
 
 import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
@@ -124,23 +123,20 @@ abstract public class CommandActivity extends AppCompatActivity {
     }
 
     private void processData(String data) {
-        byte[] processedData = new byte[0];
+        ProcessRawData.Data processedData = new ProcessRawData.Data();
         try {
             processedData = ProcessRawData.convert(data);
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData);
-            assert activeCommand != null;
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData.getWithoutHeader());
             activeCommand.readResult(inputStream);
             Log.d(LogTags.STREAMING, getCommandLogString(activeCommand));
             Log.d(LogTags.STREAMING_DATA, "Result: " + activeCommand.getFormattedResult());
             currentlySending = false;
-            handleProcessedData(activeCommand, processedData);
+            handleProcessedData(activeCommand, processedData.getWithHeader());
         } catch (InfoMessageExcpetion e) {
             currentlySending = false;
-            handleProcessedData(activeCommand, processedData);
+            handleProcessedData(activeCommand, processedData.getWithHeader());
         } catch (Exception e) {
             handleCommandError(e, activeCommand);
-        } catch (AssertionError e) {
-            handleAsserionError(e, processedData);
         }
     }
 
@@ -153,12 +149,6 @@ abstract public class CommandActivity extends AppCompatActivity {
      */
     protected void handleProcessedData(ObdCommand activeCommand, byte[] processedData) {
         valueTextView.setText(activeCommand.getFormattedResult());
-    }
-
-    private void handleAsserionError(AssertionError e, byte[] processedData) {
-        Log.e(TAG, "AssertionError: " + e.getMessage() + ". With data: '"
-                + Arrays.toString(processedData) + "'");
-        e.printStackTrace();
     }
 
     protected void handleDisconnect() {
