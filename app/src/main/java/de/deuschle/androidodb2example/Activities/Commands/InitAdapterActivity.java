@@ -102,6 +102,7 @@ public class InitAdapterActivity extends CommandActivity {
             EcuSelection selection = EcuSelection.process(processedData);
             showEcuSelection(selection);
         } catch (OnlyOneEcuException ignored) {
+            Log.i(TAG, "OnlyOneEcuException fired");
         }
     }
 
