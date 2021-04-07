@@ -126,6 +126,7 @@ abstract public class CommandActivity extends AppCompatActivity {
         ProcessRawData.Data processedData = new ProcessRawData.Data();
         try {
             processedData = ProcessRawData.convert(data);
+            Log.d(TAG, "processed Data: " + processedData.toString());
             ByteArrayInputStream inputStream = new ByteArrayInputStream(processedData.getWithoutHeader());
             activeCommand.readResult(inputStream);
             Log.d(LogTags.STREAMING, getCommandLogString(activeCommand));

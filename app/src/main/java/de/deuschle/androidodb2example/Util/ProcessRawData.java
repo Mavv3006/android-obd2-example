@@ -115,6 +115,14 @@ public class ProcessRawData {
             process(data);
         }
 
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "withHeader=" + Arrays.toString(withHeader) +
+                    ", withoutHeader=" + Arrays.toString(withoutHeader) +
+                    '}';
+        }
+
         public Data() {
             withoutHeader = new byte[]{};
             withHeader = new byte[]{};
