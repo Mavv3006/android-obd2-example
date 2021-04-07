@@ -3,8 +3,10 @@ package de.deuschle.androidodb2example.Activities.Session;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -46,6 +48,14 @@ public class DisplayDataActivity extends AppCompatActivity {
     private TextView vehicleSpeedTextView;
     private TextView idTextView;
     private TextView ambientTemperatureTextView;
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -20,10 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.NoActionBar">
         <activity android:name=".Activities.Commands.InitAdapterActivity" />
-        <activity android:name=".Activities.Session.SessionListActivity"
-            android:parentActivityName=".Activities.MainActivity"/>
-        <activity android:name=".Activities.Session.DisplayDataActivity"
-            android:parentActivityName=".Activities.Session.SessionListActivity"/>
+        <activity android:name=".Activities.Session.SessionListActivity" />
+        <activity android:name=".Activities.Session.DisplayDataActivity" />
         <activity android:name=".Activities.Commands.Streaming.StreamingActivity" />
         <activity android:name=".Activities.BluetoothScanActivity">
             <intent-filter>
