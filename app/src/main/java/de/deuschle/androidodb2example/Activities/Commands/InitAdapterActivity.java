@@ -104,6 +104,13 @@ public class InitAdapterActivity extends CommandActivity {
             showEcuSelection(selection);
         } catch (OnlyOneEcuException ignored) {
             Log.i(TAG, "OnlyOneEcuException fired");
+            ObdCommand[] commands = {
+                    new HeadersOffCommand(),
+                    new LineFeedOffCommand(),
+                    new SpacesOffCommand(),
+                    new VinCommand()
+            };
+            addCommand(commands);
         }
     }
 
