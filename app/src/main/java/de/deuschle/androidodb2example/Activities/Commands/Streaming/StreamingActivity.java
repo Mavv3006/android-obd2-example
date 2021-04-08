@@ -93,12 +93,10 @@ public class StreamingActivity extends CommandActivity {
         final String vin = application.getVin();
         final VinDatabase db = application.getVinDatabase();
         try {
-            List<SupportedCommandsEntity> supportedPids = new SupportedCommandsTask(db, vin)
+            new SupportedCommandsTask(db, vin)
                     .execute(SupportedCommands.getAllAsArray())
-                    .get();
-            for (SupportedCommandsEntity pid : supportedPids) {
-                handleSupportedCommandEntity(pid);
-            }
+                    .get()
+                    .forEach(this::handleSupportedCommandEntity);
         } catch (ExecutionException | InterruptedException ignored) {
             engineSpeedSwitch.setEnabled(false);
             vehicleSpeedSwitch.setEnabled(false);
