@@ -69,6 +69,8 @@
         <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
         <item name="materialButtonStyle">@style/Widget.MyApp.Button</item>
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="android:actionMenuTextColor">?attr/colorControlNormal</item>
     </style>
 
     <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -82,6 +84,7 @@
 
     <style name="ThemeOverlay.MyApp.Button.SecondaryColor" parent="">
         <item name="colorPrimary">?attr/colorSecondary</item>
+        <item name="colorOnPrimary">?attr/colorOnSecondary</item>
     </style>
 
     <style name="Widget.MyApp.Button" parent="@style/Widget.MaterialComponents.Button">

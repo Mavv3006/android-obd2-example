@@ -17,10 +17,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Components-->
-    <style name="Widget.MyTheme.ActionBar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?attr/colorOnPrimary</item>
-        <item name="elevation">@dimen/elevation_default_top_app_bar</item>
-    </style>
 
     <!--Bottom Sheets-->
     <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">

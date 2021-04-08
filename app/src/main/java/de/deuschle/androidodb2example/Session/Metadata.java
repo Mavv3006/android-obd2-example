@@ -1,9 +1,8 @@
 package de.deuschle.androidodb2example.Session;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface Metadata {
-    void setDate(LocalDate date);
 
-    LocalDate getDate();
+    LocalDateTime getDate();
 }

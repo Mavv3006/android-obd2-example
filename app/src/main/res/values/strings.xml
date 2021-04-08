@@ -23,9 +23,6 @@
     <string name="menu_stop">Stop</string>
     <string name="menu_refresh">Refresh</string>
 
-    <!-- Main Activity -->
-    <string name="main_toolbar_title">Hauptmenü</string>
-
     <string name="bluetooth_connection_status">Status:</string>
     <string name="bluetooth_connection_connected">Verbunden</string>
     <string name="bluetooth_connection_disconnected">Getrennt</string>
@@ -50,18 +47,38 @@
     <string name="ambient_temperature_description">aktuelle Umgebungstemperatur:</string>
     <string name="ambient_temperature_toolbar_title">@string/ambient_temperature</string>
     <string name="ambient_temperature">Ambient Temperature</string>
+    <string name="streaming_data_database_name">StreamingDataDatabase</string>
+    <string name="vin_database_name">VinDatabase</string>
     <string name="init_toolbar_title">Init Activity</string>
     <string name="init_button">Starten</string>
     <string name="init_restart_adapter">Adapter neustarten</string>
     <string name="init_deactivate_space_separation">Leerzeichentrennung deaktivieren</string>
     <string name="init_success">success - OK</string>
     <string name="init_error">error - Error</string>
-    <string name="main_init_button_name">Init Adapter</string>
+    <string name="main_init_test">Test Init Commands</string>
     <string name="init_select_ecu">Steuergerät auswählen</string>
     <string name="init_line_feed_off">Zeilenumbrüche entfernen</string>
-    <string name="streaming_start">Start</string>
+    <string name="start">Start</string>
     <string name="streaming_stop">Stop</string>
     <string name="main_rpm_streaming">RPM Streaming</string>
     <string name="main_ambient_temperature_streaming">Ambient Temperature Streaming</string>
-    <string name="main_combined_streaming">Combined Streaming</string>
+    <string name="main_streaming">Streaming</string>
+    <string name="displayDataEngineRPM">Engine RPM:</string>
+    <string name="displayDataVehicleSpeed">Vehicle Speed:</string>
+    <string name="displayDataAmbientTemperature">Ambient Temperature:</string>
+    <string name="displayDataSessionDate">Datum und Uhrzeit:</string>
+    <string name="displayDataToolbarTitle">Datacollection</string>
+    <string name="main_previous_sessions">Previous Sessions</string>
+    <string name="session_list_empty_text">There are no sessions in the database.\nPlease record one first.</string>
+    <string name="display_data_id">Id:</string>
+    <string name="init_adapter_toolbar_tilte">Initialize Adapter</string>
+    <string name="init_adapter_status_running">Running</string>
+    <string name="init_adapter_status_finished">Finished</string>
+    <string name="init_adapter_status_not_stated">Not started yet</string>
+    <string name="init_adapter_status">Status:</string>
+    <string name="main_init_adapter">Init Adapter</string>
+    <string name="streaming_vehicle_speed">Vehicle Speed</string>
+    <string name="streaming_engine_speed">Engine Speed</string>
+    <string name="streaming_ambient_temperature">Ambient Temperature</string>
+    <string name="streaming_toolbar">Combined Streaming</string>
 </resources>
