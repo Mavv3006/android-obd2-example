@@ -32,4 +32,17 @@ public class StreamingActivityViewModelTest {
 
         assertArrayEquals(new ObdCommand[]{command}, viewModel.getCommands());
     }
+
+    @Test
+    public void addNoStreamingCommand() {
+        SwitchCompat switchCompat = new SwitchCompat(ApplicationProvider.getApplicationContext());
+        switchCompat.setChecked(false);
+        String key = "test";
+        ObdCommand command = new SpeedCommand();
+        viewModel.putCommand(key, command);
+
+        viewModel.addStreamingCommand(switchCompat, key);
+
+        assertArrayEquals(new ObdCommand[0], viewModel.getCommands());
+    }
 }

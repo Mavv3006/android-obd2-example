@@ -52,7 +52,12 @@ public class StreamingActivity extends CommandActivity {
         viewModel.addStreamingCommand(vehicleSpeedSwitch, SupportedCommands.SPEED);
         viewModel.addStreamingCommand(engineSpeedSwitch, SupportedCommands.ENGINE_RPM);
         viewModel.addStreamingCommand(ambientTemperatureSwitch, SupportedCommands.AMBIENT_AIR_TEMP);
-        addCommand(viewModel.getCommands());
+        ObdCommand[] commands = viewModel.getCommands();
+        if (Arrays.equals(commands, new ObdCommand[0])) {
+            Log.d(TAG, "no commands to stream. None selected");
+            return;
+        }
+        addCommand(commands);
     }
 
     @Override
