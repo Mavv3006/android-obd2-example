@@ -168,7 +168,7 @@ public class InitAdapterActivity extends CommandActivity {
     }
 
     private void handleVinCommand(ObdCommand activeCommand) {
-        vin = activeCommand.getCalculatedResult();
+        vin = activeCommand.getResult();
         application.setVin(vin);
         if (checkIfVinIsInDb(activeCommand)) {
             finish();

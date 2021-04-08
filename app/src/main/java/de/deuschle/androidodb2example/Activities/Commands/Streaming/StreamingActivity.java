@@ -14,11 +14,8 @@ import androidx.room.Room;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Stream;
 
 import de.deuschle.androidodb2example.Activities.Commands.CommandActivity;
 import de.deuschle.androidodb2example.Database.StreamingDataDatabase.SaveSession;
@@ -30,6 +27,7 @@ import de.deuschle.androidodb2example.LogTags.LogTags;
 import de.deuschle.androidodb2example.R;
 import de.deuschle.androidodb2example.Session.StreamingSession;
 import de.deuschle.androidodb2example.Util.SupportedCommands;
+import de.deuschle.androidodb2example.ViewModel.StreamingActivityViewModel;
 import de.deuschle.obd.commands.ObdCommand;
 import de.deuschle.obd.commands.engine.RPMCommand;
 import de.deuschle.obd.commands.engine.SpeedCommand;
@@ -39,6 +37,8 @@ public class StreamingActivity extends CommandActivity {
     private static final String TAG = StreamingActivity.class.getSimpleName();
     private static final String STREAMING = "streaming";
     private static final String NOT_STREAMING = "not streaming";
+
+    private final StreamingActivityViewModel viewModel = new StreamingActivityViewModel();
     private StreamingSession session;
     private SwitchMaterial vehicleSpeedSwitch;
     private SwitchMaterial engineSpeedSwitch;
@@ -47,29 +47,12 @@ public class StreamingActivity extends CommandActivity {
     private Button stopStreamingButton;
     private Toolbar toolbar;
     private boolean isStreaming = false;
-    private final Map<String, ObdCommand> supportedCommands = new HashMap<>();
 
     protected void addStreamingCommand() {
-        ObdCommand[] obdCommandArray = {};
-        if (vehicleSpeedSwitch.isChecked() && supportedCommands.containsKey(SupportedCommands.SPEED)) {
-            ObdCommand speedCommand = supportedCommands.get(SupportedCommands.SPEED);
-            if (speedCommand != null) {
-                obdCommandArray = Stream.of(obdCommandArray, speedCommand).flatMap(Stream::of).toArray(ObdCommand[]::new);
-            }
-        }
-        if (engineSpeedSwitch.isChecked() && supportedCommands.containsKey(SupportedCommands.ENGINE_RPM)) {
-            ObdCommand engineCommand = supportedCommands.get(SupportedCommands.ENGINE_RPM);
-            if (engineCommand != null) {
-                obdCommandArray = Stream.of(obdCommandArray, engineCommand).flatMap(Stream::of).toArray(ObdCommand[]::new);
-            }
-        }
-        if (ambientTemperatureSwitch.isChecked() && supportedCommands.containsKey(SupportedCommands.AMBIENT_AIR_TEMP)) {
-            ObdCommand ambientTemperatureCommand = supportedCommands.get(SupportedCommands.AMBIENT_AIR_TEMP);
-            if (ambientTemperatureCommand != null) {
-                obdCommandArray = Stream.of(obdCommandArray, ambientTemperatureCommand).flatMap(Stream::of).toArray(ObdCommand[]::new);
-            }
-        }
-        addCommand(obdCommandArray);
+        viewModel.addStreamingCommand(vehicleSpeedSwitch, SupportedCommands.SPEED);
+        viewModel.addStreamingCommand(engineSpeedSwitch, SupportedCommands.ENGINE_RPM);
+        viewModel.addStreamingCommand(ambientTemperatureSwitch, SupportedCommands.AMBIENT_AIR_TEMP);
+        addCommand(viewModel.getCommands());
     }
 
     @Override
@@ -121,21 +104,21 @@ public class StreamingActivity extends CommandActivity {
     private void handleSupportedCommandEntity(SupportedCommandsEntity pid) {
         if (pid.pid.equals(SupportedCommands.ENGINE_RPM)) {
             if (pid.isSupported == 1) {
-                supportedCommands.put(SupportedCommands.ENGINE_RPM, new RPMCommand());
+                viewModel.putCommand(SupportedCommands.ENGINE_RPM, new RPMCommand());
             } else {
                 engineSpeedSwitch.setEnabled(false);
             }
         }
         if (pid.pid.equals(SupportedCommands.SPEED)) {
             if (pid.isSupported == 1) {
-                supportedCommands.put(SupportedCommands.SPEED, new SpeedCommand());
+                viewModel.putCommand(SupportedCommands.SPEED, new SpeedCommand());
             } else {
                 vehicleSpeedSwitch.setEnabled(false);
             }
         }
         if (pid.pid.equals(SupportedCommands.AMBIENT_AIR_TEMP)) {
             if (pid.isSupported == 1) {
-                supportedCommands.put(SupportedCommands.AMBIENT_AIR_TEMP, new AmbientAirTemperatureCommand());
+                viewModel.putCommand(SupportedCommands.AMBIENT_AIR_TEMP, new AmbientAirTemperatureCommand());
             } else {
                 ambientTemperatureSwitch.setEnabled(false);
             }
