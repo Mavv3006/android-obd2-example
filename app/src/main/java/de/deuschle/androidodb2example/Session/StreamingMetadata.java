@@ -1,17 +1,23 @@
 package de.deuschle.androidodb2example.Session;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class StreamingMetadata implements Metadata {
-    private LocalDate date;
+    private LocalDateTime date;
 
-    @Override
-    public LocalDate getDate() {
-        return date;
+    public StreamingMetadata() {
+    }
+
+    public StreamingMetadata(LocalDateTime date) {
+        this.date = date;
     }
 
     @Override
-    public void setDate(LocalDate date) {
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

@@ -3,14 +3,7 @@ package de.deuschle.androidodb2example.Session;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import de.deuschle.obd.commands.ObdCommand;
 import de.deuschle.obd.enums.AvailableCommand;
@@ -55,30 +48,6 @@ public class StreamingSessionTest {
         streamingSession = new StreamingSession();
     }
 
-    @Test
-    public void testSettingUsedCommands() {
-        final List<ObdCommand> commandList = Collections.singletonList(new TestCommand());
-
-        streamingSession.setUsedCommands(commandList);
-
-        assertEquals(commandList, streamingSession.getMetadata().getUsedCommands());
-    }
-
-    @Test
-    public void testStartStop() {
-        final int delay = 1000;
-        final Duration expectedResult = Duration.of(delay, ChronoUnit.MILLIS);
-
-        streamingSession.start();
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                streamingSession.stop();
-                assertTrue(expectedResult.minus(streamingSession.getMetadata().getDuration()).isZero());
-            }
-        }, delay);
-    }
 
     @Test
     public void testCalcNextValueStartingW0() {
@@ -127,19 +96,11 @@ public class StreamingSessionTest {
     }
 
     @Test
-    public void testDate() {
-        streamingSession.start();
-
-        assertEquals(LocalDate.now(), streamingSession.getMetadata().getDate());
-    }
-
-    @Test
     public void testAddingNextValue() {
         final ObdCommand command = new TestCommand();
 
         streamingSession.addValue(command);
         streamingSession.addValue(command);
-
 
         Map<String, SessionData> values = streamingSession.getValues();
         assertEquals(1, values.size());
