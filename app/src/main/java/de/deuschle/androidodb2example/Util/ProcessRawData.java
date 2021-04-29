@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import de.deuschle.androidodb2example.Exception.InfoMessageExcpetion;
 
 public class ProcessRawData {
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
-    protected static final List<String> greaterSign = Collections.singletonList(">");
     private static final String TAG = ProcessRawData.class.getSimpleName();
 
     public static Data convert(String inputData) throws InfoMessageExcpetion {
@@ -36,19 +34,22 @@ public class ProcessRawData {
         }
 
         if (splitted[0].equals("01")) {
-            List<String> list = new LinkedList<>(Arrays.asList(splitted));
-            list.remove(0);
-            list.remove(0);
-            splitted = list.toArray(EMPTY_STRING_ARRAY);
-            Log.d(TAG, "splitted2: " + Arrays.toString(splitted));
+            splitted = removeRequestPid(splitted);
         }
 
         List<String> hexArray = toHexStringList(Arrays.asList(splitted));
 
-        if (hexArray.equals(greaterSign)) return null;
-
         Log.d(TAG, "Hex Array: " + hexArray);
         return hexArray;
+    }
+
+    private static String[] removeRequestPid(String[] splitted) {
+        List<String> list = new LinkedList<>(Arrays.asList(splitted));
+        list.remove(0);
+        list.remove(0);
+        splitted = list.toArray(EMPTY_STRING_ARRAY);
+        Log.d(TAG, "splitted2: " + Arrays.toString(splitted));
+        return splitted;
     }
 
     protected static String[] splitData(String data) {
