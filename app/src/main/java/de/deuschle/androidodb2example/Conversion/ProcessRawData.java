@@ -18,7 +18,7 @@ public class ProcessRawData {
     public static byte[] convert(String inputData) throws InfoMessageExcpetion {
         List<String> hexArray = preprocess(inputData);
 
-        byte[] resultArray = fillRestultArray(hexArray);
+        byte[] resultArray = fillResultArray(hexArray);
 
         Log.d(TAG, "Integer Array: " + Arrays.toString(resultArray));
         return resultArray;
@@ -79,7 +79,7 @@ public class ProcessRawData {
         return hexArray;
     }
 
-    protected static byte[] fillRestultArray(List<String> hexArray) {
+    protected static byte[] fillResultArray(List<String> hexArray) {
         byte[] resultArray = new byte[hexArray.size()];
         for (int i = 0; i < hexArray.size(); i++) {
             resultArray[i] = getByte(hexArray.get(i));
